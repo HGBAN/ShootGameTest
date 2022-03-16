@@ -4,8 +4,12 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {EntityEventList} from "@/scripts/game/EntityEventList";
 import {Scene} from "@/scripts/engine/Scene";
 
-export interface BulletEventGenerator {
-    (bullet: Bullet): void;
+export interface EntityEventGenerator {
+    (entity: Entity): void;
+}
+
+export interface EntityGenerator {
+    (): Entity;
 }
 
 export class Emitter extends Entity {
@@ -18,13 +22,13 @@ export class Emitter extends Entity {
     fixedAngle = 360;
     duration = 5;
 
-    bulletEvent: BulletEventGenerator | null;
-    bullet: BulletEventGenerator | null;
+    entityEvent: EntityEventGenerator | null;
+    entity: EntityGenerator;
 
-    constructor(pos: Vec2, bulletEvent: BulletEventGenerator | null = null, bullet: BulletEventGenerator | null = null) {
+    constructor(pos: Vec2, entity: EntityGenerator, bulletEvent: EntityEventGenerator | null = null) {
         super(pos);
-        this.bulletEvent = bulletEvent;
-        this.bullet = bullet;
+        this.entityEvent = bulletEvent;
+        this.entity = entity;
     }
 
     setScene(scene: Scene) {
@@ -43,13 +47,14 @@ export class Emitter extends Entity {
         for (let i = 0; i < this.numberAtOnce; i++) {
             const rad = currentAngle * Math.PI / 180;
             const dir: Vec2 = new Vec2(Math.cos(rad), Math.sin(rad));
-            const bullet: Bullet = new Bullet(this.pos.add(dir.mul(this.radius)));
-            bullet.dir = dir;
+            const entity: Entity = this.entity();
+            entity.dir = dir;
+            entity.pos = this.pos.add(dir.mul(this.radius));
             // bullet.setScene(this.scene);
             // bullet.speed = 200;
-            this.bullet?.(bullet);
-            this.bulletEvent?.(bullet);
-            this.scene.addObject(bullet);
+            // this.entity?.(entity);
+            this.entityEvent?.(entity);
+            this.scene.addObject(entity);
 
             currentAngle += addAngle;
         }

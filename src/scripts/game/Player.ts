@@ -8,6 +8,7 @@ import {Timer} from "@/scripts/engine/Timer";
 export class Player extends Entity {
     radius = 5;
     shootTimer: Timer;
+    life = 100;
 
     constructor(pos: Vec2) {
         super(pos);

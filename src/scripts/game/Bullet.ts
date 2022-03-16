@@ -9,6 +9,7 @@ import {Scene} from "@/scripts/engine/Scene";
 
 export class Bullet extends Entity implements IndexObject {
 
+    damage = 10;
     // radius = 20;
     // speed = 200;
     // direction = new Vec2(1, 0);

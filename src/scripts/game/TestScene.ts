@@ -4,8 +4,9 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Emitter} from "@/scripts/game/Emitter";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
-import {Emitters} from "@/scripts/function/Emitters";
+import {BulletEmitters} from "@/scripts/function/BulletEmitters";
 import {Player} from "@/scripts/game/Player";
+import {Enemy} from "@/scripts/game/Enemy";
 
 export class TestScene extends Scene {
     time = 0;
@@ -16,6 +17,8 @@ export class TestScene extends Scene {
         this.player = new Player(new Vec2(800, 1000));
         // this.player.setScene(this);
         this.addObject(this.player);
+
+        this.addObject(new Enemy(new Vec2(600, 200)));
         // const emitter: Emitter = new Emitter(new Vec2(800, 600));
         // emitter.scene = this;
         // emitter.numberAtOnce = 4;
@@ -29,7 +32,7 @@ export class TestScene extends Scene {
         //     bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 1.5, new PropMutation(bullet, 'angle', bullet.angle +30)));
         //     bullet.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(bullet, 'speed', -100)));
         // }
-        // const emitter = Emitters.circle1();
+        // const emitter = BulletEmitters.circle1();
         // emitter.pos = new Vec2(800, 600);
         // emitter.scene = this;
         // emitter.numberAtOnce = 4;
@@ -38,7 +41,7 @@ export class TestScene extends Scene {
         // emitter.radius=10;
         // this.addObject(emitter);
 
-        const emitter = Emitters.waveParticle();
+        const emitter = BulletEmitters.waveParticle();
         emitter.pos = new Vec2(800, 600);
         // emitter.scene = this;
         // emitter.setScene(this);
@@ -48,7 +51,7 @@ export class TestScene extends Scene {
         emitter.duration = 100;
         this.addObject(emitter);
 
-        // const emitter = Emitters.sin(true);
+        // const emitter = BulletEmitters.sin(true);
         // emitter.pos = new Vec2(800, 600);
         // emitter.setScene(this);
         // emitter.radius = 0;
@@ -56,7 +59,7 @@ export class TestScene extends Scene {
         // emitter.period = 0.1;
         // emitter.duration = 5;
         // this.addObject(emitter);
-        // const emitter2 = Emitters.sin();
+        // const emitter2 = BulletEmitters.sin();
         // emitter2.pos = new Vec2(800, 600);
         // emitter2.setScene(this);
         // emitter2.radius = 0;
