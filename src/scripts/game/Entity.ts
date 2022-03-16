@@ -20,7 +20,7 @@ export class Entity extends GameObject {
 
     collision: any;
 
-    protected emitter: Emitter | null = null;
+    protected emitters: Emitter[] = [];
 
     constructor(pos: Vec2) {
         super(pos);
@@ -31,8 +31,11 @@ export class Entity extends GameObject {
 
     set pos(value: Vec2) {
         this._pos = value;
-        if (this.emitter)
-            this.emitter.pos = this._pos;
+        // if (this.emitter)
+        //     this.emitter.pos = this._pos;
+        for (const emitter of this.emitters) {
+            emitter.pos = this._pos;
+        }
         this.collision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
     }
 
@@ -42,32 +45,41 @@ export class Entity extends GameObject {
 
     set dir(value: Vec2) {
         this._dir = value;
-        if (this.emitter)
-            this.emitter.dir = this._dir;
+        // if (this.emitter)
+        //     this.emitter.dir = this._dir;
+        for (const emitter of this.emitters) {
+            emitter.dir = this._dir;
+        }
     }
 
     get dir() {
         return this._dir;
     }
 
-    setEmitter(emitter: Emitter) {
-        this.emitter = emitter;
+    addEmitter(emitter: Emitter) {
+        // this.emitter = emitter;
         if (this.scene)
-            this.scene.addObject(this.emitter);
-        this.emitter.pos = this.pos;
-        this.emitter.dir = this.dir;
+            this.scene.addObject(emitter);
+        emitter.pos = this._pos;
+        emitter.dir = this._dir;
+        this.emitters.push(emitter);
+        // this.emitter.pos = this.pos;
+        // this.emitter.dir = this.dir;
     }
 
-    getEmitter() {
-        return this.emitter;
+    getEmitters() {
+        return this.emitters;
     }
 
     setScene(scene: Scene) {
         if (this.scene == scene)
             return;
         this.scene = scene;
-        if (this.emitter) {
-            this.scene.addObject(this.emitter);
+        // if (this.emitter) {
+        //     this.scene.addObject(this.emitter);
+        // }
+        for (const emitter of this.emitters) {
+            this.scene.addObject(emitter);
         }
         this.scene.collisionWorld.add(this.collision);
     }
@@ -119,7 +131,10 @@ export class Entity extends GameObject {
 
     destroy(): void {
         super.destroy();
-        this.emitter?.destroy();
+        // this.emitter?.destroy();
+        for (const emitter of this.emitters) {
+            emitter.destroy();
+        }
         if (this.scene) {
             this.scene.collisionWorld.remove(this.collision);
         }

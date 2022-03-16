@@ -17,8 +17,9 @@ export class Enemy extends Entity {
 
     set pos(value: Vec2) {
         this._pos = value;
-        if (this.emitter)
-            this.emitter.pos = this._pos;
+        for (const emitter of this.emitters) {
+            emitter.pos = this._pos;
+        }
         this.collision.set_position(new SSCD.Vector(this._pos.x - this.width / 2, this._pos.y - this.height / 2));
     }
 

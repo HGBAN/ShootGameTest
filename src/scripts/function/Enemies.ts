@@ -15,7 +15,22 @@ export abstract class Enemies {
         emitter.numberAtOnce = 1;
         emitter.period = 1;
         emitter.duration = -1;
-        enemy.setEmitter(emitter);
+        enemy.addEmitter(emitter);
+
+        return enemy;
+    }
+
+    static sin1(scene: Scene | null = null): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.maxLife = 80;
+        enemy.speed = 100;
+        if (scene)
+            enemy.setScene(scene);
+        const emitter = BulletEmitters.sin();
+        emitter.numberAtOnce = 1;
+        emitter.period = 1;
+        emitter.duration = -1;
+        enemy.addEmitter(emitter);
 
         return enemy;
     }
