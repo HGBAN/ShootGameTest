@@ -25,7 +25,7 @@ export class Entity extends GameObject {
     constructor(pos: Vec2) {
         super(pos);
         this.eventList = new EntityEventList();
-        this.collision = new SSCD.Circle(new SSCD.Vector(0, 0), this.radius);
+        this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
         this.collision.entity = this;
     }
 
@@ -83,6 +83,10 @@ export class Entity extends GameObject {
     fixedUpdate(time: number): void {
         this.survivalTime += time;
         if (this.survivalTime >= this.duration && this.duration != -1) {
+            this.destroy();
+            return;
+        }
+        if (this.pos.x < -100 || this.pos.x > 1700 || this.pos.y < -100 || this.pos.y > 1300) {
             this.destroy();
             return;
         }

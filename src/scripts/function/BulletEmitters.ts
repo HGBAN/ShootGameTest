@@ -11,7 +11,11 @@ export abstract class BulletEmitters {
     }
 
     static snipe(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = new Bullet(Vec2.zero);
+            bullet.speed = 400;
+            return bullet;
+        });
 
         emitter.entityEvent = (entity) => {
             entity.eventList.addEvent(new EntityEvent(null, new PropMutation(entity.dir, 'x', () => {

@@ -22,7 +22,7 @@ export class Enemy extends Entity {
         this.collision.set_position(new SSCD.Vector(this._pos.x - this.width / 2, this._pos.y - this.height / 2));
     }
 
-    get pos(){
+    get pos() {
         return this._pos;
     }
 
@@ -47,6 +47,8 @@ export class Enemy extends Entity {
             const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'player_bullet');
             if (collisionObj != null) {
                 const bullet: PlayerBullet = collisionObj.entity;
+                // eslint-disable-next-line no-debugger
+                debugger;
                 this.hit(bullet.damage);
                 bullet.destroy();
             }

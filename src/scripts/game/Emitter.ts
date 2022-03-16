@@ -50,6 +50,8 @@ export class Emitter extends Entity {
             const entity: Entity = this.entity();
             entity.dir = dir;
             entity.pos = this.pos.add(dir.mul(this.radius));
+
+            // console.log(entity.pos,entity.collision.__position);
             // entity.setScene(this.scene);
             // bullet.speed = 200;
             // this.entity?.(entity);

@@ -8,8 +8,12 @@ import {Enemies} from "@/scripts/function/Enemies";
 import {Scene} from "@/scripts/engine/Scene";
 
 export abstract class EnemyEmitters {
-    static line(scene: Scene | null = null): Emitter {
+    static line1(scene: Scene | null = null): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, Enemies.sniper1);
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 2,
+            new PropMutation(emitter, 'numberAtOnce', 1)));
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 7,
+            new PropMutation(emitter, 'numberAtOnce', 0)));
         if (scene)
             emitter.setScene(scene);
         return emitter;

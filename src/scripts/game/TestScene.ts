@@ -19,16 +19,18 @@ export class TestScene extends Scene {
 
     constructor() {
         super();
-        const emitterLine1: Emitter = EnemyEmitters.line();
+        const emitterLine1: Emitter = EnemyEmitters.line1();
         emitterLine1.pos = new Vec2(0, 0);
-        emitterLine1.angle = 45;
-        emitterLine1.numberAtOnce = 1;
+        emitterLine1.angle = 25;
+        emitterLine1.numberAtOnce = 0;
+        emitterLine1.duration = -1;
         this.addObject(emitterLine1);
 
-        const emitterLine2: Emitter = EnemyEmitters.line();
+        const emitterLine2: Emitter = EnemyEmitters.line1();
         emitterLine2.pos = new Vec2(1600, 0);
-        emitterLine2.angle = 135;
-        emitterLine2.numberAtOnce = 1;
+        emitterLine2.angle = 155;
+        emitterLine2.numberAtOnce = 0;
+        emitterLine2.duration = -1;
         this.addObject(emitterLine2);
 
         this.player = new Player(new Vec2(800, 1000));

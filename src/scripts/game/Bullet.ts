@@ -72,9 +72,9 @@ export class Bullet extends Entity implements IndexObject {
     }
 
     fixedUpdate(time: number) {
+
         super.fixedUpdate(time);
-        if (this.pos.x < -100 || this.pos.x > 1700 || this.pos.y < -100 || this.pos.y > 1300)
-            this.destroy();
+
         // this.changer.update(time);
         // this.tween.update(time);
 
