@@ -19,8 +19,12 @@ export abstract class GameObject {
     }
 
     destroy(): void {
-        if(this.scene){
+        if (this.scene) {
             this.scene.objects.delete(this);
         }
+    }
+
+    setScene(scene: Scene) {
+        this.scene = scene;
     }
 }

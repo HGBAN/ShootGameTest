@@ -14,6 +14,7 @@ export class TestScene extends Scene {
     constructor() {
         super();
         this.player = new Player(new Vec2(800, 1000));
+        // this.player.setScene(this);
         this.addObject(this.player);
         // const emitter: Emitter = new Emitter(new Vec2(800, 600));
         // emitter.scene = this;
@@ -40,7 +41,7 @@ export class TestScene extends Scene {
         const emitter = Emitters.waveParticle();
         emitter.pos = new Vec2(800, 600);
         // emitter.scene = this;
-        emitter.setScene(this);
+        // emitter.setScene(this);
         emitter.radius = 0;
         emitter.numberAtOnce = 4;
         emitter.period = 0.08;

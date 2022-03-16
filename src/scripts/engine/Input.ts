@@ -31,4 +31,11 @@ export abstract class Input {
             state.isPressed = false;
         }
     }
+
+    static reset() {
+        for (const state of this.keyState.values()) {
+            state.isPressed = false;
+            state.isDown = false;
+        }
+    }
 }

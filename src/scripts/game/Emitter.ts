@@ -2,6 +2,7 @@ import {Entity} from "@/scripts/game/Entity";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {EntityEventList} from "@/scripts/game/EntityEventList";
+import {Scene} from "@/scripts/engine/Scene";
 
 export interface BulletEventGenerator {
     (bullet: Bullet): void;
@@ -26,6 +27,10 @@ export class Emitter extends Entity {
         this.bullet = bullet;
     }
 
+    setScene(scene: Scene) {
+        super.setScene(scene);
+        this.collision.set_collision_tags('emitter');
+    }
 
     shoot() {
         if (!this.scene)
@@ -40,7 +45,7 @@ export class Emitter extends Entity {
             const dir: Vec2 = new Vec2(Math.cos(rad), Math.sin(rad));
             const bullet: Bullet = new Bullet(this.pos.add(dir.mul(this.radius)));
             bullet.dir = dir;
-            bullet.setScene(this.scene);
+            // bullet.setScene(this.scene);
             // bullet.speed = 200;
             this.bullet?.(bullet);
             this.bulletEvent?.(bullet);

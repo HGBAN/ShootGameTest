@@ -7,7 +7,7 @@ export class Scene {
     collisionWorld: any = new SSCD.World();
 
     addObject(obj: GameObject): void {
-        obj.scene = this;
+        obj.setScene(this);
         this.objects.add(obj);
     }
 

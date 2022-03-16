@@ -90,3 +90,30 @@ export class Bullet extends Entity implements IndexObject {
         // this.pos.y = this.yFunc(t);
     }
 }
+
+export class PlayerBullet extends Bullet {
+    speed = 1000;
+    radius = 5;
+
+    setScene(scene: Scene) {
+        super.setScene(scene);
+        this.collision.set_collision_tags('player_bullet');
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        super.draw(ctx);
+        ctx.beginPath();
+        ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#2279dd";
+
+        const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, this.radius);
+        grd.addColorStop(0, "white");
+        grd.addColorStop(1, "#e5e5d1");
+        ctx.fillStyle = grd;
+
+        ctx.stroke();
+        ctx.fill();
+
+    }
+}

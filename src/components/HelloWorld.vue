@@ -22,6 +22,16 @@ export default defineComponent({
     // context.fillRect(0, 0, 100, 100);
     const gameMain = new GameMain(canvas);
 
+    // window.onfocus = () => {
+    //   requestAnimationFrame(gameMain.getStartTimeCallback);
+    //   console.log("Df");
+    // }
+
+    document.addEventListener('visibilitychange', () => {
+      gameMain.resetTime = true;
+      Input.reset();
+    });
+
     document.addEventListener('keydown', (e) => {
       Input.keyDown(e.key);
     });
@@ -30,8 +40,9 @@ export default defineComponent({
       Input.keyUp(e.key);
     })
 
-    requestAnimationFrame(gameMain.getStartTimeCallback);
+    gameMain.resetTime = true;
     requestAnimationFrame(gameMain.gameLoopCallback);
+
     // for(let i=0;i<1000000;i++)
     //   console.log("1");
   },

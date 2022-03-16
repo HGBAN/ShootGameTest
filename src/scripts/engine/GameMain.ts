@@ -10,8 +10,9 @@ export class GameMain {
     context: CanvasRenderingContext2D;
     fps: Fps;
     scene: Scene = new TestScene();
-    fixedTimeStep = 0.02;
+    fixedTimeStep = 0.016;
     fixedTime = 0;
+    resetTime = false;
 
     constructor(private canvas: HTMLCanvasElement) {
         const context = canvas.getContext('2d');
@@ -39,12 +40,13 @@ export class GameMain {
         this.scene.draw(this.context);
     }
 
-    getStartTimeCallback = (time: number): void => {
-        Time.update(time);
-    }
-
     gameLoopCallback = (time: number): void => {
+
         Time.update(time);
+        if (this.resetTime) {
+            Time.update(time);
+            this.resetTime = false;
+        }
         // console.log(1);
 
         // console.log($time.deltaTime);
