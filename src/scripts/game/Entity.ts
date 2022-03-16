@@ -4,19 +4,23 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {EntityEventList} from "@/scripts/game/EntityEventList";
 import {Timer} from "@/scripts/engine/Timer";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
+import {Emitter} from "@/scripts/game/Emitter";
+import {Enemy} from "@/scripts/game/Enemy";
 
 
 export class Entity extends GameObject {
     time = 0;
     radius = 10;
     speed = 0;
-    dir: Vec2 = new Vec2(1, 0);
+    protected _dir: Vec2 = new Vec2(1, 0);
     duration = 9999;
 
     survivalTime = 0;
     eventList: EntityEventList;
 
     collision: any;
+
+    protected emitter: Emitter | null = null;
 
     constructor(pos: Vec2) {
         super(pos);
@@ -25,8 +29,46 @@ export class Entity extends GameObject {
         this.collision.entity = this;
     }
 
+    set pos(value: Vec2) {
+        this._pos = value;
+        if (this.emitter)
+            this.emitter.pos = this._pos;
+        this.collision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
+    }
+
+    get pos() {
+        return this._pos;
+    }
+
+    set dir(value: Vec2) {
+        this._dir = value;
+        if (this.emitter)
+            this.emitter.dir = this._dir;
+    }
+
+    get dir() {
+        return this._dir;
+    }
+
+    setEmitter(emitter: Emitter) {
+        this.emitter = emitter;
+        if (this.scene)
+            this.scene.addObject(this.emitter);
+        this.emitter.pos = this.pos;
+        this.emitter.dir = this.dir;
+    }
+
+    getEmitter() {
+        return this.emitter;
+    }
+
     setScene(scene: Scene) {
+        if (this.scene == scene)
+            return;
         this.scene = scene;
+        if (this.emitter) {
+            this.scene.addObject(this.emitter);
+        }
         this.scene.collisionWorld.add(this.collision);
     }
 
@@ -40,12 +82,19 @@ export class Entity extends GameObject {
 
     fixedUpdate(time: number): void {
         this.survivalTime += time;
-        if (this.survivalTime >= this.duration) {
+        if (this.survivalTime >= this.duration && this.duration != -1) {
             this.destroy();
             return;
         }
+
         this.pos = this.pos.add(this.dir.mul(this.speed * time));
-        this.collision.set_position(new SSCD.Vector(this.pos.x, this.pos.y));
+        // if (this.emitter) {
+        //     // this.emitter.fixedUpdate(time);
+        //     this.emitter.pos = this.pos;
+        //     this.emitter.dir = this.dir;
+        //
+        // }
+        // this.collision.set_position(new SSCD.Vector(this.pos.x, this.pos.y));
 
         this.eventList.update(time);
     }
@@ -66,6 +115,7 @@ export class Entity extends GameObject {
 
     destroy(): void {
         super.destroy();
+        this.emitter?.destroy();
         if (this.scene) {
             this.scene.collisionWorld.remove(this.collision);
         }

@@ -4,15 +4,36 @@ import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
 
 export class Enemy extends Entity {
-    maxLife = 1000000;
-    width = 100;
-    height = 100;
-    private life;
+    private _maxLife = 100;
+    width = 60;
+    height = 60;
+    private life = 100;
 
     constructor(pos: Vec2) {
         super(pos);
-        this.life = this.maxLife;
-        this.collision = new SSCD.Rectangle(new SSCD.Vector(pos.x, pos.y), new SSCD.Vector(this.width, this.height));
+        // this.life = this.maxLife;
+        this.collision = new SSCD.Rectangle(new SSCD.Vector(pos.x - this.width / 2, pos.y - this.height / 2), new SSCD.Vector(this.width, this.height));
+    }
+
+    set pos(value: Vec2) {
+        this._pos = value;
+        if (this.emitter)
+            this.emitter.pos = this._pos;
+        this.collision.set_position(new SSCD.Vector(this._pos.x - this.width / 2, this._pos.y - this.height / 2));
+    }
+
+    get pos(){
+        return this._pos;
+    }
+
+    get maxLife() {
+        return this._maxLife;
+    }
+
+    set maxLife(value) {
+        this._maxLife = value;
+        if (this.life > this._maxLife)
+            this.life = this._maxLife;
     }
 
     setScene(scene: Scene) {
@@ -45,8 +66,8 @@ export class Enemy extends Entity {
         // grd.addColorStop(0, "white");
         // grd.addColorStop(1, "#e5e5d1");
         ctx.fillStyle = "#9f4747";
-        ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-        ctx.strokeRect(this.pos.x, this.pos.y, this.width, this.height);
+        ctx.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
+        ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
 
         // ctx.stroke();
         // ctx.fill();

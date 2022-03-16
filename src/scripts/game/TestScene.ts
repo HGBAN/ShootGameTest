@@ -7,18 +7,40 @@ import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransfo
 import {BulletEmitters} from "@/scripts/function/BulletEmitters";
 import {Player} from "@/scripts/game/Player";
 import {Enemy} from "@/scripts/game/Enemy";
+import {EnemyEmitters} from "@/scripts/function/EnemyEmitters";
+import {GameObject} from "@/scripts/engine/GameObject";
+import {Enemies} from "@/scripts/function/Enemies";
 
 export class TestScene extends Scene {
     time = 0;
     player: Player;
 
+    // emitterLine1: Emitter;
+
     constructor() {
         super();
+        const emitterLine1: Emitter = EnemyEmitters.line();
+        emitterLine1.pos = new Vec2(0, 0);
+        emitterLine1.angle = 45;
+        emitterLine1.numberAtOnce = 1;
+        this.addObject(emitterLine1);
+
+        const emitterLine2: Emitter = EnemyEmitters.line();
+        emitterLine2.pos = new Vec2(1600, 0);
+        emitterLine2.angle = 135;
+        emitterLine2.numberAtOnce = 1;
+        this.addObject(emitterLine2);
+
         this.player = new Player(new Vec2(800, 1000));
         // this.player.setScene(this);
         this.addObject(this.player);
 
-        this.addObject(new Enemy(new Vec2(600, 200)));
+        // const enemy = Enemies.sniper1(this);
+        // enemy.pos = new Vec2(800, 600);
+        // enemy.speed = 0;
+        // this.addObject(enemy);
+
+        // this.addObject(new Enemy(new Vec2(600, 200)));
         // const emitter: Emitter = new Emitter(new Vec2(800, 600));
         // emitter.scene = this;
         // emitter.numberAtOnce = 4;
@@ -49,7 +71,7 @@ export class TestScene extends Scene {
         emitter.numberAtOnce = 4;
         emitter.period = 0.08;
         emitter.duration = 100;
-        this.addObject(emitter);
+        // this.addObject(emitter);
 
         // const emitter = BulletEmitters.sin(true);
         // emitter.pos = new Vec2(800, 600);

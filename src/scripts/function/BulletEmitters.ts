@@ -3,10 +3,26 @@ import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullet} from "@/scripts/game/Bullet";
+import {Player} from "@/scripts/game/Player";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
         return new Bullet(Vec2.zero);
+    }
+
+    static snipe(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
+
+        emitter.entityEvent = (entity) => {
+            entity.eventList.addEvent(new EntityEvent(null, new PropMutation(entity.dir, 'x', () => {
+                return Player.toPlayerDir(entity.pos).x;
+            })));
+            entity.eventList.addEvent(new EntityEvent(null, new PropMutation(entity.dir, 'y', () => {
+                return Player.toPlayerDir(entity.pos).y;
+            })));
+        }
+
+        return emitter;
     }
 
     static circle1(): Emitter {

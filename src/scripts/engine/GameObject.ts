@@ -2,12 +2,20 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Scene} from "@/scripts/engine/Scene";
 
 export abstract class GameObject {
-    pos: Vec2;
+    protected _pos: Vec2;
     scene: Scene | null = null;
 
     protected constructor(pos: Vec2 = Vec2.zero) {
         // this.scene = scene;
-        this.pos = pos;
+        this._pos = pos;
+    }
+
+    set pos(value: Vec2) {
+        this._pos = value;
+    }
+
+    get pos(){
+        return this._pos;
     }
 
     abstract update(): void;

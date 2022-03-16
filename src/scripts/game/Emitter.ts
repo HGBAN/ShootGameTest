@@ -16,7 +16,7 @@ export class Emitter extends Entity {
     numberAtOnce = 4;
     period = 1;
     private currentPeriod = 0;
-    radius = 100;
+    radius = 0;
     randomMinAngle = 0;
     randomMaxAngle = 0;
     fixedAngle = 360;
@@ -50,7 +50,7 @@ export class Emitter extends Entity {
             const entity: Entity = this.entity();
             entity.dir = dir;
             entity.pos = this.pos.add(dir.mul(this.radius));
-            // bullet.setScene(this.scene);
+            // entity.setScene(this.scene);
             // bullet.speed = 200;
             // this.entity?.(entity);
             this.entityEvent?.(entity);
@@ -62,7 +62,7 @@ export class Emitter extends Entity {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
-        if (this.survivalTime >= this.duration) return;
+        if (this.duration != -1 && this.survivalTime >= this.duration) return;
         if (this.currentPeriod < this.survivalTime / this.period) {
             this.currentPeriod++;
             this.shoot();

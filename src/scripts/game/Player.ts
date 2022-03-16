@@ -9,10 +9,16 @@ export class Player extends Entity {
     radius = 5;
     shootTimer: Timer;
     life = 100;
+    static playerPos: Vec2;
 
     constructor(pos: Vec2) {
         super(pos);
         this.shootTimer = new Timer(0.1);
+        Player.playerPos = pos;
+    }
+
+    static toPlayerDir(pos:Vec2){
+        return this.playerPos.sub(pos).normalize;
     }
 
     setScene(scene: Scene) {
@@ -59,6 +65,7 @@ export class Player extends Entity {
         }
         dir = dir.normalize;
         this.pos = this.pos.add(dir.mul(200 * time));
+        Player.playerPos = this.pos;
 
         this.shootTimer.update(time);
         if (this.shootTimer.isOver) {
