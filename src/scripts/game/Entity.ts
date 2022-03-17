@@ -103,7 +103,7 @@ export class Entity extends GameObject {
             this.destroy();
             return;
         }
-        if (this.pos.x < -100 || this.pos.x > 1700 || this.pos.y < -100 || this.pos.y > 1300) {
+        if (this.pos.x < -100 || this.pos.x > 820 || this.pos.y < -100 || this.pos.y > 1380) {
             this.destroy();
             return;
         }

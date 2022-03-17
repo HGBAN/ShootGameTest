@@ -13,7 +13,7 @@ export class Fps extends GameObject {
         this._interval = interval;
         this.timer = new Timer(this._interval);
         this.timer.timeOverCallback = () => {
-            this._fps = 1 / Time.deltaTime;
+            this._fps = 1 / Time.deltaTime * Time.timeScale;
             this.timer.reset();
         };
     }
