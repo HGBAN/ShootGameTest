@@ -34,11 +34,25 @@ export class TestScene extends Scene {
         this.addObject(emitterLine2);
 
         const emitterSin1: Emitter = EnemyEmitters.sin1();
-        emitterSin1.pos = new Vec2(800, 0);
-        emitterSin1.angle = 90;
+        emitterSin1.pos = new Vec2(1600, 300);
+        emitterSin1.angle = 180;
         emitterSin1.numberAtOnce = 0;
         emitterSin1.duration = -1;
         this.addObject(emitterSin1);
+
+        const emitterSin2: Emitter = EnemyEmitters.sin1();
+        emitterSin2.pos = new Vec2(0, 300);
+        emitterSin2.angle = 0;
+        emitterSin2.numberAtOnce = 0;
+        emitterSin2.duration = -1;
+        this.addObject(emitterSin2);
+
+        const emitterCircle1: Emitter = EnemyEmitters.circle2();
+        emitterCircle1.pos = new Vec2(800, 0);
+        emitterCircle1.angle = 90;
+        emitterCircle1.numberAtOnce = 0;
+        emitterCircle1.duration = -1;
+        this.addObject(emitterCircle1);
 
         this.player = new Player(new Vec2(800, 1000));
         // this.player.setScene(this);
@@ -72,14 +86,14 @@ export class TestScene extends Scene {
         // emitter.radius=10;
         // this.addObject(emitter);
 
-        const emitter = BulletEmitters.waveParticle();
-        emitter.pos = new Vec2(800, 600);
-        // emitter.scene = this;
-        // emitter.setScene(this);
-        emitter.radius = 0;
-        emitter.numberAtOnce = 4;
-        emitter.period = 0.08;
-        emitter.duration = 100;
+        // const emitter = BulletEmitters.circle2();
+        // emitter.pos = new Vec2(800, 600);
+        // // emitter.scene = this;
+        // // emitter.setScene(this);
+        // emitter.radius = 0;
+        // emitter.numberAtOnce = 4;
+        // emitter.period = 0.1;
+        // emitter.duration = 100;
         // this.addObject(emitter);
 
         // const emitter = BulletEmitters.sin(true);

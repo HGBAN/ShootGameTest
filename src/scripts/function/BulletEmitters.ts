@@ -42,6 +42,12 @@ export abstract class BulletEmitters {
         return emitter;
     }
 
+    static circle2(time: number = 5, angle: number = 720): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
+        emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', time, angle)));
+        return emitter;
+    }
+
     static waveParticle(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
         emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => x * x)));

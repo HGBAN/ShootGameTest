@@ -29,4 +29,15 @@ export abstract class EnemyEmitters {
             emitter.setScene(scene);
         return emitter;
     }
+
+    static circle2(scene: Scene | null = null): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Enemies.circle2);
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 14,
+            new PropMutation(emitter, 'numberAtOnce', 1)));
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 15,
+            new PropMutation(emitter, 'numberAtOnce', 0)));
+        if (scene)
+            emitter.setScene(scene);
+        return emitter;
+    }
 }

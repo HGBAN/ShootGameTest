@@ -58,4 +58,28 @@ export abstract class Enemies {
 
         return enemy;
     }
+
+    static circle2(scene: Scene | null = null): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.maxLife = 200;
+        enemy.speed = 200;
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 2,
+            new PropMutation(enemy, 'speed', 0)));
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 7, () => {
+            enemy.speed = -200;
+        }));
+        if (scene)
+            enemy.setScene(scene);
+        const emitter = BulletEmitters.circle2(7);
+        emitter.numberAtOnce = 0;
+        emitter.period = 0.1;
+        emitter.duration = -1;
+        emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 2,
+            new PropMutation(emitter, 'numberAtOnce', 5)));
+        emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 7,
+            new PropMutation(emitter, 'numberAtOnce', 0)));
+        enemy.addEmitter(emitter);
+
+        return enemy;
+    }
 }

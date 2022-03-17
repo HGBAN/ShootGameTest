@@ -34,7 +34,7 @@ export class Entity extends GameObject {
         // if (this.emitter)
         //     this.emitter.pos = this._pos;
         for (const emitter of this.emitters) {
-            emitter.pos = this._pos;
+            emitter.pos = this._pos.clone;
         }
         this.collision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
     }
@@ -47,9 +47,9 @@ export class Entity extends GameObject {
         this._dir = value;
         // if (this.emitter)
         //     this.emitter.dir = this._dir;
-        for (const emitter of this.emitters) {
-            emitter.dir = this._dir;
-        }
+        // for (const emitter of this.emitters) {
+        //     emitter.dir = this._dir.clone;
+        // }
     }
 
     get dir() {
@@ -60,8 +60,8 @@ export class Entity extends GameObject {
         // this.emitter = emitter;
         if (this.scene)
             this.scene.addObject(emitter);
-        emitter.pos = this._pos;
-        emitter.dir = this._dir;
+        emitter.pos = this._pos.clone;
+        emitter.dir = this._dir.clone;
         emitter.bindingEntity = this;
         this.emitters.add(emitter);
         // this.emitter.pos = this.pos;

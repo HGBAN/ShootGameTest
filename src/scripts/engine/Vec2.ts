@@ -46,4 +46,8 @@ export class Vec2 implements IndexObject {
         const [cosA, sinA] = [Math.cos(rad), Math.sin(rad)];
         return new Vec2(cosA * v.x - sinA * v.y, sinA * v.x + cosA * v.y);
     }
+
+    get clone() {
+        return new Vec2(this.x, this.y);
+    }
 }
