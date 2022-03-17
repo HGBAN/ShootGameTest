@@ -27,6 +27,8 @@ export class Emitter extends Entity {
     entityEvent: EntityEventGenerator | null;
     entity: EntityGenerator;
 
+    active = true;
+
     constructor(pos: Vec2, entity: EntityGenerator, bulletEvent: EntityEventGenerator | null = null) {
         super(pos);
         this.entityEvent = bulletEvent;
@@ -65,6 +67,10 @@ export class Emitter extends Entity {
     }
 
     fixedUpdate(time: number) {
+        if (!this.active) {
+            this.eventList.update(time);
+            return;
+        }
         super.fixedUpdate(time);
         if (this.duration != -1 && this.survivalTime >= this.duration) return;
         if (this.currentPeriod < this.survivalTime / this.period) {

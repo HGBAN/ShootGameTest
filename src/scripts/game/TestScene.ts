@@ -55,6 +55,20 @@ export class TestScene extends Scene {
         emitterCircle1.duration = -1;
         this.addObject(emitterCircle1);
 
+        const emitterLineRandom1: Emitter = EnemyEmitters.line1(18, 4, Enemies.lineRandom);
+        emitterLineRandom1.pos = new Vec2(400, 0);
+        emitterLineRandom1.angle = 90;
+        emitterLineRandom1.numberAtOnce = 0;
+        emitterLineRandom1.duration = -1;
+        this.addObject(emitterLineRandom1);
+
+        const emitterLineRandom2: Emitter = EnemyEmitters.line1(18, 4, Enemies.lineRandom);
+        emitterLineRandom2.pos = new Vec2(1200, 0);
+        emitterLineRandom2.angle = 90;
+        emitterLineRandom2.numberAtOnce = 0;
+        emitterLineRandom2.duration = -1;
+        this.addObject(emitterLineRandom2);
+
         this.player = new Player(new Vec2(800, 1000));
         // this.player.setScene(this);
         this.addObject(this.player);
@@ -78,13 +92,13 @@ export class TestScene extends Scene {
         //     bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 1.5, new PropMutation(bullet, 'angle', bullet.angle +30)));
         //     bullet.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(bullet, 'speed', -100)));
         // }
-        // const emitter = BulletEmitters.circle1();
-        // emitter.pos = new Vec2(800, 600);
+        const emitter = BulletEmitters.lineRandom();
+        emitter.pos = new Vec2(800, 600);
         // emitter.scene = this;
-        // emitter.numberAtOnce = 4;
-        // emitter.period = 0.08;
-        // emitter.duration = 5;
-        // emitter.radius=10;
+        emitter.numberAtOnce = 4;
+        emitter.period = 1;
+        emitter.duration = 5;
+        // emitter.radius=20;
         // this.addObject(emitter);
 
         // const emitter = BulletEmitters.circle2();

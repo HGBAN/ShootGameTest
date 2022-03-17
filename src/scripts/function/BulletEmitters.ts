@@ -4,6 +4,7 @@ import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransfo
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Player} from "@/scripts/game/Player";
+import {Random} from "@/scripts/engine/Random";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
@@ -83,8 +84,25 @@ export abstract class BulletEmitters {
         emitter.entityEvent = (entity) => {
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, () => entity.speed = 0));
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, new PropChanger(entity, 'speed', 1, 200)));
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, () => entity.angle = Math.random()));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, () => entity.angle = Random.range(0, 360)));
         }
+        // emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => Math.sin(x))));
+
+        return emitter;
+    }
+
+    static lineRandom(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = new Bullet(Vec2.zero);
+            const emitter: Emitter = this.random1();
+            // emitter.radius = 10;
+            emitter.numberAtOnce = 1;
+            emitter.active = false;
+            emitter.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 0.5, () => emitter.active = true));
+            bullet.addEmitter(emitter);
+            return bullet;
+        });
+
         // emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => Math.sin(x))));
 
         return emitter;
