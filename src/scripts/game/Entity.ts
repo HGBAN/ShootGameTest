@@ -20,7 +20,7 @@ export class Entity extends GameObject {
 
     collision: any;
 
-    protected emitters: Emitter[] = [];
+    protected emitters: Set<Emitter> = new Set<Emitter>();
 
     constructor(pos: Vec2) {
         super(pos);
@@ -62,9 +62,14 @@ export class Entity extends GameObject {
             this.scene.addObject(emitter);
         emitter.pos = this._pos;
         emitter.dir = this._dir;
-        this.emitters.push(emitter);
+        emitter.bindingEntity = this;
+        this.emitters.add(emitter);
         // this.emitter.pos = this.pos;
         // this.emitter.dir = this.dir;
+    }
+
+    removeEmitter(emitter: Emitter){
+        this.emitters.delete(emitter);
     }
 
     getEmitters() {

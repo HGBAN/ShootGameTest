@@ -33,6 +33,13 @@ export class TestScene extends Scene {
         emitterLine2.duration = -1;
         this.addObject(emitterLine2);
 
+        const emitterSin1: Emitter = EnemyEmitters.sin1();
+        emitterSin1.pos = new Vec2(800, 0);
+        emitterSin1.angle = 90;
+        emitterSin1.numberAtOnce = 0;
+        emitterSin1.duration = -1;
+        this.addObject(emitterSin1);
+
         this.player = new Player(new Vec2(800, 1000));
         // this.player.setScene(this);
         this.addObject(this.player);

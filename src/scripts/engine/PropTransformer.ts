@@ -5,6 +5,12 @@ export interface IndexObject {
     [index: string]: any;
 }
 
+export interface EventFunc {
+    (): void;
+}
+
+export type Transformer = PropTransformer | EventFunc | null;
+
 export class PropTransformer {
     protected obj: IndexObject;
     protected prop: string;

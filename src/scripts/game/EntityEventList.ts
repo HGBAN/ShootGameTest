@@ -1,4 +1,4 @@
-import {PropMutation, PropTransformer} from "@/scripts/engine/PropTransformer";
+import {PropMutation, PropTransformer, Transformer} from "@/scripts/engine/PropTransformer";
 
 export interface ConditionFunc {
     (): boolean;
@@ -6,10 +6,11 @@ export interface ConditionFunc {
 
 export class EntityEvent {
     protected readonly condition: ConditionFunc | null;
-    protected transformer: PropTransformer | null;
+    protected transformer: Transformer;
     protected start = false;
+    protected funcOver = false;
 
-    constructor(condition: ConditionFunc | null, transformer: PropTransformer | null) {
+    constructor(condition: ConditionFunc | null, transformer: Transformer) {
         this.condition = condition;
         this.transformer = transformer;
     }
@@ -19,19 +20,30 @@ export class EntityEvent {
             this.start = this.condition ? this.condition() : true;
         }
         if (this.start) {
-            this.transformer?.update(time);
+            if (this.transformer) {
+                if (this.transformer instanceof PropTransformer) {
+                    this.transformer.update(time);
+                } else if (!this.funcOver) {
+                    this.transformer();
+                    this.funcOver = true;
+                }
+            }
         }
     }
 
     get isOver(): boolean {
         if (this.transformer)
-            return this.transformer.isOver
+            if (this.transformer instanceof PropTransformer)
+                return this.transformer.isOver
+            else return this.funcOver;
         return false;
     }
 
     reset() {
-        this.transformer?.reset();
+        if (this.transformer instanceof PropTransformer)
+            this.transformer.reset();
         this.start = false;
+        this.funcOver = false;
     }
 }
 

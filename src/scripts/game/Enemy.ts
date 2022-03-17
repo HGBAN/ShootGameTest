@@ -48,8 +48,8 @@ export class Enemy extends Entity {
             const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'player_bullet');
             if (collisionObj != null) {
                 const bullet: PlayerBullet = collisionObj.entity;
-                // eslint-disable-next-line no-debugger
-                debugger;
+                // // eslint-disable-next-line no-debugger
+                // debugger;
                 this.hit(bullet.damage);
                 bullet.destroy();
             }

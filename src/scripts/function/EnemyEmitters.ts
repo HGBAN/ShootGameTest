@@ -18,4 +18,15 @@ export abstract class EnemyEmitters {
             emitter.setScene(scene);
         return emitter;
     }
+
+    static sin1(scene: Scene | null = null): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Enemies.sin1);
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 10,
+            new PropMutation(emitter, 'numberAtOnce', 1)));
+        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 11,
+            new PropMutation(emitter, 'numberAtOnce', 0)));
+        if (scene)
+            emitter.setScene(scene);
+        return emitter;
+    }
 }

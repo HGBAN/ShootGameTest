@@ -22,6 +22,8 @@ export class Emitter extends Entity {
     fixedAngle = 360;
     duration = 5;
 
+    bindingEntity?: Entity;
+
     entityEvent: EntityEventGenerator | null;
     entity: EntityGenerator;
 
@@ -69,5 +71,10 @@ export class Emitter extends Entity {
             this.currentPeriod++;
             this.shoot();
         }
+    }
+
+    destroy() {
+        super.destroy();
+        this.bindingEntity?.removeEmitter(this);
     }
 }
