@@ -1,5 +1,5 @@
 import {Entity} from "@/scripts/game/Entity";
-import {Scene} from "@/scripts/engine/Scene";
+import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Input} from "@/scripts/engine/Input";
 import {Vec2} from "@/scripts/engine/Vec2";
@@ -10,11 +10,24 @@ export class Player extends Entity {
     shootTimer: Timer;
     life = 100;
     static playerPos: Vec2;
+    rubRadius = 30;
+    rubCollision: any;
+    rubTimer: Set<Timer> = new Set<Timer>();
 
     constructor(pos: Vec2) {
         super(pos);
         this.shootTimer = new Timer(0.1);
+        this.rubCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.rubRadius);
         Player.playerPos = pos;
+    }
+
+    set pos(value: Vec2) {
+        super.pos = value;
+        this.rubCollision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
+    }
+
+    get pos() {
+        return this._pos;
     }
 
     static toPlayerDir(pos: Vec2) {
@@ -24,6 +37,8 @@ export class Player extends Entity {
     setScene(scene: Scene) {
         super.setScene(scene);
         this.collision.set_collision_tags('player');
+        this.scene?.collisionWorld.add(this.rubCollision);
+        this.rubCollision.set_collision_tags('rub');
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -41,8 +56,25 @@ export class Player extends Entity {
 
         ctx.stroke();
         ctx.fill();
-        // ctx.fill();
 
+
+        for (const timer of this.rubTimer) {
+            if (timer.isOver) {
+                this.rubTimer.delete(timer);
+                continue;
+            }
+            const pro = timer.progress;
+            ctx.beginPath();
+            ctx.ellipse(this.pos.x, this.pos.y, this.rubRadius * pro, this.rubRadius * pro, 0, 0, 2 * Math.PI);
+            ctx.globalAlpha = 1 - pro;
+            ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+
+        // if (!this.rubTimer.isOver) {
+        //
+        // }
     }
 
     fixedUpdate(time: number) {
@@ -76,16 +108,30 @@ export class Player extends Entity {
         this.shootTimer.update(time);
         if (this.shootTimer.isOver) {
             // if (Input.getKey('j').isDown) {
-                this.shoot();
-                this.shootTimer.reset();
+            this.shoot();
+            this.shootTimer.reset();
             // }
         }
 
+        for (const timer of this.rubTimer)
+            timer.update(time);
+
         if (this.scene) {
-            const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'bullet');
-            if (collisionObj != null) {
-                const bullet: Bullet = collisionObj.entity;
-                bullet.destroy();
+            const rubCollisionObj = this.scene.collisionWorld.pick_object(this.rubCollision, 'bullet');
+            if (rubCollisionObj != null) {
+                if (!rubCollisionObj.rubbed) {
+                    rubCollisionObj.rubbed = true;
+                    this.rubTimer.add(new Timer(0.5));
+                }
+
+                // for (const timer of this.rubTimer)
+                //     timer.reset();
+
+                const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'bullet');
+                if (collisionObj != null) {
+                    const bullet: Bullet = collisionObj.entity;
+                    bullet.destroy();
+                }
             }
         }
     }
@@ -97,5 +143,10 @@ export class Player extends Entity {
         const bullet2: PlayerBullet = new PlayerBullet(this.pos.sub(new Vec2(10, 0)));
         bullet2.dir = new Vec2(0, -1);
         this.scene?.addObject(bullet2);
+    }
+
+    destroy() {
+        super.destroy();
+        this.scene?.collisionWorld.remove(this.rubCollision);
     }
 }

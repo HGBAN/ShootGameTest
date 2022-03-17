@@ -25,7 +25,7 @@ export class Fps extends GameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.lineWidth = 2;
         ctx.fillStyle = "#000";
-        ctx.fillText(this._fps.toFixed(2), this.pos.x, this.pos.y);
+        ctx.fillText('FPS:' + this._fps.toFixed(2), this.pos.x, this.pos.y);
     }
 
     update(): void {

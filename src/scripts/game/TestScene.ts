@@ -101,15 +101,15 @@ export class TestScene extends Scene {
         // emitter.radius=20;
         // this.addObject(emitter);
 
-        const emitter = BulletEmitters.circle2();
-        emitter.pos = new Vec2(360, 640);
-        // emitter.scene = this;
-        // emitter.setScene(this);
-        emitter.radius = 0;
-        emitter.numberAtOnce = 16;
-        emitter.period = 0.1;
-        emitter.duration = 100;
-        this.addObject(emitter);
+        // const emitter = BulletEmitters.circle2();
+        // emitter.pos = new Vec2(360, 640);
+        // // emitter.scene = this;
+        // // emitter.setScene(this);
+        // emitter.radius = 0;
+        // emitter.numberAtOnce = 16;
+        // emitter.period = 0.1;
+        // emitter.duration = 100;
+        // this.addObject(emitter);
 
         // const emitter = BulletEmitters.sin(true);
         // emitter.pos = new Vec2(800, 600);
