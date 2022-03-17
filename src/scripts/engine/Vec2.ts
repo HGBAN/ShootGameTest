@@ -50,4 +50,8 @@ export class Vec2 implements IndexObject {
     get clone() {
         return new Vec2(this.x, this.y);
     }
+
+    equals(other: Vec2) {
+        return this.x == other.x && this.y == other.y;
+    }
 }

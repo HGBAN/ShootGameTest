@@ -69,7 +69,7 @@ export class TestScene extends Scene {
         emitterLineRandom2.duration = -1;
         this.addObject(emitterLineRandom2);
 
-        this.player = new Player(new Vec2(800, 1000));
+        this.player = new Player(new Vec2(360, 1000));
         // this.player.setScene(this);
         this.addObject(this.player);
 

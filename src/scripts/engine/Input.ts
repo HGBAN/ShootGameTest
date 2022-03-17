@@ -1,3 +1,5 @@
+import {Vec2} from "@/scripts/engine/Vec2";
+
 export class KeyState {
     isDown = false;
     isPressed = false;
@@ -5,6 +7,8 @@ export class KeyState {
 
 export abstract class Input {
     static keyState: Map<string, KeyState> = new Map<string, KeyState>();
+
+    static moveDir: Vec2 = Vec2.zero;
 
     static keyDown(key: string) {
         this.getKey(key).isDown = true;
@@ -30,6 +34,7 @@ export abstract class Input {
         for (const state of this.keyState.values()) {
             state.isPressed = false;
         }
+        // this.moveDir = Vec2.zero;
     }
 
     static reset() {

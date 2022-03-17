@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "hammerjs": "^2.0.8",
     "seedrandom": "^3.0.5",
     "sscd": "^1.5.1",
     "vue": "^3.0.0"
@@ -47,5 +48,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "env": {
+    "node": true
+  }
 }

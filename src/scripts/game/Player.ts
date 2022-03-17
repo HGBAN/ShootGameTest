@@ -17,7 +17,7 @@ export class Player extends Entity {
         Player.playerPos = pos;
     }
 
-    static toPlayerDir(pos:Vec2){
+    static toPlayerDir(pos: Vec2) {
         return this.playerPos.sub(pos).normalize;
     }
 
@@ -51,28 +51,34 @@ export class Player extends Entity {
         //     this.pos = this.pos.add(new Vec2(-1, 0).mul(100 * time));
         // }
         let dir: Vec2 = Vec2.zero;
-        if (Input.getKey('a').isDown) {
-            dir.x -= 1;
+        if (Input.moveDir.equals(Vec2.zero)) {
+            if (Input.getKey('a').isDown) {
+                dir.x -= 1;
+            }
+            if (Input.getKey('d').isDown) {
+                dir.x += 1;
+            }
+            if (Input.getKey('w').isDown) {
+                dir.y -= 1;
+            }
+            if (Input.getKey('s').isDown) {
+                dir.y += 1;
+            }
+            dir = dir.normalize;
+        } else {
+            dir = Input.moveDir;
+            // Input.moveDir = Vec2.zero;
         }
-        if (Input.getKey('d').isDown) {
-            dir.x += 1;
-        }
-        if (Input.getKey('w').isDown) {
-            dir.y -= 1;
-        }
-        if (Input.getKey('s').isDown) {
-            dir.y += 1;
-        }
-        dir = dir.normalize;
+
         this.pos = this.pos.add(dir.mul(200 * time));
         Player.playerPos = this.pos;
 
         this.shootTimer.update(time);
         if (this.shootTimer.isOver) {
-            if (Input.getKey('j').isDown) {
+            // if (Input.getKey('j').isDown) {
                 this.shoot();
                 this.shootTimer.reset();
-            }
+            // }
         }
 
         if (this.scene) {
