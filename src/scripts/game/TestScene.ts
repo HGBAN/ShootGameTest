@@ -4,12 +4,12 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Emitter} from "@/scripts/game/Emitter";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
-import {BulletEmitters} from "@/scripts/function/BulletEmitters";
+import {BulletEmitters} from "@/scripts/data/BulletEmitters";
 import {Player} from "@/scripts/game/Player";
 import {Enemy} from "@/scripts/game/Enemy";
-import {EnemyEmitters} from "@/scripts/function/EnemyEmitters";
+import {EnemyEmitters} from "@/scripts/data/EnemyEmitters";
 import {GameObject} from "@/scripts/engine/GameObject";
-import {Enemies} from "@/scripts/function/Enemies";
+import {Enemies} from "@/scripts/data/Enemies";
 import {Random} from "@/scripts/engine/Random";
 
 export class TestScene extends Scene {

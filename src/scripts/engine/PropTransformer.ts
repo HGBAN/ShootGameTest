@@ -1,5 +1,5 @@
 import {Timer} from "@/scripts/engine/Timer";
-import {NoArg, Unary} from "@/scripts/function/Functions";
+import {NoArg, Unary} from "@/scripts/data/Functions";
 
 export interface IndexObject {
     [index: string]: any;

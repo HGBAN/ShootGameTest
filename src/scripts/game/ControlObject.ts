@@ -1,5 +1,5 @@
 import {GameObject} from "@/scripts/engine/GameObject";
-import {Unary} from "@/scripts/function/Functions";
+import {Unary} from "@/scripts/data/Functions";
 import {Vec2} from "@/scripts/engine/Vec2";
 
 export class ControlObject extends GameObject {

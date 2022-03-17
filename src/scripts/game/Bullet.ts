@@ -1,7 +1,7 @@
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Time} from "@/scripts/engine/Time";
-import {liner, Unary} from "@/scripts/function/Functions";
+import {liner, Unary} from "@/scripts/data/Functions";
 import {IndexObject, PropChanger, PropTween} from "@/scripts/engine/PropTransformer";
 import {Entity} from "@/scripts/game/Entity";
 import {EntityEvent} from "@/scripts/game/EntityEventList";

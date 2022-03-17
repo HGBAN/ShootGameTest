@@ -4,7 +4,7 @@ import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation} from "@/scripts/engine/PropTransformer";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Enemy} from "@/scripts/game/Enemy";
-import {Enemies} from "@/scripts/function/Enemies";
+import {Enemies} from "@/scripts/data/Enemies";
 import {Scene} from "@/scripts/engine/Scene";
 
 export abstract class EnemyEmitters {

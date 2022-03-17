@@ -90,13 +90,13 @@ export default defineComponent({
       this.resize();
     });
 
-    // window.addEventListener("load",function(){
+    // window.addEventListener("load",data(){
     //   setTimeout(scrollTo,0,0,1);
     // },false);
 
     // document.body.addEventListener("touchmove", (e)=>{e.preventDefault()}, false);
 
-    // document.addEventListener('touchmove', function(event) {
+    // document.addEventListener('touchmove', data(event) {
     //   event.preventDefault();
     // });
     document.addEventListener('visibilitychange', () => {
