@@ -76,4 +76,17 @@ export abstract class BulletEmitters {
 
         return emitter;
     }
+
+    static random1(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
+
+        emitter.entityEvent = (entity) => {
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, () => entity.speed = 0));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, new PropChanger(entity, 'speed', 1, 200)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, () => entity.angle = Math.random()));
+        }
+        // emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => Math.sin(x))));
+
+        return emitter;
+    }
 }

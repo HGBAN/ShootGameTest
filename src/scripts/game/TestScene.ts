@@ -10,6 +10,7 @@ import {Enemy} from "@/scripts/game/Enemy";
 import {EnemyEmitters} from "@/scripts/function/EnemyEmitters";
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Enemies} from "@/scripts/function/Enemies";
+import {Random} from "@/scripts/engine/Random";
 
 export class TestScene extends Scene {
     time = 0;
