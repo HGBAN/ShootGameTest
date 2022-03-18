@@ -8,12 +8,12 @@ import {Enemies} from "@/scripts/data/Enemies";
 import {Scene} from "@/scripts/engine/Scene";
 
 export abstract class EnemyEmitters {
-    static line1(delay: number = 2, duration: number = 5, enemy: EntityGenerator = Enemies.sniper1): Emitter {
+    static line1(/*delay: number = 2, duration: number = 5, */enemy: EntityGenerator = Enemies.sniper1): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, enemy);
-        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= delay,
-            new PropMutation(emitter, 'numberAtOnce', 1)));
-        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= delay + duration,
-            new PropMutation(emitter, 'numberAtOnce', 0)));
+        // emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= delay,
+        //     new PropMutation(emitter, 'numberAtOnce', 1)));
+        // emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= delay + duration,
+        //     new PropMutation(emitter, 'numberAtOnce', 0)));
         return emitter;
     }
 

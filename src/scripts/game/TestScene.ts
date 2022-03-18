@@ -22,16 +22,30 @@ export class TestScene extends Scene {
     constructor() {
         super();
         const emitterLine1: Emitter = EnemyEmitters.line1();
+        emitterLine1.active = false;
+        emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {
+            emitterLine1.active = true;
+        }));
+        emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
+            emitterLine1.active = false;
+        }));
         emitterLine1.pos = new Vec2(0, 0);
         emitterLine1.angle = 25;
-        emitterLine1.numberAtOnce = 0;
+        emitterLine1.numberAtOnce = 1;
         emitterLine1.duration = -1;
         this.addObject(emitterLine1);
 
         const emitterLine2: Emitter = EnemyEmitters.line1();
+        emitterLine2.active = false;
+        emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {
+            emitterLine2.active = true;
+        }));
+        emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
+            emitterLine2.active = false;
+        }));
         emitterLine2.pos = new Vec2(720, 0);
         emitterLine2.angle = 155;
-        emitterLine2.numberAtOnce = 0;
+        emitterLine2.numberAtOnce = 1;
         emitterLine2.duration = -1;
         this.addObject(emitterLine2);
 
@@ -56,14 +70,28 @@ export class TestScene extends Scene {
         emitterCircle1.duration = -1;
         this.addObject(emitterCircle1);
 
-        const emitterLineRandom1: Emitter = EnemyEmitters.line1(18, 4, Enemies.lineRandom);
+        const emitterLineRandom1: Emitter = EnemyEmitters.line1(/*18, 4, */Enemies.lineRandom);
+        emitterLineRandom1.active = false;
+        emitterLineRandom1.eventList.addEvent(new EntityEvent(() => this.time >= 18, () => {
+            emitterLineRandom1.active = true;
+        }));
+        emitterLineRandom1.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            emitterLineRandom1.active = false;
+        }));
         emitterLineRandom1.pos = new Vec2(180, 0);
         emitterLineRandom1.angle = 90;
-        emitterLineRandom1.numberAtOnce = 0;
+        emitterLineRandom1.numberAtOnce = 1;
         emitterLineRandom1.duration = -1;
         this.addObject(emitterLineRandom1);
 
-        const emitterLineRandom2: Emitter = EnemyEmitters.line1(18, 4, Enemies.lineRandom);
+        const emitterLineRandom2: Emitter = EnemyEmitters.line1(/*18, 4, */Enemies.lineRandom);
+        emitterLineRandom2.active = false;
+        emitterLineRandom2.eventList.addEvent(new EntityEvent(() => this.time >= 18, () => {
+            emitterLineRandom2.active = true;
+        }));
+        emitterLineRandom2.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            emitterLineRandom2.active = false;
+        }));
         emitterLineRandom2.pos = new Vec2(540, 0);
         emitterLineRandom2.angle = 90;
         emitterLineRandom2.numberAtOnce = 0;

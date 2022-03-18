@@ -81,7 +81,7 @@ export abstract class Enemies {
 
     static lineRandom(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.maxLife = 100;
+        enemy.maxLife = 50;
         enemy.speed = 200;
 
         const emitter = BulletEmitters.lineRandom();

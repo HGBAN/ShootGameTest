@@ -2,12 +2,18 @@ import {Entity} from "@/scripts/game/Entity";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
+import {Timer} from "@/scripts/engine/Timer";
+import {Color} from "@/scripts/engine/Color";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
     width = 60;
     height = 60;
     private life = 100;
+    hitTimer: Timer = new Timer(0.1, false);
+
+    normalColor: Color = new Color('#9f4747');
+    hitColor: Color = new Color('#1f5b8d');
 
     constructor(pos: Vec2) {
         super(pos);
@@ -44,6 +50,7 @@ export class Enemy extends Entity {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
+        this.hitTimer.update(time);
         if (this.scene) {
             const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'player_bullet');
             if (collisionObj != null) {
@@ -68,16 +75,16 @@ export class Enemy extends Entity {
         // const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, this.radius);
         // grd.addColorStop(0, "white");
         // grd.addColorStop(1, "#e5e5d1");
-        ctx.fillStyle = "#9f4747";
+        ctx.fillStyle = this.normalColor.mix(this.hitColor, this.hitTimer.progress * 0.8 + 0.2).toString();
         ctx.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
         ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-
         // ctx.stroke();
         // ctx.fill();
     }
 
     hit(damage: number) {
         this.life -= damage;
+        this.hitTimer.reset();
         if (this.life <= 0) {
             this.destroy();
         }
