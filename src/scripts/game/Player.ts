@@ -4,15 +4,25 @@ import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Input} from "@/scripts/engine/Input";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Timer} from "@/scripts/engine/Timer";
+import {Elimination} from "@/scripts/game/Elimination";
 
 export class Player extends Entity {
-    radius = 5;
+    radius = 4;
     shootTimer: Timer;
     life = 100;
+    maxLife = 100;
+    hitTimer: Timer = new Timer(1, false);
     static playerPos: Vec2;
-    rubRadius = 30;
+    rubRadius = 35;
     rubCollision: any;
     rubTimer: Set<Timer> = new Set<Timer>();
+
+    rubTimes = 0;
+    rubValue = 0;
+    rubValueMax = 20;
+    //允许消弹次数
+    elimination = 1;
+    eliminationTimer = new Timer(1, false);
 
     constructor(pos: Vec2) {
         super(pos);
@@ -43,6 +53,7 @@ export class Player extends Entity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);
+        //绘制自身
         ctx.beginPath();
         ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
         // ctx.fillRect(this.pos.x, this.pos.y, this.radius, this.radius);
@@ -54,10 +65,12 @@ export class Player extends Entity {
         grd.addColorStop(1, '#DD2222');
         ctx.fillStyle = grd;
 
+        //受创效果
+        ctx.globalAlpha = Math.cos(this.hitTimer.progress * Math.PI * 8) / 2.3 + (1 - 1 / 2.3);
         ctx.stroke();
         ctx.fill();
 
-
+        //绘制擦弹效果
         for (const timer of this.rubTimer) {
             if (timer.isOver) {
                 this.rubTimer.delete(timer);
@@ -72,9 +85,23 @@ export class Player extends Entity {
 
         ctx.globalAlpha = 1;
 
-        // if (!this.rubTimer.isOver) {
-        //
-        // }
+        //绘制血条
+        ctx.fillRect(680, 20, 20, 10);
+        ctx.fillRect(685, 15, 10, 20);
+        ctx.strokeRect(680, 40, 20, 200);
+        const healthRate = this.life / this.maxLife;
+        ctx.fillRect(683, 43 + 194 * (1 - healthRate), 14, 194 * healthRate);
+
+        //绘制擦弹条
+        ctx.fillStyle = '#3c79d5';
+        ctx.strokeStyle = '#3c79d5';
+        ctx.beginPath();
+        ctx.ellipse(660, 25, 10, 10, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeRect(650, 40, 20, 200);
+        const rubRate = this.rubValue / this.rubValueMax;
+        ctx.fillRect(653, 43 + 194 * (1 - rubRate), 14, 194 * rubRate);
+        ctx.fillText(this.elimination.toString(), 648, 285);
     }
 
     fixedUpdate(time: number) {
@@ -82,7 +109,13 @@ export class Player extends Entity {
         // if (Input.getKey('a').isDown) {
         //     this.pos = this.pos.add(new Vec2(-1, 0).mul(100 * time));
         // }
+        this.hitTimer.update(time);
+        this.eliminationTimer.update(time);
         let dir: Vec2 = Vec2.zero;
+        if (Input.doubleTap) {
+            this.eliminate();
+            Input.doubleTap = false;
+        }
         if (Input.moveDir.equals(Vec2.zero)) {
             if (Input.getKey('a').isDown) {
                 dir.x -= 1;
@@ -96,14 +129,19 @@ export class Player extends Entity {
             if (Input.getKey('s').isDown) {
                 dir.y += 1;
             }
+            if (Input.getKey('k').isDown) {
+                this.eliminate();
+            }
             dir = dir.normalize;
         } else {
             dir = Input.moveDir;
-            // Input.moveDir = Vec2.zero;
         }
 
-        this.pos = this.pos.add(dir.mul(200 * time));
-        Player.playerPos = this.pos;
+        const newPos = this.pos.add(dir.mul(200 * time));
+        if (newPos.x > 0 && newPos.y > 0 && newPos.x < 720 && newPos.y < 1280) {
+            this.pos = newPos;
+            Player.playerPos = this.pos;
+        }
 
         this.shootTimer.update(time);
         if (this.shootTimer.isOver) {
@@ -119,9 +157,18 @@ export class Player extends Entity {
         if (this.scene) {
             const rubCollisionObj = this.scene.collisionWorld.pick_object(this.rubCollision, 'bullet');
             if (rubCollisionObj != null) {
+                //判定擦弹
                 if (!rubCollisionObj.rubbed) {
+                    //一个子弹只能擦一次
                     rubCollisionObj.rubbed = true;
+                    //添加擦弹效果
                     this.rubTimer.add(new Timer(0.5));
+                    this.rubTimes++;
+                    this.rubValue++;
+                    if (this.rubValue >= this.rubValueMax) {
+                        this.rubValue -= this.rubValueMax;
+                        this.elimination++;
+                    }
                 }
 
                 // for (const timer of this.rubTimer)
@@ -131,6 +178,7 @@ export class Player extends Entity {
                 if (collisionObj != null) {
                     const bullet: Bullet = collisionObj.entity;
                     bullet.destroy();
+                    this.hit(bullet.damage);
                 }
             }
         }
@@ -148,5 +196,25 @@ export class Player extends Entity {
     destroy() {
         super.destroy();
         this.scene?.collisionWorld.remove(this.rubCollision);
+    }
+
+    hit(damage: number) {
+        //受创硬直
+        if (!this.hitTimer.isOver)
+            return;
+        this.life -= damage;
+        if (this.life < 0)
+            this.life = 0;
+        this.hitTimer.reset();
+    }
+
+    eliminate() {
+        if (this.eliminationTimer.isOver) {
+            if (this.elimination >= 1) {
+                this.elimination--;
+                this.eliminationTimer.reset();
+                this.scene?.addObject(new Elimination(this.pos.clone, this.scene));
+            }
+        }
     }
 }

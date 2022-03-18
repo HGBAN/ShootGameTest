@@ -43,6 +43,14 @@ export class Enemy extends Entity {
             this.life = this._maxLife;
     }
 
+    setMaxLife(value: number, recover = true) {
+        this._maxLife = value;
+        if (recover)
+            this.life = this._maxLife;
+        else if (this.life > this._maxLife)
+            this.life = this._maxLife;
+    }
+
     setScene(scene: Scene) {
         super.setScene(scene);
         this.collision.set_collision_tags('enemy');

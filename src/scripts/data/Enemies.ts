@@ -10,7 +10,7 @@ import {Player} from "@/scripts/game/Player";
 export abstract class Enemies {
     static sniper1(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.maxLife = 50;
+        enemy.setMaxLife(50);
         enemy.speed = 100;
         const emitter = BulletEmitters.snipe();
         emitter.numberAtOnce = 1;
@@ -23,7 +23,7 @@ export abstract class Enemies {
 
     static sin1(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.maxLife = 120;
+        enemy.setMaxLife(200);
         enemy.speed = 100;
         enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 2,
             new PropMutation(enemy, 'speed', 0)));
@@ -59,7 +59,7 @@ export abstract class Enemies {
 
     static circle2(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.maxLife = 200;
+        enemy.setMaxLife(300);
         enemy.speed = 200;
         enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 2,
             new PropMutation(enemy, 'speed', 0)));
@@ -81,7 +81,7 @@ export abstract class Enemies {
 
     static lineRandom(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.maxLife = 50;
+        enemy.setMaxLife(50);
         enemy.speed = 200;
 
         const emitter = BulletEmitters.lineRandom();

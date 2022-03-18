@@ -29,6 +29,12 @@ export class TestScene extends Scene {
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
             emitterLine1.active = false;
         }));
+        emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            emitterLine1.active = true;
+        }));
+        emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 27, () => {
+            emitterLine1.active = false;
+        }));
         emitterLine1.pos = new Vec2(0, 0);
         emitterLine1.angle = 25;
         emitterLine1.numberAtOnce = 1;
@@ -41,6 +47,12 @@ export class TestScene extends Scene {
             emitterLine2.active = true;
         }));
         emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
+            emitterLine2.active = false;
+        }));
+        emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            emitterLine2.active = true;
+        }));
+        emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 27, () => {
             emitterLine2.active = false;
         }));
         emitterLine2.pos = new Vec2(720, 0);
@@ -94,7 +106,7 @@ export class TestScene extends Scene {
         }));
         emitterLineRandom2.pos = new Vec2(540, 0);
         emitterLineRandom2.angle = 90;
-        emitterLineRandom2.numberAtOnce = 0;
+        emitterLineRandom2.numberAtOnce = 1;
         emitterLineRandom2.duration = -1;
         this.addObject(emitterLineRandom2);
 

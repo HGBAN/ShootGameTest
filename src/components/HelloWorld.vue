@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 100%">
+  <div class="container">
     <canvas v-show="true" width="720" height="1280" ref="canvas" class="canvas"
             :style="{width:width+'px',height:height+'px'}"></canvas>
     <!--    <div class="canvas" :style="{width:width+'px',height:height+'px'}"></div>-->
@@ -72,6 +72,12 @@ export default defineComponent({
 
     });
 
+    hammer.on('doubletap', function (e: any) {
+      // if (e.maxPointers == 2) {
+        Input.doubleTap = true;
+      // }
+    });
+
 
     let canvas = this.$refs.canvas as HTMLCanvasElement;
     // let context = canvas.getContext('2d');
@@ -137,8 +143,19 @@ export default defineComponent({
   //position: absolute;
   border-style: solid;
   border-width: 10px;
+  border-color: #1d2328;
 
   box-sizing: border-box;
   display: block;
+
+  background-color: #36424b;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

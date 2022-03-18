@@ -9,6 +9,7 @@ export abstract class Input {
     static keyState: Map<string, KeyState> = new Map<string, KeyState>();
 
     static moveDir: Vec2 = Vec2.zero;
+    static doubleTap = false;
 
     static keyDown(key: string) {
         this.getKey(key).isDown = true;
@@ -35,6 +36,7 @@ export abstract class Input {
             state.isPressed = false;
         }
         // this.moveDir = Vec2.zero;
+        // this.doubleTap = false;
     }
 
     static reset() {
@@ -42,5 +44,7 @@ export abstract class Input {
             state.isPressed = false;
             state.isDown = false;
         }
+        this.moveDir = Vec2.zero;
+        // this.doubleTap = false;
     }
 }
