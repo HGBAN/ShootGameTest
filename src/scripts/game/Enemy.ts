@@ -62,14 +62,26 @@ export class Enemy extends Entity {
         super.fixedUpdate(time);
         this.hitTimer.update(time);
         if (this.scene) {
-            const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'player_bullet');
-            if (collisionObj != null) {
-                const bullet: PlayerBullet = collisionObj.entity;
+            const collisionObjs: Array<any> = [];
+            this.scene.collisionWorld.test_collision(this.collision, 'player_bullet', collisionObjs);
+            for (const obj of collisionObjs) {
+                const bullet: PlayerBullet = obj.entity;
                 // // eslint-disable-next-line no-debugger
                 // debugger;
                 this.hit(bullet.damage);
                 bullet.destroy();
+                if (this.life == 0)
+                    return;
             }
+
+            // const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'player_bullet');
+            // if (collisionObj != null) {
+            //     const bullet: PlayerBullet = collisionObj.entity;
+            //     // // eslint-disable-next-line no-debugger
+            //     // debugger;
+            //     this.hit(bullet.damage);
+            //     bullet.destroy();
+            // }
         }
     }
 

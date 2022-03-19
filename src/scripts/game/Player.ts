@@ -7,7 +7,7 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Elimination} from "@/scripts/game/Elimination";
 
 export class Player extends Entity {
-    radius = 4;
+    radius = 2;
     shootTimer: Timer;
     life = 100;
     maxLife = 100;
@@ -55,12 +55,12 @@ export class Player extends Entity {
         super.draw(ctx);
         //绘制自身
         ctx.beginPath();
-        ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
+        ctx.ellipse(this.pos.x, this.pos.y, 4, 4, 0, 0, 2 * Math.PI);
         // ctx.fillRect(this.pos.x, this.pos.y, this.radius, this.radius);
         // ctx.lineWidth = 4;
         ctx.strokeStyle = '#DD2222';
 
-        const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, this.radius);
+        const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, 4);
         grd.addColorStop(0, 'red');
         grd.addColorStop(1, '#DD2222');
         ctx.fillStyle = grd;

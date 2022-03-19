@@ -4,6 +4,7 @@ import {Scene} from "@/scripts/engine/Scene";
 export abstract class GameObject {
     protected _pos: Vec2;
     scene: Scene | null = null;
+    dead = false;
 
     protected constructor(pos: Vec2 = Vec2.zero) {
         // this.scene = scene;
@@ -14,7 +15,7 @@ export abstract class GameObject {
         this._pos = value;
     }
 
-    get pos(){
+    get pos() {
         return this._pos;
     }
 
@@ -30,6 +31,7 @@ export abstract class GameObject {
         if (this.scene) {
             this.scene.objects.delete(this);
         }
+        this.dead = true;
     }
 
     setScene(scene: Scene) {

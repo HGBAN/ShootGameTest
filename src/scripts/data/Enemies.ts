@@ -107,6 +107,7 @@ export abstract class Enemies {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(3000);
         enemy.showBar = true;
+        enemy.speed = 400;
         // enemy.speed = 300;
 
         const emitter = BulletEmitters.circle1();
@@ -159,6 +160,10 @@ export abstract class Enemies {
             }));
         enemy.addEmitter(emitter2);
 
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1,
+            () => {
+                enemy.speed = 0;
+            }));
         enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 12.5,
             () => {
                 emitter2.active = false;

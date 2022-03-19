@@ -88,6 +88,7 @@ export class EntityEventList extends EntityEvent {
 
     addEvent(entityEvent: EntityEvent): void {
         this.events.add(entityEvent);
+        this.currentEvents.add(entityEvent);
     }
 
     reset() {

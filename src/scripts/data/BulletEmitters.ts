@@ -44,7 +44,9 @@ export abstract class BulletEmitters {
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'speed', 0)));
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'angle', entity.angle + 30)));
 
-
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, ()=>{
+                entity.eventList.addEvent(new EntityEvent(() => emitter.dead, new PropMutation(entity, 'speed', -300)));
+            }));
             entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(entity, 'speed', -300)));
         }
         return emitter;

@@ -25,12 +25,14 @@ export class Scene1 extends Scene {
         emitterLine1.active = false;
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {
             emitterLine1.active = true;
+            emitterLine1.survivalTime = 0;
         }));
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
             emitterLine1.active = false;
         }));
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
             emitterLine1.active = true;
+            emitterLine1.survivalTime = 0;
         }));
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 27, () => {
             emitterLine1.active = false;
@@ -45,12 +47,14 @@ export class Scene1 extends Scene {
         emitterLine2.active = false;
         emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {
             emitterLine2.active = true;
+            emitterLine2.survivalTime = 0;
         }));
         emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 5, () => {
             emitterLine2.active = false;
         }));
         emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
             emitterLine2.active = true;
+            emitterLine2.survivalTime = 0;
         }));
         emitterLine2.eventList.addEvent(new EntityEvent(() => this.time >= 27, () => {
             emitterLine2.active = false;
@@ -86,6 +90,7 @@ export class Scene1 extends Scene {
         emitterLineRandom1.active = false;
         emitterLineRandom1.eventList.addEvent(new EntityEvent(() => this.time >= 18, () => {
             emitterLineRandom1.active = true;
+            emitterLineRandom1.survivalTime = 0;
         }));
         emitterLineRandom1.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
             emitterLineRandom1.active = false;
@@ -100,6 +105,7 @@ export class Scene1 extends Scene {
         emitterLineRandom2.active = false;
         emitterLineRandom2.eventList.addEvent(new EntityEvent(() => this.time >= 18, () => {
             emitterLineRandom2.active = true;
+            emitterLineRandom2.survivalTime = 0;
         }));
         emitterLineRandom2.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
             emitterLineRandom2.active = false;
@@ -109,6 +115,21 @@ export class Scene1 extends Scene {
         emitterLineRandom2.numberAtOnce = 1;
         emitterLineRandom2.duration = -1;
         this.addObject(emitterLineRandom2);
+
+        const bossEmitter: Emitter = EnemyEmitters.line1(Enemies.boss1);
+        bossEmitter.active = false;
+        bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            bossEmitter.active = true;
+            bossEmitter.survivalTime = 0;
+        }));
+        bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22.5, () => {
+            bossEmitter.active = false;
+        }));
+        bossEmitter.pos = new Vec2(360, 0);
+        bossEmitter.angle = 90;
+        bossEmitter.numberAtOnce = 1;
+        bossEmitter.duration = -1;
+        this.addObject(bossEmitter);
 
         this.player = new Player(new Vec2(360, 1000));
         // this.player.setScene(this);

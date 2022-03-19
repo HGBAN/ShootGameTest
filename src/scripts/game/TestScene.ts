@@ -25,10 +25,10 @@ export class TestScene extends Scene {
         // this.player.setScene(this);
         this.addObject(this.player);
 
-        const boss1: Enemy = Enemies.boss1();
-        boss1.pos = new Vec2(360, 400);
-        boss1.speed = 0;
-        this.addObject(boss1);
+        // const boss1: Enemy = Enemies.boss1();
+        // boss1.pos = new Vec2(360, 400);
+        // boss1.speed = 0;
+        // this.addObject(boss1);
     }
 
     fixedUpdate(time: number) {

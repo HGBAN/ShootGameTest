@@ -10,7 +10,7 @@ import {TestScene} from "@/scripts/game/TestScene";
 export class GameMain {
     context: CanvasRenderingContext2D;
     fps: Fps;
-    scene: Scene = new TestScene();//new Scene1();
+    scene: Scene = /*new TestScene();*/new Scene1();
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;
