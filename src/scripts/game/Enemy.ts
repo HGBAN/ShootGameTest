@@ -15,6 +15,8 @@ export class Enemy extends Entity {
     normalColor: Color = new Color('#9f4747');
     hitColor: Color = new Color('#1f5b8d');
 
+    showBar = false;
+
     constructor(pos: Vec2) {
         super(pos);
         // this.life = this.maxLife;
@@ -86,6 +88,17 @@ export class Enemy extends Entity {
         ctx.fillStyle = this.normalColor.mix(this.hitColor, this.hitTimer.progress * 0.8 + 0.2).toString();
         ctx.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
         ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
+
+        ctx.fillStyle = new Color('#d93f3f').mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).toString();
+        ctx.strokeStyle = "#d93f3f";
+        ctx.lineWidth = 2;
+        if (this.showBar) {
+            ctx.fillRect(83, 43, 554 * this.life / this.maxLife, 14);
+            ctx.strokeRect(80, 40, 560, 20);
+            // ctx.strokeRect(680, 40, 20, 200);
+            // const healthRate = this.life / this.maxLife;
+            // ctx.fillRect(683, 43 + 194 * (1 - healthRate), 14, 194 * healthRate);
+        }
         // ctx.stroke();
         // ctx.fill();
     }

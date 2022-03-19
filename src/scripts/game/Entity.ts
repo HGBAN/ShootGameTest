@@ -22,6 +22,9 @@ export class Entity extends GameObject {
 
     protected emitters: Set<Emitter> = new Set<Emitter>();
 
+    active = true;
+    activeTime = 0;
+
     constructor(pos: Vec2) {
         super(pos);
         this.eventList = new EntityEventList();
@@ -68,7 +71,7 @@ export class Entity extends GameObject {
         // this.emitter.dir = this.dir;
     }
 
-    removeEmitter(emitter: Emitter){
+    removeEmitter(emitter: Emitter) {
         this.emitters.delete(emitter);
     }
 
@@ -99,6 +102,12 @@ export class Entity extends GameObject {
 
     fixedUpdate(time: number): void {
         this.survivalTime += time;
+        this.eventList.update(time);
+
+        if (!this.active) {
+            return;
+        }
+        this.activeTime += time;
         if (this.survivalTime >= this.duration && this.duration != -1) {
             this.destroy();
             return;
@@ -117,7 +126,7 @@ export class Entity extends GameObject {
         // }
         // this.collision.set_position(new SSCD.Vector(this.pos.x, this.pos.y));
 
-        this.eventList.update(time);
+        // this.eventList.update(time);
     }
 
     // get angle(){
@@ -143,5 +152,10 @@ export class Entity extends GameObject {
         if (this.scene) {
             this.scene.collisionWorld.remove(this.collision);
         }
+    }
+
+    reset() {
+        this.eventList.reset();
+        this.survivalTime = this.activeTime = 0;
     }
 }

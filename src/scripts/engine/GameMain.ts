@@ -2,14 +2,15 @@
 import {Time} from "@/scripts/engine/Time";
 import {Fps} from "@/scripts/engine/Fps";
 import {Scene} from "@/scripts/engine/Scene";
-import {TestScene} from "@/scripts/game/TestScene";
+import {Scene1} from "@/scripts/game/Scene1";
 import {Timer} from "@/scripts/engine/Timer";
 import {Input} from "@/scripts/engine/Input";
+import {TestScene} from "@/scripts/game/TestScene";
 
 export class GameMain {
     context: CanvasRenderingContext2D;
     fps: Fps;
-    scene: Scene = new TestScene();
+    scene: Scene = new TestScene();//new Scene1();
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;

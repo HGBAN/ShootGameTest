@@ -4,7 +4,7 @@ export const SSCD = require('sscd').sscd;
 
 export class Scene {
     objects: Set<GameObject> = new Set<GameObject>();
-    collisionWorld: any = new SSCD.World();
+    collisionWorld: any = new SSCD.World({grid_size:200});
 
     addObject(obj: GameObject): void {
         obj.setScene(this);

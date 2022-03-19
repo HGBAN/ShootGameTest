@@ -32,6 +32,8 @@ export class PropTransformer {
     update(time: number): void {
         if (this.isOver)
             return;
+        if (this.obj['active'] === false)
+            return;
         this.timer.update(time);
     }
 

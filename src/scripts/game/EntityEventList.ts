@@ -74,9 +74,10 @@ export class EntityEventList extends EntityEvent {
                 for (const entityEvent of this.currentEvents)
                     entityEvent.reset();
                 this.currentPeriodTime = 0;
-            } else {
-                this.events.clear();
             }
+            // else {
+            //     this.events.clear();
+            // }
         }
         for (const entityEvent of this.currentEvents) {
             entityEvent.update(time);
@@ -87,6 +88,13 @@ export class EntityEventList extends EntityEvent {
 
     addEvent(entityEvent: EntityEvent): void {
         this.events.add(entityEvent);
+    }
+
+    reset() {
+        super.reset();
+        this.currentPeriodTime = 0;
+        this.currentRepeatTime = 0;
+        this.currentEvents.clear();
     }
 
     get isOver(): boolean {

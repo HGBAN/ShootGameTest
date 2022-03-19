@@ -31,14 +31,21 @@ export abstract class BulletEmitters {
     }
 
     static circle1(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
-        emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 1, 90)));
-        emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 1, new PropMutation(emitter, 'numberAtOnce', 0)));
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = new Bullet(Vec2.zero);
+            bullet.speed = 300;
+            return bullet;
+        });
+        emitter.eventList.addEvent(new EntityEvent(null, new PropChanger(emitter, 'angle', 1.5, 270)));
+        // emitter.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 1, new PropMutation(emitter, 'numberAtOnce', 0)));
+
         emitter.entityEvent = (entity) => {
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, new PropChanger(entity, 'angle', 1.5, 90)));
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, new PropMutation(entity, 'speed', 0)));
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, new PropMutation(entity, 'angle', entity.angle + 30)));
-            entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(entity, 'speed', -100)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, new PropChanger(entity, 'angle', 0.5, 90)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'speed', 0)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'angle', entity.angle + 30)));
+
+
+            entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(entity, 'speed', -300)));
         }
         return emitter;
     }
@@ -51,8 +58,8 @@ export abstract class BulletEmitters {
 
     static waveParticle(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
-        emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => x * x)));
-
+        emitter.eventList.addEvent(new EntityEvent(null, new PropChanger(emitter, 'angle', 100, 720000, (x) => x * x + 1000)));
+        // emitter.eventList.addEvent(new EntityEvent(null, new PropChanger(emitter, 'angle', 5, 10000, (x) => x)));
         return emitter;
     }
 

@@ -155,12 +155,12 @@ export class Player extends Entity {
             timer.update(time);
 
         if (this.scene) {
-            const rubCollisionObj = this.scene.collisionWorld.pick_object(this.rubCollision, 'bullet');
-            if (rubCollisionObj != null) {
-                //判定擦弹
-                if (!rubCollisionObj.rubbed) {
+            const rubCollisionObjs: Array<any> = [];
+            this.scene.collisionWorld.test_collision(this.rubCollision, 'bullet', rubCollisionObjs);
+            for(const obj of rubCollisionObjs){
+                if (!obj.rubbed) {
                     //一个子弹只能擦一次
-                    rubCollisionObj.rubbed = true;
+                    obj.rubbed = true;
                     //添加擦弹效果
                     this.rubTimer.add(new Timer(0.5));
                     this.rubTimes++;
@@ -170,10 +170,8 @@ export class Player extends Entity {
                         this.elimination++;
                     }
                 }
-
-                // for (const timer of this.rubTimer)
-                //     timer.reset();
-
+            }
+            if(rubCollisionObjs.length>0){
                 const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'bullet');
                 if (collisionObj != null) {
                     const bullet: Bullet = collisionObj.entity;
