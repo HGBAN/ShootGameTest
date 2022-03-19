@@ -6,6 +6,7 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Emitter} from "@/scripts/game/Emitter";
 import {Enemy} from "@/scripts/game/Enemy";
+import {Player} from "@/scripts/game/Player";
 
 
 export class Entity extends GameObject {

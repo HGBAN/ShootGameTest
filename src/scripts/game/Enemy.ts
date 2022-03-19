@@ -4,6 +4,7 @@ import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Timer} from "@/scripts/engine/Timer";
 import {Color} from "@/scripts/engine/Color";
+import {Player} from "@/scripts/game/Player";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
@@ -11,6 +12,7 @@ export class Enemy extends Entity {
     height = 60;
     private life = 100;
     hitTimer: Timer = new Timer(0.1, false);
+    score = 500;
 
     normalColor: Color = new Color('#9f4747');
     hitColor: Color = new Color('#1f5b8d');
@@ -117,9 +119,15 @@ export class Enemy extends Entity {
 
     hit(damage: number) {
         this.life -= damage;
+        Player.score += Math.floor(100 * (1 + Player.rubTimes / 100));
         this.hitTimer.reset();
         if (this.life <= 0) {
             this.destroy();
         }
+    }
+
+    destroy() {
+        super.destroy();
+        Player.score += Math.floor(this.score * (1 + Player.rubTimes / 100));
     }
 }

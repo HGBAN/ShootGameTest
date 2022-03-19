@@ -121,7 +121,7 @@ export abstract class Enemies {
                 emitter.survivalTime = 0;
             }));
         emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1, () => {
-            console.log(emitter.numberAtOnce);
+            // console.log(emitter.numberAtOnce);
             emitter.entity = () => {
                 const bullet: Bullet = new Bullet(Vec2.zero);
                 bullet.speed = 300;
@@ -129,7 +129,7 @@ export abstract class Enemies {
             }
         }));
         emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1.5, () => {
-            console.log(emitter.numberAtOnce);
+            // console.log(emitter.numberAtOnce);
             emitter.entity = () => {
                 const bullet: Bullet = new Bullet(Vec2.zero);
                 bullet.speed = 500;

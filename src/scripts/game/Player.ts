@@ -17,12 +17,14 @@ export class Player extends Entity {
     rubCollision: any;
     rubTimer: Set<Timer> = new Set<Timer>();
 
-    rubTimes = 0;
+    static rubTimes = 0;
     rubValue = 0;
     rubValueMax = 20;
     //允许消弹次数
     elimination = 1;
     eliminationTimer = new Timer(1, false);
+
+    static score = 0;
 
     constructor(pos: Vec2) {
         super(pos);
@@ -102,6 +104,15 @@ export class Player extends Entity {
         const rubRate = this.rubValue / this.rubValueMax;
         ctx.fillRect(653, 43 + 194 * (1 - rubRate), 14, 194 * rubRate);
         ctx.fillText(this.elimination.toString(), 648, 285);
+
+        //绘制分数
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#9f65ff';
+        ctx.fillText(Player.score.toString(), 360, 1164);
+        //绘制擦弹数
+        ctx.fillStyle = '#ff6593';
+        ctx.fillText(Player.rubTimes.toString(), 360, 1224);
+        ctx.textAlign = "left";
     }
 
     fixedUpdate(time: number) {
@@ -157,13 +168,13 @@ export class Player extends Entity {
         if (this.scene) {
             const rubCollisionObjs: Array<any> = [];
             this.scene.collisionWorld.test_collision(this.rubCollision, 'bullet', rubCollisionObjs);
-            for(const obj of rubCollisionObjs){
+            for (const obj of rubCollisionObjs) {
                 if (!obj.rubbed) {
                     //一个子弹只能擦一次
                     obj.rubbed = true;
                     //添加擦弹效果
                     this.rubTimer.add(new Timer(0.5));
-                    this.rubTimes++;
+                    Player.rubTimes++;
                     this.rubValue++;
                     if (this.rubValue >= this.rubValueMax) {
                         this.rubValue -= this.rubValueMax;
@@ -171,7 +182,7 @@ export class Player extends Entity {
                     }
                 }
             }
-            if(rubCollisionObjs.length>0){
+            if (rubCollisionObjs.length > 0) {
                 const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'bullet');
                 if (collisionObj != null) {
                     const bullet: Bullet = collisionObj.entity;
