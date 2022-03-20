@@ -12,20 +12,15 @@ import {GameObject} from "@/scripts/engine/GameObject";
 import {Enemies} from "@/scripts/data/Enemies";
 import {Random} from "@/scripts/engine/Random";
 import {Timer} from "@/scripts/engine/Timer";
+import {GameScene} from "@/scripts/game/GameScene";
+import {GameMain} from "@/scripts/engine/GameMain";
 
-export class TestScene extends Scene {
-    time = 0;
-    player: Player;
-
+export class TestScene extends GameScene {
     // emitterLine1: Emitter;
     timer: Timer = new Timer(1);
 
-    constructor() {
-        super();
-
-        this.player = new Player(new Vec2(360, 1000));
-        // this.player.setScene(this);
-        this.addObject(this.player);
+    constructor(gameMain:GameMain) {
+        super(gameMain);
 
         const boss1: Enemy = Enemies.boss1();
         boss1.pos = new Vec2(360, 400);
@@ -55,7 +50,6 @@ export class TestScene extends Scene {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
-        this.time += time;
         // this.timer.update(time);
         // if(this.timer.isOver){
         //     this.timer.reset();

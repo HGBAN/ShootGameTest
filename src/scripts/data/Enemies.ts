@@ -7,6 +7,7 @@ import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {PropMutation} from "@/scripts/engine/PropTransformer";
 import {Player} from "@/scripts/game/Player";
 import {Bullet} from "@/scripts/game/Bullet";
+import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export abstract class Enemies {
     static sniper1(): Enemy {
@@ -123,23 +124,26 @@ export abstract class Enemies {
         emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1, () => {
             // console.log(emitter.numberAtOnce);
             emitter.entity = () => {
-                const bullet: Bullet = new Bullet(Vec2.zero);
+                const bullet: Bullet = bulletPool.get();
                 bullet.speed = 300;
+                bullet.texture = 'bullet_1';
                 return bullet;
             }
         }));
         emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1.5, () => {
             // console.log(emitter.numberAtOnce);
             emitter.entity = () => {
-                const bullet: Bullet = new Bullet(Vec2.zero);
+                const bullet: Bullet = bulletPool.get();
                 bullet.speed = 500;
+                bullet.texture = 'bullet_1';
                 return bullet;
             }
         }));
         emitter.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 2, () => {
             emitter.entity = () => {
-                const bullet: Bullet = new Bullet(Vec2.zero);
+                const bullet: Bullet = bulletPool.get();
                 bullet.speed = 700;
+                bullet.texture = 'bullet_1';
                 return bullet;
             }
         }));

@@ -16,6 +16,7 @@ export abstract class BulletEmitters {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
             const bullet: Bullet = bulletPool.get();
             bullet.speed = 400;
+            bullet.texture = 'bullet_1'
             return bullet;
         });
 
@@ -32,6 +33,7 @@ export abstract class BulletEmitters {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
             const bullet: Bullet = bulletPool.get();
             bullet.speed = 300;
+            bullet.texture = 'bullet_1';
             return bullet;
         });
         emitter.eventList.addEvent(new EntityEvent(null, new PropChanger(emitter, 'angle', 1.5, 270)));
@@ -91,7 +93,11 @@ export abstract class BulletEmitters {
     }
 
     static random1(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, this.bulletGenerator);
+        const emitter: Emitter = new Emitter(Vec2.zero, ()=>{
+            const bullet: Bullet = bulletPool.get();
+            bullet.texture = 'bullet_1';
+            return bullet;
+        });
 
         emitter.entityEvent = (entity) => {
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, () => entity.speed = 0));
