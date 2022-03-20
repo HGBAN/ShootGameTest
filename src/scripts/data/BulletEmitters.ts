@@ -20,12 +20,9 @@ export abstract class BulletEmitters {
         });
 
         emitter.entityEvent = (entity) => {
-            entity.eventList.addEvent(new EntityEvent(null, new PropMutation(entity.dir, 'x', () => {
-                return Player.toPlayerDir(entity.pos).x;
-            })));
-            entity.eventList.addEvent(new EntityEvent(null, new PropMutation(entity.dir, 'y', () => {
-                return Player.toPlayerDir(entity.pos).y;
-            })));
+            entity.eventList.addEvent(new EntityEvent(null, () => {
+                entity.dir = Player.toPlayerDir(entity.pos);
+            }));
         }
 
         return emitter;
@@ -43,12 +40,17 @@ export abstract class BulletEmitters {
         emitter.entityEvent = (entity) => {
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, new PropChanger(entity, 'angle', 0.5, 90)));
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'speed', 0)));
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'angle', entity.angle + 30)));
+            // entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, new PropMutation(entity, 'angle', entity.angle + 30)));
 
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, ()=>{
-                entity.eventList.addEvent(new EntityEvent(() => emitter.dead, new PropMutation(entity, 'speed', -300)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0.5, () => {
+                entity.eventList.addEvent(new EntityEvent(() => emitter.dead, new PropMutation(entity, 'speed', 300)));
             }));
-            entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(entity, 'speed', -300)));
+            entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, new PropMutation(entity, 'speed', 300)));
+            // entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3, () => {
+            //     entity.angle += 210;
+            // }));
+            entity.eventList.addEvent(new EntityEvent(() => emitter.survivalTime >= 3,
+                new PropChanger(entity, 'angle', 0.5, 210)));
         }
         return emitter;
     }
@@ -94,7 +96,7 @@ export abstract class BulletEmitters {
         emitter.entityEvent = (entity) => {
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, () => entity.speed = 0));
             entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, new PropChanger(entity, 'speed', 1, 200)));
-            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 1.5, () => entity.angle = Random.range(0, 360)));
+            entity.eventList.addEvent(new EntityEvent(() => entity.survivalTime >= 0, () => entity.angle = Random.range(0, 360)));
         }
         // emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => Math.sin(x))));
 

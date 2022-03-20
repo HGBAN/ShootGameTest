@@ -12,7 +12,7 @@ import * as PIXI from 'pixi.js';
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
     fps: Fps;
-    scene: Scene = /*new TestScene();*/new Scene1();
+    scene: Scene;
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;
@@ -21,8 +21,13 @@ export class GameMain {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
         this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
+        this.scene = new Scene1(this);
         this.scene.addObject(this.fps);
         this.app.stage = this.scene;
+
+
+        this.app.loader.add(require('@/assets/1.png')).load();
+        // console.log(this.app.loader.resources[require('@/assets/1.png')])
     }
 
     update(): void {

@@ -13,6 +13,7 @@ import {Enemies} from "@/scripts/data/Enemies";
 import {Random} from "@/scripts/engine/Random";
 import {PlayerUI} from "@/scripts/ui/PlayerUI";
 import {GameScene} from "@/scripts/game/GameScene";
+import {GameMain} from "@/scripts/engine/GameMain";
 
 export class Scene1 extends GameScene {
     // time = 0;
@@ -22,8 +23,8 @@ export class Scene1 extends GameScene {
     // emitterLine1: Emitter;
 
 
-    constructor() {
-        super();
+    constructor(gameMain: GameMain) {
+        super(gameMain);
         const emitterLine1: Emitter = EnemyEmitters.line1();
         emitterLine1.active = false;
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {

@@ -1,12 +1,19 @@
 import {GameObject} from "@/scripts/engine/GameObject";
 
 import * as PIXI from 'pixi.js';
+import {GameMain} from "@/scripts/engine/GameMain";
 
 export const SSCD = require('sscd').sscd;
 
-export class Scene extends PIXI.Container{
+export class Scene extends PIXI.Container {
     objects: Set<GameObject> = new Set<GameObject>();
-    collisionWorld: any = new SSCD.World({grid_size:200});
+    collisionWorld: any = new SSCD.World({grid_size: 200});
+    gameMain: GameMain;
+
+    constructor(gameMain: GameMain) {
+        super();
+        this.gameMain = gameMain;
+    }
 
     addObject(obj: GameObject): void {
         obj.setScene(this);

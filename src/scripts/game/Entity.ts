@@ -143,8 +143,9 @@ export class Entity extends GameObject {
 
     set angle(angle: number) {
         const rad = angle * Math.PI / 180;
-        this.dir.x = Math.cos(rad);
-        this.dir.y = Math.sin(rad);
+        // this.dir.x = ;
+        // this.dir.y = ;
+        this.dir=new Vec2(Math.cos(rad),Math.sin(rad));
     }
 
     get angle(): number {

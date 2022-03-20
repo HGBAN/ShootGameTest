@@ -6,7 +6,7 @@ import {IndexObject, PropChanger, PropTween} from "@/scripts/engine/PropTransfor
 import {Entity} from "@/scripts/game/Entity";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
-import {Graphics} from "pixi.js";
+import {Graphics, Sprite, utils} from "pixi.js";
 import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export class Bullet extends Entity implements IndexObject {
@@ -26,7 +26,8 @@ export class Bullet extends Entity implements IndexObject {
 
     // tween: PropTween;
     radius = 10;
-    display = new Graphics();
+    // display = new Graphics();
+    display = new Sprite();
 
     constructor(pos: Vec2) {
         super(pos);
@@ -73,6 +74,12 @@ export class Bullet extends Entity implements IndexObject {
 
     setScene(scene: Scene) {
         super.setScene(scene);
+        this.display = new Sprite(this.scene?.gameMain.app.loader.resources[require('@/assets/1.png')].texture);
+        this.scene?.addChild(this.display);
+        this.display.angle = this.angle;
+        this.display.anchor.x = 0.5;
+        this.display.anchor.y = 0.5;
+        // console.log(this.display.texture);
         this.collision.set_collision_tags('bullet');
     }
 
@@ -86,10 +93,10 @@ export class Bullet extends Entity implements IndexObject {
     }
 
     initGraphics() {
-        this.display.lineStyle(2, 0xDD2222, 1);
-        this.display.beginFill(0xE5E5D1);
-        this.display.drawCircle(0, 0, this.radius);
-        this.display.endFill();
+        // this.display.lineStyle(2, 0xDD2222, 1);
+        // this.display.beginFill(0xE5E5D1);
+        // this.display.drawCircle(0, 0, this.radius);
+        // this.display.endFill();
 
         // this.display.scale.set(this.radius, this.radius);
         // this.display.addChild(this.selfDisplay);
@@ -149,10 +156,10 @@ export class PlayerBullet extends Bullet {
     }
 
     initGraphics() {
-        this.display.lineStyle(2, 0x2279dd, 1);
-        this.display.beginFill(0xe5e5d1);
-        this.display.drawCircle(0, 0, this.radius);
-        this.display.endFill();
+        // this.display.lineStyle(2, 0x2279dd, 1);
+        // this.display.beginFill(0xe5e5d1);
+        // this.display.drawCircle(0, 0, this.radius);
+        // this.display.endFill();
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
