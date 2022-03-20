@@ -106,7 +106,7 @@ export abstract class Enemies {
     static boss1(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(3000);
-        enemy.showBar = true;
+        // enemy.showBar = true;
         enemy.speed = 400;
         // enemy.speed = 300;
 
@@ -163,6 +163,11 @@ export abstract class Enemies {
         enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1,
             () => {
                 enemy.speed = 0;
+            }));
+        enemy.eventList.addEvent(new EntityEvent(null,
+            () => {
+                if (enemy.scene)
+                    enemy.scene.playerUI.boss = enemy;
             }));
         enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 12.5,
             () => {

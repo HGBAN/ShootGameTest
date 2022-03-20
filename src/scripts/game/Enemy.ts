@@ -6,19 +6,21 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Color} from "@/scripts/engine/Color";
 import {Player} from "@/scripts/game/Player";
 import {Graphics} from "pixi.js";
+import {GameScene} from "@/scripts/game/GameScene";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
     width = 60;
     height = 60;
-    private life = 100;
+    life = 100;
     hitTimer: Timer = new Timer(0.1, false);
     score = 500;
 
     normalColor: Color = new Color('#9f4747');
     hitColor: Color = new Color('#1f5b8d');
 
-    showBar = false;
+    scene: GameScene | null = null;
+    // showBar = false;
     display = new Graphics();
 
     constructor(pos: Vec2) {
@@ -26,6 +28,10 @@ export class Enemy extends Entity {
         // this.life = this.maxLife;
         this.collision = new SSCD.Rectangle(new SSCD.Vector(pos.x - this.width / 2, pos.y - this.height / 2), new SSCD.Vector(this.width, this.height));
         this.collision.entity = this;
+
+        this.hitTimer.timeOverCallback = () => {
+            this.initGraphics();
+        }
     }
 
     set pos(value: Vec2) {
@@ -59,9 +65,19 @@ export class Enemy extends Entity {
             this.life = this._maxLife;
     }
 
-    setScene(scene: Scene) {
+    setScene(scene: GameScene) {
         super.setScene(scene);
         this.collision.set_collision_tags('enemy');
+    }
+
+    update() {
+        if (!this.hitTimer.isOver) {
+            this.display.clear();
+            this.display.lineStyle(4, 0xfab2b2, 1);
+            this.display.beginFill(new Color('#d93f3f').mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).valueOf());
+            this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
+            this.display.endFill();
+        }
     }
 
     fixedUpdate(time: number) {
@@ -92,6 +108,7 @@ export class Enemy extends Entity {
     }
 
     initGraphics() {
+        this.display.clear();
         this.display.lineStyle(4, 0xfab2b2, 1);
         this.display.beginFill(0xd93f3f);
         this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
@@ -117,13 +134,13 @@ export class Enemy extends Entity {
         ctx.fillStyle = new Color('#d93f3f').mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).toString();
         ctx.strokeStyle = "#d93f3f";
         ctx.lineWidth = 2;
-        if (this.showBar) {
-            ctx.fillRect(83, 43, 554 * this.life / this.maxLife, 14);
-            ctx.strokeRect(80, 40, 560, 20);
-            // ctx.strokeRect(680, 40, 20, 200);
-            // const healthRate = this.life / this.maxLife;
-            // ctx.fillRect(683, 43 + 194 * (1 - healthRate), 14, 194 * healthRate);
-        }
+        // if (this.showBar) {
+        //     ctx.fillRect(83, 43, 554 * this.life / this.maxLife, 14);
+        //     ctx.strokeRect(80, 40, 560, 20);
+        //     // ctx.strokeRect(680, 40, 20, 200);
+        //     // const healthRate = this.life / this.maxLife;
+        //     // ctx.fillRect(683, 43 + 194 * (1 - healthRate), 14, 194 * healthRate);
+        // }
         // ctx.stroke();
         // ctx.fill();
     }

@@ -3,16 +3,31 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
+import {Graphics} from "pixi.js";
 
 export class Elimination extends Entity {
     radius = 0;
     maxRadius = 1000;
     duration = -1;
     eliminationTimer: Timer = new Timer(1);
+    display = new Graphics();
 
     constructor(pos: Vec2, scene: Scene) {
         super(pos);
+        this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
+        this.collision.entity = this;
         this.setScene(scene);
+    }
+
+    initGraphics() {
+        this.display.lineStyle(2, 0xDD2222, 1);
+        this.display.drawCircle(0, 0, this.radius);
+    }
+
+    update() {
+        this.display.clear();
+        this.display.lineStyle(2, 0xDD2222, 1 - this.eliminationTimer.progress);
+        this.display.drawCircle(0, 0, this.radius);
     }
 
     draw(ctx: CanvasRenderingContext2D) {

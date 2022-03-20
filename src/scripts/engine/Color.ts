@@ -35,4 +35,11 @@ export class Color {
     toString() {
         return '#' + this.r.toString(16) + this.g.toString(16) + this.b.toString(16);
     }
+
+    valueOf() {
+        let result = this.r;
+        result = (result << 8) + this.g;
+        result = (result << 8) + this.b;
+        return result;
+    }
 }

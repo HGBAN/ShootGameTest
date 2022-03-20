@@ -11,10 +11,13 @@ import {EnemyEmitters} from "@/scripts/data/EnemyEmitters";
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Enemies} from "@/scripts/data/Enemies";
 import {Random} from "@/scripts/engine/Random";
+import {PlayerUI} from "@/scripts/ui/PlayerUI";
+import {GameScene} from "@/scripts/game/GameScene";
 
-export class Scene1 extends Scene {
-    time = 0;
-    player: Player;
+export class Scene1 extends GameScene {
+    // time = 0;
+    // player: Player;
+    // playerUI: PlayerUI;
 
     // emitterLine1: Emitter;
 
@@ -131,9 +134,11 @@ export class Scene1 extends Scene {
         bossEmitter.duration = -1;
         this.addObject(bossEmitter);
 
-        this.player = new Player(new Vec2(360, 1000));
-        // this.player.setScene(this);
-        this.addObject(this.player);
+        // this.player = new Player(new Vec2(360, 1000));
+        // this.addObject(this.player);
+        //
+        // this.playerUI = new PlayerUI(this.player);
+        // this.addObject(this.playerUI);
 
         // const enemy = Enemies.sniper1(this);
         // enemy.pos = new Vec2(800, 600);
