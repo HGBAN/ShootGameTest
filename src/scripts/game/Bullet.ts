@@ -61,12 +61,20 @@ export class Bullet extends Entity implements IndexObject {
         this.active = true;
         this.emitters.clear();
         this.eventList.init();
+        this.duration = 9999;
+        this._pos = new Vec2(0, 0);
+        this._dir = new Vec2(1, 0);
+        this.texture = 'bullet_3';
+        this.dead = false;
+        this.collision = new SSCD.Circle(new SSCD.Vector(0, 0), this.radius);
+        this.collision.entity = this;
+        this.display = new Sprite();
     }
 
     destroy() {
         super.destroy();
         this.init();
-        // this.pushPool();
+        this.pushPool();
     }
 
     pushPool() {

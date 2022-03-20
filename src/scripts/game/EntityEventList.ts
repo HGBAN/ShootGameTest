@@ -98,11 +98,12 @@ export class EntityEventList extends EntityEvent {
         this.currentEvents.clear();
     }
 
-    init(){
+    init() {
         this.currentPeriodTime = 0;
         this.currentRepeatTime = 0;
         this.currentEvents.clear();
         this.events.clear();
+        this.repeatTime = 1;
     }
 
     get isOver(): boolean {

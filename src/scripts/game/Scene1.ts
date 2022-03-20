@@ -14,6 +14,7 @@ import {Random} from "@/scripts/engine/Random";
 import {PlayerUI} from "@/scripts/ui/PlayerUI";
 import {GameScene} from "@/scripts/game/GameScene";
 import {GameMain} from "@/scripts/engine/GameMain";
+import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export class Scene1 extends GameScene {
     // time = 0;
@@ -199,5 +200,10 @@ export class Scene1 extends GameScene {
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
         // this.time += time;
+    }
+
+    addObject(obj: GameObject) {
+        super.addObject(obj);
+        // console.log(bulletPool.queue.length);
     }
 }
