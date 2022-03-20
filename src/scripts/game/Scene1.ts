@@ -197,6 +197,6 @@ export class Scene1 extends GameScene {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
-        this.time += time;
+        // this.time += time;
     }
 }

@@ -110,7 +110,7 @@ export class Enemy extends Entity {
     initGraphics() {
         this.display.clear();
         this.display.lineStyle(4, 0xfab2b2, 1);
-        this.display.beginFill(0xd93f3f);
+        this.display.beginFill(0xd9f4747);
         this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
         this.display.endFill();
     }
