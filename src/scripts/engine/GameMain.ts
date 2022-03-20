@@ -16,6 +16,7 @@ export class GameMain {
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;
+    resources: Map<string, string> = new Map<string, string>();
 
     constructor() {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
@@ -25,9 +26,24 @@ export class GameMain {
         this.scene.addObject(this.fps);
         this.app.stage = this.scene;
 
+        this.resources.set('player_bullet', require('@/assets/player_bullet.png'));
+        this.resources.set('bullet_1', require('@/assets/1.png'));
+        this.resources.set('bullet_2', require('@/assets/2.png'));
+        this.resources.set('bullet_3', require('@/assets/3.png'));
 
-        this.app.loader.add(require('@/assets/1.png')).load();
+        for (const path of this.resources.values()) {
+            this.app.loader.add(path);
+        }
+        this.app.loader.load();
+
         // console.log(this.app.loader.resources[require('@/assets/1.png')])
+    }
+
+    getTexture(key: string) {
+        const path = this.resources.get(key);
+        if (!path)
+            return undefined;
+        return this.app.loader.resources[path].texture;
     }
 
     update(): void {

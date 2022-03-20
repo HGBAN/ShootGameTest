@@ -28,6 +28,7 @@ export class Bullet extends Entity implements IndexObject {
     radius = 10;
     // display = new Graphics();
     display = new Sprite();
+    texture: string = 'bullet_3';
 
     constructor(pos: Vec2) {
         super(pos);
@@ -74,11 +75,13 @@ export class Bullet extends Entity implements IndexObject {
 
     setScene(scene: Scene) {
         super.setScene(scene);
-        this.display = new Sprite(this.scene?.gameMain.app.loader.resources[require('@/assets/1.png')].texture);
+        this.display = new Sprite(this.scene?.gameMain.getTexture(this.texture));
         this.scene?.addChild(this.display);
         this.display.angle = this.angle;
         this.display.anchor.x = 0.5;
         this.display.anchor.y = 0.5;
+        this.display.width = this.display.height = this.radius * 2;
+
         // console.log(this.display.texture);
         this.collision.set_collision_tags('bullet');
     }
@@ -149,9 +152,12 @@ export class Bullet extends Entity implements IndexObject {
 export class PlayerBullet extends Bullet {
     speed = 1000;
     radius = 5;
+    texture = 'player_bullet';
 
     setScene(scene: Scene) {
         super.setScene(scene);
+        // this.display.width = this.radius + 4;
+        // this.display.height = this.radius + 4;
         this.collision.set_collision_tags('player_bullet');
     }
 
