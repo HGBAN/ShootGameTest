@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <canvas v-show="true" width="720" height="1280" ref="canvas" class="canvas"
-            :style="{width:width+'px',height:height+'px'}"></canvas>
+  <div ref="container" class="container">
+    <!--    <canvas v-show="true" width="720" height="1280" ref="canvas" class="canvas"-->
+    <!--            :style="{width:width+'px',height:height+'px'}"></canvas>-->
     <!--    <div class="canvas" :style="{width:width+'px',height:height+'px'}"></div>-->
   </div>
 </template>
@@ -19,7 +19,8 @@ export default defineComponent({
   data() {
     return {
       width: 720,
-      height: 1280
+      height: 1280,
+      gameMain: new GameMain()
     };
   },
   methods: {
@@ -27,8 +28,6 @@ export default defineComponent({
       let width = document.body.clientWidth;
       let height = document.body.clientHeight;
 
-
-      // this.height = width * 16 / 9;
       if (width * 16 / 9 > height) {
         this.width = height * 9 / 16;
         this.height = height;
@@ -37,23 +36,42 @@ export default defineComponent({
         this.height = width * 16 / 9;
       }
 
-      // this.width=width;
-      // this.height=height;
-      // console.log(width,height);
-      // console.log(this.width,this.height);
+      this.gameMain.app.view.style.width = this.width + 'px';
+      this.gameMain.app.view.style.height = this.height + 'px';
     }
   },
   props: {
     msg: String,
   },
   mounted() {
+    // const gameMain = new GameMain();
+    let container = this.$refs.container as HTMLDivElement;
+    this.gameMain.app.view.className = 'canvas';
+    container.appendChild(this.gameMain.app.view);
+
+    this.resize();
+    window.addEventListener('resize', (e) => {
+      // console.log(e);
+      this.resize();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      this.gameMain.resetTime = true;
+      Input.reset();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      Input.keyDown(e.key);
+    });
+
+    document.addEventListener('keyup', (e) => {
+      Input.keyUp(e.key);
+    });
+
     const hammer = new Hammer(document.querySelector('.canvas'));
     hammer.get('pan').set({direction: Hammer.DIRECTION_ALL});
 
     hammer.on('pan', function (e: any) {
-      // e.target.classList.toggle('expand');
-      // console.log("You're pressing me!");
-      // console.log(e);
 
       let dir = new Vec2(e.velocityX, e.velocityY);
       let dis = dir.dis;
@@ -74,67 +92,18 @@ export default defineComponent({
 
     hammer.on('doubletap', function (e: any) {
       // if (e.maxPointers == 2) {
-        Input.doubleTap = true;
+      Input.doubleTap = true;
       // }
     });
 
+    this.gameMain.resetTime = true;
 
-    let canvas = this.$refs.canvas as HTMLCanvasElement;
-    // let context = canvas.getContext('2d');
-    // if (!context)
-    //   throw new Error('context为null');
-    // context.fillRect(0, 0, 100, 100);
-    const gameMain = new GameMain(canvas);
-
-    // window.onfocus = () => {
-    //   requestAnimationFrame(gameMain.getStartTimeCallback);
-    //   console.log("Df");
-    // }
-    this.resize();
-    window.addEventListener('resize', (e) => {
-      // console.log(e);
-      this.resize();
-    });
-
-    // window.addEventListener("load",data(){
-    //   setTimeout(scrollTo,0,0,1);
-    // },false);
-
-    // document.body.addEventListener("touchmove", (e)=>{e.preventDefault()}, false);
-
-    // document.addEventListener('touchmove', data(event) {
-    //   event.preventDefault();
-    // });
-    document.addEventListener('visibilitychange', () => {
-      gameMain.resetTime = true;
-      Input.reset();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      Input.keyDown(e.key);
-    });
-
-    document.addEventListener('keyup', (e) => {
-      Input.keyUp(e.key);
-    })
-
-    // document.addEventListener('touchmove', (e) => {
-    //   console.log(e);
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // });
-
-    gameMain.resetTime = true;
-    requestAnimationFrame(gameMain.gameLoopCallback);
-
-    // for(let i=0;i<1000000;i++)
-    //   console.log("1");
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .canvas {
   //width: 720px;
   //height: 1280px;
@@ -148,7 +117,7 @@ export default defineComponent({
   box-sizing: border-box;
   display: block;
 
-  background-color: #36424b;
+  //background-color: #36424b;
 }
 
 .container {

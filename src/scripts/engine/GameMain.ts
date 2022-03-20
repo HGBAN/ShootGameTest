@@ -7,23 +7,22 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Input} from "@/scripts/engine/Input";
 import {TestScene} from "@/scripts/game/TestScene";
 
+import * as PIXI from 'pixi.js';
+
 export class GameMain {
-    context: CanvasRenderingContext2D;
+    readonly app = new PIXI.Application({width: 720, height: 1280});
     fps: Fps;
     scene: Scene = /*new TestScene();*/new Scene1();
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;
 
-    constructor(private canvas: HTMLCanvasElement) {
-        const context = canvas.getContext('2d');
-        if (context == null) {
-            throw new Error('context为null');
-        }
-
-        this.context = context;
+    constructor() {
+        this.app.ticker.add(delta => this.gameLoopCallback(delta));
+        this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
-
+        this.scene.addObject(this.fps);
+        this.app.stage = this.scene;
     }
 
     update(): void {
@@ -36,35 +35,30 @@ export class GameMain {
         this.scene.fixedUpdate(this.fixedTimeStep);
     }
 
-    draw(): void {
-        this.fps.draw(this.context);
-        this.scene.draw(this.context);
-    }
+    // draw(): void {
+    // this.fps.draw(this.context);
+    // this.scene.draw(this.context);
+    // }
 
-    gameLoopCallback = (time: number): void => {
-
-        Time.update(time);
+    gameLoopCallback = (delta: number): void => {
+        let time = (delta / 60);
         if (this.resetTime) {
-            Time.update(time);
+            time = 0;
             this.resetTime = false;
         }
-        // console.log(1);
 
-        // console.log($time.deltaTime);
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.font = "40px Arial";
-        // this.context.fillText((1000 / Time.deltaTime).toString(), 0, 30);
+        Time.update(time);
+        // if (this.resetTime) {
+        //     Time.update(time);
+        //     this.resetTime = false;
+        // }
+
         this.update();
-        // this.scene.fixedUpdate(Time.deltaTime);
+
         this.fixedTime += Time.deltaTime;
         while (this.fixedTime >= this.fixedTimeStep) {
             this.fixedTime -= this.fixedTimeStep;
             this.fixedUpdate();
         }
-
-        this.draw();
-        requestAnimationFrame(this.gameLoopCallback);
-        // console.log(this.context);
-
     }
 }

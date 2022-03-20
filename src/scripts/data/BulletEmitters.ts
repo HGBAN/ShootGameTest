@@ -5,15 +5,16 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Player} from "@/scripts/game/Player";
 import {Random} from "@/scripts/engine/Random";
+import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
-        return new Bullet(Vec2.zero);
+        return bulletPool.get();
     }
 
     static snipe(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = new Bullet(Vec2.zero);
+            const bullet: Bullet = bulletPool.get();
             bullet.speed = 400;
             return bullet;
         });
@@ -32,7 +33,7 @@ export abstract class BulletEmitters {
 
     static circle1(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = new Bullet(Vec2.zero);
+            const bullet: Bullet = bulletPool.get();
             bullet.speed = 300;
             return bullet;
         });
@@ -102,7 +103,7 @@ export abstract class BulletEmitters {
 
     static lineRandom(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = new Bullet(Vec2.zero);
+            const bullet: Bullet = bulletPool.get();
             const emitter: Emitter = this.random1();
             // emitter.radius = 10;
             emitter.numberAtOnce = 1;

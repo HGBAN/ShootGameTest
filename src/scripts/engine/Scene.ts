@@ -1,8 +1,10 @@
 import {GameObject} from "@/scripts/engine/GameObject";
 
+import * as PIXI from 'pixi.js';
+
 export const SSCD = require('sscd').sscd;
 
-export class Scene {
+export class Scene extends PIXI.Container{
     objects: Set<GameObject> = new Set<GameObject>();
     collisionWorld: any = new SSCD.World({grid_size:200});
 
@@ -23,9 +25,9 @@ export class Scene {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        for (const obj of this.objects) {
-            obj.draw(ctx);
-        }
-    }
+    // draw(ctx: CanvasRenderingContext2D): void {
+    //     for (const obj of this.objects) {
+    //         obj.draw(ctx);
+    //     }
+    // }
 }

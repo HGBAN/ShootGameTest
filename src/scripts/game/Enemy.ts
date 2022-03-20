@@ -5,6 +5,7 @@ import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Timer} from "@/scripts/engine/Timer";
 import {Color} from "@/scripts/engine/Color";
 import {Player} from "@/scripts/game/Player";
+import {Graphics} from "pixi.js";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
@@ -18,18 +19,21 @@ export class Enemy extends Entity {
     hitColor: Color = new Color('#1f5b8d');
 
     showBar = false;
+    display = new Graphics();
 
     constructor(pos: Vec2) {
         super(pos);
         // this.life = this.maxLife;
         this.collision = new SSCD.Rectangle(new SSCD.Vector(pos.x - this.width / 2, pos.y - this.height / 2), new SSCD.Vector(this.width, this.height));
+        this.collision.entity = this;
     }
 
     set pos(value: Vec2) {
-        this._pos = value;
-        for (const emitter of this.emitters) {
-            emitter.pos = this._pos;
-        }
+        super.pos = value;
+        // this.display.position.set(this.pos.x - this.width / 2, this.pos.y - this.height / 2);
+        // for (const emitter of this.emitters) {
+        //     emitter.pos = this._pos;
+        // }
         this.collision.set_position(new SSCD.Vector(this._pos.x - this.width / 2, this._pos.y - this.height / 2));
     }
 
@@ -85,6 +89,13 @@ export class Enemy extends Entity {
             //     bullet.destroy();
             // }
         }
+    }
+
+    initGraphics() {
+        this.display.lineStyle(4, 0xfab2b2, 1);
+        this.display.beginFill(0xd93f3f);
+        this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
+        this.display.endFill();
     }
 
     draw(ctx: CanvasRenderingContext2D) {

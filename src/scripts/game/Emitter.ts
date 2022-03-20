@@ -36,7 +36,7 @@ export class Emitter extends Entity {
 
     setScene(scene: Scene) {
         super.setScene(scene);
-        this.collision.set_collision_tags('emitter');
+        // this.collision.set_collision_tags('emitter');
     }
 
     shoot() {

@@ -5,6 +5,13 @@ import {Input} from "@/scripts/engine/Input";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Timer} from "@/scripts/engine/Timer";
 import {Elimination} from "@/scripts/game/Elimination";
+import {Container, Graphics} from "pixi.js";
+import {GameObject} from "@/scripts/engine/GameObject";
+
+interface RubEffect {
+    timer: Timer;
+    display: Graphics;
+}
 
 export class Player extends Entity {
     radius = 2;
@@ -15,7 +22,8 @@ export class Player extends Entity {
     static playerPos: Vec2;
     rubRadius = 35;
     rubCollision: any;
-    rubTimer: Set<Timer> = new Set<Timer>();
+    // rubTimer: Set<Timer> = new Set<Timer>();
+    rubEffects: Set<RubEffect> = new Set<RubEffect>();
 
     static rubTimes = 0;
     rubValue = 0;
@@ -26,15 +34,28 @@ export class Player extends Entity {
 
     static score = 0;
 
+    display = new Graphics();
+
+    // selfDisplay = new Graphics();
+
     constructor(pos: Vec2) {
         super(pos);
         this.shootTimer = new Timer(0.1);
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.rubRadius);
         Player.playerPos = pos;
+
+        this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
+        this.collision.entity = this;
+
+        this.hitTimer.timeOverCallback=()=>{
+            this.initGraphics();
+        }
+        // this.initGraphics();
     }
 
     set pos(value: Vec2) {
         super.pos = value;
+        // this.d.position.set(this.pos.x, this.pos.y);
         this.rubCollision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
     }
 
@@ -51,6 +72,25 @@ export class Player extends Entity {
         this.collision.set_collision_tags('player');
         this.scene?.collisionWorld.add(this.rubCollision);
         this.rubCollision.set_collision_tags('rub');
+    }
+
+    initGraphics() {
+        //绘制自身
+        this.display.lineStyle(1, 0x8C1A1A, 1);
+        this.display.clear();
+        this.display.beginFill(0xDD2222, 1);
+        this.display.drawCircle(0, 0, 4);
+        this.display.endFill();
+
+        // this.display.addChild(this.display);
+        // console.log(1);
+        // this.display.position.set();
+    }
+
+    addRubEffect() {
+        const effect: RubEffect = {timer: new Timer(0.5), display: new Graphics()};
+        this.display.addChild(effect.display);
+        this.rubEffects.add(effect);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -73,17 +113,17 @@ export class Player extends Entity {
         ctx.fill();
 
         //绘制擦弹效果
-        for (const timer of this.rubTimer) {
-            if (timer.isOver) {
-                this.rubTimer.delete(timer);
-                continue;
-            }
-            const pro = timer.progress;
-            ctx.beginPath();
-            ctx.ellipse(this.pos.x, this.pos.y, this.rubRadius * pro, this.rubRadius * pro, 0, 0, 2 * Math.PI);
-            ctx.globalAlpha = 1 - pro;
-            ctx.stroke();
-        }
+        // for (const timer of this.rubTimer) {
+        //     if (timer.isOver) {
+        //         this.rubTimer.delete(timer);
+        //         continue;
+        //     }
+        //     const pro = timer.progress;
+        //     ctx.beginPath();
+        //     ctx.ellipse(this.pos.x, this.pos.y, this.rubRadius * pro, this.rubRadius * pro, 0, 0, 2 * Math.PI);
+        //     ctx.globalAlpha = 1 - pro;
+        //     ctx.stroke();
+        // }
 
         ctx.globalAlpha = 1;
 
@@ -113,6 +153,24 @@ export class Player extends Entity {
         ctx.fillStyle = '#ff6593';
         ctx.fillText(Player.rubTimes.toString(), 360, 1224);
         ctx.textAlign = "left";
+    }
+
+    update() {
+        //更新受创效果
+        if (!this.hitTimer.isOver) {
+            this.display.clear();
+            this.display.beginFill(0xDD2222, Math.cos(this.hitTimer.progress * Math.PI * 8) / 2.3 + (1 - 1 / 2.3));
+            this.display.drawCircle(0, 0, 4);
+            this.display.endFill();
+        }
+        //更新擦弹效果
+        for (const effect of this.rubEffects) {
+            const pro = effect.timer.progress;
+
+            effect.display.clear();
+            effect.display.lineStyle(1, 0xDD2222, 1 - pro);
+            effect.display.drawCircle(0, 0, this.rubRadius * pro);
+        }
     }
 
     fixedUpdate(time: number) {
@@ -162,8 +220,15 @@ export class Player extends Entity {
             // }
         }
 
-        for (const timer of this.rubTimer)
-            timer.update(time);
+        // for (const timer of this.rubTimer)
+        //     timer.update(time);
+        for (const effect of this.rubEffects) {
+            effect.timer.update(time);
+            if (effect.timer.isOver) {
+                this.rubEffects.delete(effect);
+                this.display.removeChild(effect.display);
+            }
+        }
 
         if (this.scene) {
             const rubCollisionObjs: Array<any> = [];
@@ -173,7 +238,8 @@ export class Player extends Entity {
                     //一个子弹只能擦一次
                     obj.rubbed = true;
                     //添加擦弹效果
-                    this.rubTimer.add(new Timer(0.5));
+                    // this.rubTimer.add(new Timer(0.5));
+                    this.addRubEffect();
                     Player.rubTimes++;
                     this.rubValue++;
                     if (this.rubValue >= this.rubValueMax) {
@@ -191,6 +257,8 @@ export class Player extends Entity {
                 }
             }
         }
+
+
     }
 
     shoot() {
@@ -205,6 +273,7 @@ export class Player extends Entity {
     destroy() {
         super.destroy();
         this.scene?.collisionWorld.remove(this.rubCollision);
+
     }
 
     hit(damage: number) {

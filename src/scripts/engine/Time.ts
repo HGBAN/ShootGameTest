@@ -9,8 +9,9 @@ export abstract class Time {
     // }
 
     static update(time: number): void {
-        this._deltaTime = (time - this.lastTime) / 1000;
-        this.lastTime = time;
+        // this._deltaTime = (time - this.lastTime) / 1000;
+        // this.lastTime = time;
+        this._deltaTime = time;
     }
 
     static get deltaTime(): number {

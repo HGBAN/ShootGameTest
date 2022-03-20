@@ -11,7 +11,7 @@ import {Player} from "@/scripts/game/Player";
 
 export class Entity extends GameObject {
     time = 0;
-    radius = 10;
+    // radius = 10;
     speed = 0;
     protected _dir: Vec2 = new Vec2(1, 0);
     duration = 9999;
@@ -29,8 +29,8 @@ export class Entity extends GameObject {
     constructor(pos: Vec2) {
         super(pos);
         this.eventList = new EntityEventList();
-        this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
-        this.collision.entity = this;
+        // this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
+        // this.collision.entity = this;
     }
 
     set pos(value: Vec2) {
@@ -40,7 +40,8 @@ export class Entity extends GameObject {
         for (const emitter of this.emitters) {
             emitter.pos = this._pos.clone;
         }
-        this.collision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
+        this.collision?.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
+        this.display?.position.set(this.pos.x, this.pos.y);
     }
 
     get pos() {
@@ -54,6 +55,8 @@ export class Entity extends GameObject {
         // for (const emitter of this.emitters) {
         //     emitter.dir = this._dir.clone;
         // }
+        if (this.display)
+            this.display.angle = this.angle;
     }
 
     get dir() {
@@ -84,13 +87,17 @@ export class Entity extends GameObject {
         if (this.scene == scene)
             return;
         this.scene = scene;
+        this.initGraphics();
+        if (this.display)
+            this.scene.addChild(this.display);
         // if (this.emitter) {
         //     this.scene.addObject(this.emitter);
         // }
         for (const emitter of this.emitters) {
             this.scene.addObject(emitter);
         }
-        this.scene.collisionWorld.add(this.collision);
+        if (this.collision)
+            this.scene.collisionWorld.add(this.collision);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -151,12 +158,16 @@ export class Entity extends GameObject {
             emitter.destroy();
         }
         if (this.scene) {
-            this.scene.collisionWorld.remove(this.collision);
+            if (this.collision)
+                this.scene.collisionWorld.remove(this.collision);
         }
     }
 
     reset() {
         this.eventList.reset();
         this.survivalTime = this.activeTime = 0;
+    }
+
+    initGraphics(): void {
     }
 }

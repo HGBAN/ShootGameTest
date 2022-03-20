@@ -5,7 +5,9 @@ import {liner, Unary} from "@/scripts/data/Functions";
 import {IndexObject, PropChanger, PropTween} from "@/scripts/engine/PropTransformer";
 import {Entity} from "@/scripts/game/Entity";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
-import {Scene} from "@/scripts/engine/Scene";
+import {Scene, SSCD} from "@/scripts/engine/Scene";
+import {Graphics} from "pixi.js";
+import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export class Bullet extends Entity implements IndexObject {
 
@@ -23,6 +25,8 @@ export class Bullet extends Entity implements IndexObject {
     // changer: PropChanger;
 
     // tween: PropTween;
+    radius = 10;
+    display = new Graphics();
 
     constructor(pos: Vec2) {
         super(pos);
@@ -42,6 +46,29 @@ export class Bullet extends Entity implements IndexObject {
         // this.direction = (x) => {
         //     return x;
         // };
+        // this.initGraphics();
+        this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
+        this.collision.entity = this;
+    }
+
+    init() {
+        this.rubbed = false;
+        this.scene = null;
+        this.survivalTime = this.activeTime = 0;
+        this.speed = 200;
+        this.active = true;
+        this.emitters.clear();
+        this.eventList.init();
+    }
+
+    destroy() {
+        super.destroy();
+        this.init();
+        // this.pushPool();
+    }
+
+    pushPool() {
+        bulletPool.push(this);
     }
 
     setScene(scene: Scene) {
@@ -49,12 +76,31 @@ export class Bullet extends Entity implements IndexObject {
         this.collision.set_collision_tags('bullet');
     }
 
+    set pos(value: Vec2) {
+        super.pos = value;
+        this.display.position.set(this.pos.x, this.pos.y);
+    }
+
+    get pos() {
+        return super.pos;
+    }
+
+    initGraphics() {
+        this.display.lineStyle(2, 0xDD2222, 1);
+        this.display.beginFill(0xE5E5D1);
+        this.display.drawCircle(0, 0, this.radius);
+        this.display.endFill();
+
+        // this.display.scale.set(this.radius, this.radius);
+        // this.display.addChild(this.selfDisplay);
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);
         ctx.beginPath();
         ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
         // ctx.fillRect(this.pos.x, this.pos.y, this.radius, this.radius);
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 2;
         ctx.strokeStyle = "#DD2222";
 
         const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, this.radius);
@@ -102,6 +148,13 @@ export class PlayerBullet extends Bullet {
         this.collision.set_collision_tags('player_bullet');
     }
 
+    initGraphics() {
+        this.display.lineStyle(2, 0x2279dd, 1);
+        this.display.beginFill(0xe5e5d1);
+        this.display.drawCircle(0, 0, this.radius);
+        this.display.endFill();
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);
         ctx.beginPath();
@@ -116,6 +169,10 @@ export class PlayerBullet extends Bullet {
 
         ctx.stroke();
         ctx.fill();
+
+    }
+
+    pushPool() {
 
     }
 }
