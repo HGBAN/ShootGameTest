@@ -34,7 +34,7 @@ export class Entity extends GameObject {
     }
 
     set pos(value: Vec2) {
-        this._pos = value;
+        super.pos = value;
         // if (this.emitter)
         //     this.emitter.pos = this._pos;
         for (const emitter of this.emitters) {
