@@ -13,6 +13,7 @@ export class Scene extends PIXI.Container {
     constructor(gameMain: GameMain) {
         super();
         this.gameMain = gameMain;
+        this.sortableChildren = true;
     }
 
     addObject(obj: GameObject): void {

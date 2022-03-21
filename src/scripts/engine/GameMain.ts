@@ -24,16 +24,10 @@ export class GameMain {
         this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
 
-        // this.scene = new Scene1(this);
-        // this.scene = new TestScene(this);
-        this.scene = new Scene2(this);
-        this.scene.addObject(this.fps);
-        this.app.stage = this.scene;
-
         this.loadResources().then(()=>{
-            this.scene = new Scene1(this);
+            // this.scene = new Scene1(this);
             // this.scene = new TestScene(this);
-            // this.scene = new Scene2(this);
+            this.scene = new Scene2(this);
             this.scene.addObject(this.fps);
             this.app.stage = this.scene;
         });

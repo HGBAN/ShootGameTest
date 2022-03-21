@@ -8,6 +8,7 @@ export abstract class GameObject {
     scene: Scene | null = null;
     dead = false;
     display?: PIXI.DisplayObject;
+    bindingObj?: GameObject;
 
     protected constructor(pos: Vec2 = Vec2.zero) {
         // this.scene = scene;
@@ -31,7 +32,9 @@ export abstract class GameObject {
     // abstract draw(ctx: CanvasRenderingContext2D): void;
 
     fixedUpdate(time: number): void {
-
+        if (this.bindingObj) {
+            this.pos = this.bindingObj.pos;
+        }
     }
 
     destroy(): void {

@@ -16,8 +16,8 @@ export class Background extends GameObject {
         this.scene = scene;
         const texture = this.scene.gameMain.getTexture(back);
         this.display = new Sprite(texture);
-        // this.display.zIndex = -1;
-        this.scene.addChildAt(this.display, 0);
+        this.display.zIndex = -1;
+        this.scene.addChild(this.display);
         this.scene.sortChildren();
         // this.scene.addChild(this.display);
 

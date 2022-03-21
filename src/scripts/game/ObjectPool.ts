@@ -2,7 +2,7 @@ import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
 
 export class ObjectPool<T> {
-    queue: Array<T> = [];
+    stack: Array<T> = [];
 
     createCallback: () => T;
 
@@ -11,7 +11,7 @@ export class ObjectPool<T> {
     }
 
     get(): T {
-        const obj = this.queue.shift();
+        const obj = this.stack.pop();
         if (obj) {
             return obj;
         } else {
@@ -20,7 +20,7 @@ export class ObjectPool<T> {
     }
 
     push(obj: T) {
-        this.queue.push(obj);
+        this.stack.push(obj);
         // console.log(this.queue.length);
     }
 }

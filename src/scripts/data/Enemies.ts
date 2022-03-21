@@ -8,6 +8,8 @@ import {PropMutation} from "@/scripts/engine/PropTransformer";
 import {Player} from "@/scripts/game/Player";
 import {Bullet} from "@/scripts/game/Bullet";
 import {bulletPool} from "@/scripts/game/ObjectPool";
+import {Emitters} from "@/scripts/data/Emitters";
+import {GameScene} from "@/scripts/game/GameScene";
 
 export abstract class Enemies {
     static sniper1(): Enemy {
@@ -180,6 +182,33 @@ export abstract class Enemies {
                 emitter2.reset();
                 enemy.reset();
             }));
+
+        return enemy;
+    }
+
+    static explosion(scene: GameScene): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.setMaxLife(50);
+        enemy.speed = 200;
+
+        const emitter = Emitters.line1(() => {
+            const bullet: Bullet = bulletPool.get();
+            bullet.speed = 400;
+            bullet.texture = 'bullet_3'
+            return bullet;
+        });
+        emitter.numberAtOnce = 16;
+        emitter.period = 99;
+        emitter.duration = -1;
+        emitter.active = false;
+        emitter.bindingObj = enemy;
+
+        emitter.eventList.addEvent(new EntityEvent(() => enemy.dead,
+            () => {
+                emitter.shoot();
+                emitter.destroy();
+            }));
+        scene.addObject(emitter);
 
         return enemy;
     }

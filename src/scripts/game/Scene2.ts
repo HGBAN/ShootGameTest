@@ -24,5 +24,10 @@ export class Scene2 extends GameScene {
         super(gameMain);
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);
+
+        const enemy: Enemy = Enemies.explosion(this);
+        enemy.pos = new Vec2(360, 300);
+        enemy.speed = 0;
+        this.addObject(enemy);
     }
 }

@@ -108,6 +108,7 @@ export class Entity extends GameObject {
     }
 
     fixedUpdate(time: number): void {
+        super.fixedUpdate(time);
         this.survivalTime += time;
         this.eventList.update(time);
 
