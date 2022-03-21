@@ -41,7 +41,6 @@ export class Entity extends GameObject {
             emitter.pos = this._pos.clone;
         }
         this.collision?.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
-        this.display?.position.set(this.pos.x, this.pos.y);
     }
 
     get pos() {

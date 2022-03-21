@@ -17,6 +17,7 @@ export abstract class GameObject {
 
     set pos(value: Vec2) {
         this._pos = value;
+        this.display?.position.set(this.pos.x, this.pos.y);
     }
 
     get pos() {

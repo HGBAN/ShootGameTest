@@ -8,11 +8,12 @@ import {Input} from "@/scripts/engine/Input";
 import {TestScene} from "@/scripts/game/TestScene";
 
 import * as PIXI from 'pixi.js';
+import {Scene2} from "@/scripts/game/Scene2";
 
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
     fps: Fps;
-    scene: Scene;
+    scene?: Scene;
     fixedTimeStep = 0.016;
     fixedTime = 0;
     resetTime = false;
@@ -22,22 +23,31 @@ export class GameMain {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
         this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
-        this.scene = new Scene1(this);
+
+        this.loadResources().then(()=>{
+            this.scene = new Scene2(this);
+            this.scene.addObject(this.fps);
+            this.app.stage = this.scene;
+        });
+        // this.scene = new Scene1(this);
         // this.scene = new TestScene(this);
-        this.scene.addObject(this.fps);
-        this.app.stage = this.scene;
+    }
 
-        this.resources.set('player_bullet', require('@/assets/player_bullet.png'));
-        this.resources.set('bullet_1', require('@/assets/1.png'));
-        this.resources.set('bullet_2', require('@/assets/2.png'));
-        this.resources.set('bullet_3', require('@/assets/3.png'));
+    loadResources() {
+        return new Promise((resolve) => {
+            this.resources.set('player_bullet', require('@/assets/player_bullet.png'));
+            this.resources.set('bullet_1', require('@/assets/1.png'));
+            this.resources.set('bullet_2', require('@/assets/2.png'));
+            this.resources.set('bullet_3', require('@/assets/3.png'));
+            this.resources.set('back_1', require('@/assets/back_1.png'));
 
-        for (const path of this.resources.values()) {
-            this.app.loader.add(path);
-        }
-        this.app.loader.load();
-
-        // console.log(this.app.loader.resources[require('@/assets/1.png')])
+            for (const path of this.resources.values()) {
+                this.app.loader.add(path);
+            }
+            this.app.loader.load(()=>{
+                resolve(null);
+            });
+        });
     }
 
     getTexture(key: string) {
@@ -50,11 +60,11 @@ export class GameMain {
     update(): void {
         this.fps.update();
         Input.update();
-        this.scene.update();
+        this.scene?.update();
     }
 
     fixedUpdate(): void {
-        this.scene.fixedUpdate(this.fixedTimeStep);
+        this.scene?.fixedUpdate(this.fixedTimeStep);
     }
 
     // draw(): void {
