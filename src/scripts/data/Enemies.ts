@@ -10,6 +10,9 @@ import {Bullet} from "@/scripts/game/Bullet";
 import {bulletPool} from "@/scripts/game/ObjectPool";
 import {Emitters} from "@/scripts/data/Emitters";
 import {GameScene} from "@/scripts/game/GameScene";
+import {Entities} from "@/scripts/data/Entities";
+import {Bullets} from "@/scripts/data/Bullets";
+import {Color} from "@/scripts/engine/Color";
 
 export abstract class Enemies {
     static sniper1(): Enemy {
@@ -193,8 +196,9 @@ export abstract class Enemies {
 
         const emitter = Emitters.line1(() => {
             const bullet: Bullet = bulletPool.get();
-            bullet.speed = 400;
+            bullet.speed = 300;
             bullet.texture = 'bullet_3'
+            Entities.drop(bullet);
             return bullet;
         });
         emitter.numberAtOnce = 16;
@@ -210,6 +214,52 @@ export abstract class Enemies {
             }));
         scene.addObject(emitter);
 
+        return enemy;
+    }
+
+    static fire(): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.setMaxLife(200);
+        // const emitter: Emitter = Emitters.fire(Emitters.line1(Bullets.default));
+        const emitter = BulletEmitters.fire();
+        emitter.numberAtOnce = 1;
+        emitter.duration = -1;
+        emitter.period = 1.5;
+        emitter.angle = 90;
+        enemy.addEmitter(emitter);
+        enemy.normalColor = new Color('#d3780a');
+        return enemy;
+    }
+
+    static randomCircle(): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.setMaxLife(800);
+        enemy.addEmitter(BulletEmitters.randomCircle());
+        // enemy.width = enemy.height = 100;
+
+        return enemy;
+    }
+
+    static unDownThree(): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.setMaxLife(100);
+        let emitter = Emitters.three();
+        emitter.angle = 90;
+        enemy.addEmitter(emitter);
+        emitter = Emitters.three();
+        emitter.angle = -90;
+        enemy.addEmitter(emitter);
+        enemy.normalColor = new Color('#d3ab0a');
+        return enemy;
+    }
+
+    static shot(): Enemy {
+        const enemy: Enemy = new Enemy(Vec2.zero);
+        enemy.setMaxLife(150);
+        const emitter: Emitter = BulletEmitters.shot();
+        emitter.angle = 90;
+        enemy.addEmitter(emitter);
+        enemy.normalColor = new Color('#d3ab0a');
         return enemy;
     }
 }

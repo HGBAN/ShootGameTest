@@ -29,5 +29,25 @@ export class Scene2 extends GameScene {
         enemy.pos = new Vec2(360, 300);
         enemy.speed = 0;
         this.addObject(enemy);
+
+        const enemy2: Enemy = Enemies.fire();
+        enemy2.pos = new Vec2(360, 400);
+        enemy2.speed = 0;
+        this.addObject(enemy2);
+
+        const enemy3: Enemy = Enemies.randomCircle();
+        enemy3.pos = new Vec2(360, 500);
+        enemy3.speed = 0;
+        this.addObject(enemy3);
+
+        const enemy4: Enemy = Enemies.unDownThree();
+        enemy4.pos = new Vec2(460, 500);
+        enemy4.speed = 0;
+        this.addObject(enemy4);
+
+        const enemy5: Enemy = Enemies.shot();
+        enemy5.pos = new Vec2(460, 400);
+        enemy5.speed = 0;
+        this.addObject(enemy5);
     }
 }

@@ -1,8 +1,7 @@
 import {Entity} from "@/scripts/game/Entity";
-import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
-import {EntityEventList} from "@/scripts/game/EntityEventList";
 import {Scene} from "@/scripts/engine/Scene";
+import {Random} from "@/scripts/engine/Random";
 
 export interface EntityEventGenerator {
     (entity: Entity): void;
@@ -17,8 +16,9 @@ export class Emitter extends Entity {
     period = 1;
     private currentPeriod = 0;
     radius = 0;
-    randomMinAngle = 0;
-    randomMaxAngle = 0;
+    // randomMinAngle = 0;
+    // randomMaxAngle = 0;
+    random = false;
     fixedAngle = 360;
     duration = 5;
 
@@ -26,7 +26,7 @@ export class Emitter extends Entity {
 
     entityEvent: EntityEventGenerator | null;
     entity: EntityGenerator;
-
+    entityDecorator?: (entity:Entity) => void;
 
     constructor(pos: Vec2, entity: EntityGenerator, bulletEvent: EntityEventGenerator | null = null) {
         super(pos);
@@ -48,12 +48,15 @@ export class Emitter extends Entity {
             currentAngle += addAngle / 2;
 
         for (let i = 0; i < this.numberAtOnce; i++) {
-            const rad = currentAngle * Math.PI / 180;
-            const dir: Vec2 = new Vec2(Math.cos(rad), Math.sin(rad));
             const entity: Entity = this.entity();
-            entity.dir = dir;
-            entity.pos = this.pos.add(dir.mul(this.radius));
-
+            if (!this.random) {
+                const rad = currentAngle * Math.PI / 180;
+                entity.dir = new Vec2(Math.cos(rad), Math.sin(rad));
+            } else {
+                entity.angle = this.angle + Random.range(-this.fixedAngle / 2, this.fixedAngle / 2);
+            }
+            entity.pos = this.pos.add(entity.dir.mul(this.radius));
+            this.entityDecorator?.(entity);
             // console.log(entity.pos,entity.collision.__position);
             // entity.setScene(this.scene);
             // bullet.speed = 200;

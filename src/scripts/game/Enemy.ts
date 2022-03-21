@@ -74,7 +74,7 @@ export class Enemy extends Entity {
         if (!this.hitTimer.isOver) {
             this.display.clear();
             this.display.lineStyle(4, 0xfab2b2, 1);
-            this.display.beginFill(new Color('#d93f3f').mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).valueOf());
+            this.display.beginFill(this.normalColor.mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).valueOf());
             this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
             this.display.endFill();
         }
@@ -110,39 +110,9 @@ export class Enemy extends Entity {
     initGraphics() {
         this.display.clear();
         this.display.lineStyle(4, 0xfab2b2, 1);
-        this.display.beginFill(0xd9f4747);
+        this.display.beginFill(this.normalColor.valueOf());
         this.display.drawRect(-this.width / 2, -this.height / 2, this.width, this.height);
         this.display.endFill();
-    }
-
-    draw(ctx: CanvasRenderingContext2D) {
-        super.draw(ctx);
-        // this.collision.render(ctx, new SSCD.Vector(0, 0));
-        ctx.beginPath();
-        // ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
-        // ctx.fillRect(this.pos.x, this.pos.y, this.radius, this.radius);
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "#fab2b2";
-
-        // const grd = ctx.createRadialGradient(this.pos.x, this.pos.y, 0, this.pos.x, this.pos.y, this.radius);
-        // grd.addColorStop(0, "white");
-        // grd.addColorStop(1, "#e5e5d1");
-        ctx.fillStyle = this.normalColor.mix(this.hitColor, this.hitTimer.progress * 0.8 + 0.2).toString();
-        ctx.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-        ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-
-        ctx.fillStyle = new Color('#d93f3f').mix(this.hitColor, this.hitTimer.progress * 0.5 + 0.5).toString();
-        ctx.strokeStyle = "#d93f3f";
-        ctx.lineWidth = 2;
-        // if (this.showBar) {
-        //     ctx.fillRect(83, 43, 554 * this.life / this.maxLife, 14);
-        //     ctx.strokeRect(80, 40, 560, 20);
-        //     // ctx.strokeRect(680, 40, 20, 200);
-        //     // const healthRate = this.life / this.maxLife;
-        //     // ctx.fillRect(683, 43 + 194 * (1 - healthRate), 14, 194 * healthRate);
-        // }
-        // ctx.stroke();
-        // ctx.fill();
     }
 
     hit(damage: number) {

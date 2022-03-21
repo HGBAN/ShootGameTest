@@ -26,6 +26,8 @@ export class Entity extends GameObject {
     active = true;
     activeTime = 0;
 
+    updateExtension?: (time:number) => void;
+
     constructor(pos: Vec2) {
         super(pos);
         this.eventList = new EntityEventList();
@@ -67,7 +69,7 @@ export class Entity extends GameObject {
         if (this.scene)
             this.scene.addObject(emitter);
         emitter.pos = this._pos.clone;
-        emitter.dir = this._dir.clone;
+        // emitter.dir = this._dir.clone;
         emitter.bindingEntity = this;
         this.emitters.add(emitter);
         // this.emitter.pos = this.pos;
@@ -126,6 +128,8 @@ export class Entity extends GameObject {
         }
 
         this.pos = this.pos.add(this.dir.mul(this.speed * time));
+
+        this.updateExtension?.(time);
         // if (this.emitter) {
         //     // this.emitter.fixedUpdate(time);
         //     this.emitter.pos = this.pos;
@@ -145,7 +149,7 @@ export class Entity extends GameObject {
         const rad = angle * Math.PI / 180;
         // this.dir.x = ;
         // this.dir.y = ;
-        this.dir=new Vec2(Math.cos(rad),Math.sin(rad));
+        this.dir = new Vec2(Math.cos(rad), Math.sin(rad));
     }
 
     get angle(): number {

@@ -6,6 +6,9 @@ import {Bullet} from "@/scripts/game/Bullet";
 import {Player} from "@/scripts/game/Player";
 import {Random} from "@/scripts/engine/Random";
 import {bulletPool} from "@/scripts/game/ObjectPool";
+import {Emitters} from "@/scripts/data/Emitters";
+import {Bullets} from "@/scripts/data/Bullets";
+import {Entities} from "@/scripts/data/Entities";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
@@ -93,7 +96,7 @@ export abstract class BulletEmitters {
     }
 
     static random1(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, ()=>{
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
             const bullet: Bullet = bulletPool.get();
             bullet.texture = 'bullet_1';
             return bullet;
@@ -122,6 +125,45 @@ export abstract class BulletEmitters {
         });
 
         // emitter.eventList.addEvent(new EntityEvent(() => true, new PropChanger(emitter, 'angle', 100, 360000, (x) => Math.sin(x))));
+
+        return emitter;
+    }
+
+    static fire(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = bulletPool.get();
+            const emitter: Emitter = Emitters.fire(Emitters.line1());
+            // emitter.radius = 10;
+            bullet.texture = 'bullet_2';
+            bullet.radius = 20;
+            emitter.angle = -90;
+            bullet.addEmitter(emitter);
+            return bullet;
+        });
+
+        return emitter;
+    }
+
+    static randomCircle(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.default);
+        emitter.duration = -1;
+        emitter.period = 0.1;
+        emitter.numberAtOnce = 4;
+        emitter.random = true;
+        return emitter;
+    }
+
+    static shot(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.default);
+        emitter.duration = -1;
+        emitter.period = 1;
+        emitter.numberAtOnce = 8;
+        emitter.fixedAngle = 60;
+        emitter.random = true;
+        emitter.entityDecorator = (entity) => {
+            entity.speed = Random.range(700, 900);
+            Entities.drop(entity, new Vec2(0, -1));
+        }
 
         return emitter;
     }

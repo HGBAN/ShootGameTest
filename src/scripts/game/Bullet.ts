@@ -69,6 +69,8 @@ export class Bullet extends Entity implements IndexObject {
         this.collision = new SSCD.Circle(new SSCD.Vector(0, 0), this.radius);
         this.collision.entity = this;
         this.display = new Sprite();
+        this.updateExtension = undefined;
+        this.radius = 10;
     }
 
     destroy() {
