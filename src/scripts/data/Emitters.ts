@@ -62,6 +62,8 @@ export abstract class Emitters {
         eventList.repeatTime = -1;
         let currentRepeat = 0;
         eventList.addEvent(new EntityEvent(null, () => {
+            if(!emitter.active)
+                return;
             for (let i = 0; i < numberAtOnce; i++) {
                 //0右，1下，2左，3上
                 const type = Random.range(0, 3);
@@ -82,7 +84,7 @@ export abstract class Emitters {
             currentRepeat++;
             if (currentRepeat >= repeatTime)
                 emitter.destroy();
-        }))
+        }));
         eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= step, () => {
         }));
 

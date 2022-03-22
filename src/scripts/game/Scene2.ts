@@ -75,7 +75,11 @@ export class Scene2 extends GameScene {
         // emitter4.pos = new Vec2(360, 500);
         // this.addObject(emitter4);
 
-        const emitter5: Emitter = Emitters.edgeShoot(Bullets.chain);
-        this.addObject(emitter5);
+        // const emitter5: Emitter = Emitters.edgeShoot(Bullets.chain);
+        // this.addObject(emitter5);
+
+        const boss: Enemy = Enemies.boss2(this);
+        boss.pos = new Vec2(360, 500);
+        this.addObject(boss);
     }
 }

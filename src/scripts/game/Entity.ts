@@ -7,6 +7,7 @@ import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Emitter} from "@/scripts/game/Emitter";
 import {Enemy} from "@/scripts/game/Enemy";
 import {Player} from "@/scripts/game/Player";
+import {EntityStates} from "@/scripts/game/EntityState";
 
 
 export class Entity extends GameObject {
@@ -17,7 +18,7 @@ export class Entity extends GameObject {
     duration = 9999;
 
     survivalTime = 0;
-    eventList: EntityEventList;
+    // eventList: EntityEventList;
 
     collision: any;
 
@@ -26,13 +27,20 @@ export class Entity extends GameObject {
     active = true;
     activeTime = 0;
 
-    updateExtension?: (time:number) => void;
+    states: EntityStates = new EntityStates();
+
+    updateExtension?: (time: number) => void;
 
     constructor(pos: Vec2) {
         super(pos);
-        this.eventList = new EntityEventList();
+        // this.eventList = new EntityEventList();
         // this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
         // this.collision.entity = this;
+
+    }
+
+    get eventList(){
+        return this.states.currentState.events;
     }
 
     set pos(value: Vec2) {
@@ -64,16 +72,18 @@ export class Entity extends GameObject {
         return this._dir;
     }
 
-    addEmitter(emitter: Emitter) {
+    addEmitter(...emitters: Emitter[]) {
         // this.emitter = emitter;
-        if (this.scene)
-            this.scene.addObject(emitter);
-        emitter.pos = this._pos.clone;
-        // emitter.dir = this._dir.clone;
-        emitter.bindingEntity = this;
-        this.emitters.add(emitter);
-        // this.emitter.pos = this.pos;
-        // this.emitter.dir = this.dir;
+        for(const emitter of emitters) {
+            if (this.scene)
+                this.scene.addObject(emitter);
+            emitter.pos = this._pos.clone;
+            // emitter.dir = this._dir.clone;
+            emitter.bindingEntity = this;
+            this.emitters.add(emitter);
+            // this.emitter.pos = this.pos;
+            // this.emitter.dir = this.dir;
+        }
     }
 
     removeEmitter(emitter: Emitter) {
@@ -113,6 +123,7 @@ export class Entity extends GameObject {
         super.fixedUpdate(time);
         this.survivalTime += time;
         this.eventList.update(time);
+        this.states.currentState.update(time);
 
         if (!this.active) {
             return;

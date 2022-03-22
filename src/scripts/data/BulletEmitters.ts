@@ -13,12 +13,12 @@ import {GameScene} from "@/scripts/game/GameScene";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
-        return bulletPool.get();
+        return new Bullet(Vec2.zero);
     }
 
     static snipe(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = bulletPool.get();
+            const bullet: Bullet = new Bullet(Vec2.zero);
             bullet.speed = 400;
             bullet.texture = 'bullet_1'
             return bullet;
@@ -35,7 +35,7 @@ export abstract class BulletEmitters {
 
     static circle1(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = bulletPool.get();
+            const bullet: Bullet = new Bullet(Vec2.zero);
             bullet.speed = 300;
             bullet.texture = 'bullet_1';
             return bullet;
@@ -98,7 +98,7 @@ export abstract class BulletEmitters {
 
     static random1(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = bulletPool.get();
+            const bullet: Bullet = new Bullet(Vec2.zero);
             bullet.texture = 'bullet_1';
             return bullet;
         });
@@ -115,7 +115,7 @@ export abstract class BulletEmitters {
 
     static lineRandom(): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = bulletPool.get();
+            const bullet: Bullet = new Bullet(Vec2.zero);
             const emitter: Emitter = this.random1();
             // emitter.radius = 10;
             emitter.numberAtOnce = 1;
@@ -203,7 +203,7 @@ export abstract class BulletEmitters {
         const eventList: EntityEventList = new EntityEventList();
         eventList.repeatTime = -1;
         eventList.addEvent(new EntityEvent(null, () => {
-            emitter.pos.x = Random.range(10, 710);
+            emitter.pos = new Vec2(Random.range(10, 710), 0);
             emitter.shoot();
         }));
         eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 1.5, () => {
