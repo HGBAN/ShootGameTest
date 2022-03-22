@@ -27,6 +27,12 @@ export class Scene2 extends GameScene {
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);
 
+        const explosionEnemy = Enemies.explosion.bind(undefined, this);
+
+        const enemyEmitter: Emitter = new Emitter(new Vec2(200, 0), explosionEnemy);
+        enemyEmitter.angle = 90;
+
+
         // const enemy: Enemy = Enemies.explosion(this);
         // enemy.pos = new Vec2(360, 300);
         // enemy.speed = 0;
