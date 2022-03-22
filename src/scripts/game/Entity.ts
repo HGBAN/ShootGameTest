@@ -107,8 +107,9 @@ export class Entity extends GameObject {
         for (const emitter of this.emitters) {
             this.scene.addObject(emitter);
         }
-        if (this.collision)
+        if (this.collision) {
             this.scene.collisionWorld.add(this.collision);
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

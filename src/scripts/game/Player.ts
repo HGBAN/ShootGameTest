@@ -74,6 +74,13 @@ export class Player extends Entity {
         this.rubCollision.set_collision_tags('rub');
     }
 
+    reset() {
+        this.pos = new Vec2(360, 1000);
+        this.collision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.radius);
+        this.collision.entity = this;
+        this.rubCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.rubRadius);
+    }
+
     initGraphics() {
         //绘制自身
         this.display.lineStyle(1, 0x8C1A1A, 1);

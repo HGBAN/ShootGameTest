@@ -24,14 +24,16 @@ export class GameMain {
         this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
 
-        this.loadResources().then(()=>{
-            // this.scene = new Scene1(this);
-            // this.scene = new TestScene(this);
-            this.scene = new Scene2(this);
-            this.scene.addObject(this.fps);
-            this.app.stage = this.scene;
+        this.loadResources().then(() => {
+            this.setScene(new Scene1(this));
         });
 
+    }
+
+    setScene(scene: Scene) {
+        this.scene = scene;
+        this.scene.addObject(this.fps);
+        this.app.stage = this.scene;
     }
 
     loadResources() {
@@ -46,7 +48,7 @@ export class GameMain {
             for (const path of this.resources.values()) {
                 this.app.loader.add(path);
             }
-            this.app.loader.load(()=>{
+            this.app.loader.load(() => {
                 resolve(null);
             });
         });

@@ -10,11 +10,17 @@ export class GameScene extends Scene {
     player: Player;
     playerUI: PlayerUI;
 
-    constructor(gameMain:GameMain) {
+    constructor(gameMain: GameMain, player?: Player) {
         super(gameMain);
 
-        this.player = new Player(new Vec2(360, 1000));
+        if (player) {
+            this.player = player;
+            this.player.reset();
+        }
+        else
+            this.player = new Player(new Vec2(360, 1000));
         // this.player.setScene(this);
+
         this.addObject(this.player);
 
         this.playerUI = new PlayerUI(this.player);

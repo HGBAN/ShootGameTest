@@ -2,7 +2,7 @@ import {Scene} from "@/scripts/engine/Scene";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Emitter} from "@/scripts/game/Emitter";
-import {EntityEvent} from "@/scripts/game/EntityEventList";
+import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
 import {BulletEmitters} from "@/scripts/data/BulletEmitters";
 import {Player} from "@/scripts/game/Player";
@@ -15,6 +15,7 @@ import {PlayerUI} from "@/scripts/ui/PlayerUI";
 import {GameScene} from "@/scripts/game/GameScene";
 import {GameMain} from "@/scripts/engine/GameMain";
 import {bulletPool} from "@/scripts/game/ObjectPool";
+import {Scene2} from "@/scripts/game/Scene2";
 
 export class Scene1 extends GameScene {
     // time = 0;
@@ -22,10 +23,12 @@ export class Scene1 extends GameScene {
     // playerUI: PlayerUI;
 
     // emitterLine1: Emitter;
-
+    events: EntityEventList = new EntityEventList();
 
     constructor(gameMain: GameMain) {
         super(gameMain);
+        this.transition.openText.text = 'Stage 1';
+
         const emitterLine1: Emitter = EnemyEmitters.line1();
         emitterLine1.active = false;
         emitterLine1.eventList.addEvent(new EntityEvent(() => this.time >= 2, () => {
@@ -121,20 +124,38 @@ export class Scene1 extends GameScene {
         emitterLineRandom2.duration = -1;
         this.addObject(emitterLineRandom2);
 
-        const bossEmitter: Emitter = EnemyEmitters.line1(Enemies.boss1);
-        bossEmitter.active = false;
-        bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
-            bossEmitter.active = true;
-            bossEmitter.survivalTime = 0;
+        // const bossEmitter: Emitter = EnemyEmitters.line1(Enemies.boss1);
+        // bossEmitter.active = false;
+        // bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22, () => {
+        //     bossEmitter.active = true;
+        //     bossEmitter.survivalTime = 0;
+        // }));
+        // bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22.5, () => {
+        //     bossEmitter.active = false;
+        // }));
+        // bossEmitter.pos = new Vec2(360, 0);
+        // bossEmitter.angle = 90;
+        // bossEmitter.numberAtOnce = 1;
+        // bossEmitter.duration = -1;
+
+        let boss: Enemy | undefined;
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 22, () => {
+            boss = Enemies.boss1();
+            boss.pos = new Vec2(360, 0);
+            boss.angle = 90;
+            this.addObject(boss);
         }));
-        bossEmitter.eventList.addEvent(new EntityEvent(() => this.time >= 22.5, () => {
-            bossEmitter.active = false;
+
+        this.events.addEvent(new EntityEvent(() => boss ? boss.dead : false, () => {
+            const time = this.time;
+            this.events.addEvent(new EntityEvent(() => this.time - time >= 2, () => {
+                this.transition.triggerOut();
+            }));
+            this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
+                this.gameMain.setScene(new Scene2(this.gameMain, this.player));
+            }));
         }));
-        bossEmitter.pos = new Vec2(360, 0);
-        bossEmitter.angle = 90;
-        bossEmitter.numberAtOnce = 1;
-        bossEmitter.duration = -1;
-        this.addObject(bossEmitter);
 
         // this.player = new Player(new Vec2(360, 1000));
         // this.addObject(this.player);
@@ -199,6 +220,7 @@ export class Scene1 extends GameScene {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
+        this.events.update(time);
         // this.time += time;
     }
 

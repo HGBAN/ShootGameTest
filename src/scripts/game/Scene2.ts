@@ -24,8 +24,8 @@ export class Scene2 extends GameScene {
 
     events: EntityEventList = new EntityEventList();
 
-    constructor(gameMain: GameMain) {
-        super(gameMain);
+    constructor(gameMain: GameMain, player: Player) {
+        super(gameMain, player);
         this.transition.openText.text = 'Stage 2';
 
         this.back = new Background(this, 'back_1');
@@ -178,11 +178,22 @@ export class Scene2 extends GameScene {
             this.addObject(emitter);
         }));
 
+        let boss: Enemy | undefined = undefined;
         this.events.addEvent(new EntityEvent(() => this.time >= 75, () => {
-            const boss: Enemy = Enemies.boss2(this);
+            boss = Enemies.boss2(this);
             boss.pos = new Vec2(360, 0);
             boss.angle = 90;
             this.addObject(boss);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => boss ? boss.dead : false, () => {
+            const time = this.time;
+            this.events.addEvent(new EntityEvent(() => this.time - time >= 2, () => {
+                this.transition.triggerOut();
+            }));
+            this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
+                alert('恭喜！本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。');
+            }));
         }));
 
         // const enemy: Enemy = Enemies.explosion(this);

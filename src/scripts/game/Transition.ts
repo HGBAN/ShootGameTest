@@ -31,7 +31,10 @@ export class Transition extends GameObject {
         super(pos);
         this.openText = new Text(openText, TextStyles.openText);
         this.transitionTimer.timeOverCallback = () => {
-            this.transition.y = -1280;
+            if (this.transitionIn)
+                this.transition.y = -1280;
+            else
+                this.transition.y = 0;
         }
 
         this.events.addEvent(new EntityEvent(() => this.events.currentPeriodTime >= 2.5,
@@ -86,5 +89,10 @@ export class Transition extends GameObject {
                 }
             }
         }
+    }
+
+    triggerOut() {
+        this.transitionTimer.reset();
+        this.transitionIn = false;
     }
 }
