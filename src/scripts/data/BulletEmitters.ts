@@ -216,16 +216,18 @@ export abstract class BulletEmitters {
     }
 
     //发射后一段时间返回的子弹
-    static circleBack(){
-        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.stopBack);
+    static circleBack() {
+        const emitter: Emitter = Emitters.line1(Bullets.stopBack);
+        emitter.numberAtOnce = 12;
         emitter.duration = -1;
-        emitter.period = 0.1;
-        emitter.numberAtOnce = 8;
+        emitter.period = 0.25;
+        emitter.pos = new Vec2(360, 500);
         emitter.updateExtension = (time) => {
             emitter.angle += time * 20;
         }
 
-
         return emitter;
     }
+
+
 }

@@ -17,6 +17,7 @@ import {GameMain} from "@/scripts/engine/GameMain";
 import {bulletPool} from "@/scripts/game/ObjectPool";
 import {Background} from "@/scripts/game/Background";
 import {Bullets} from "@/scripts/data/Bullets";
+import {Emitters} from "@/scripts/data/Emitters";
 
 export class Scene2 extends GameScene {
     back: Background;
@@ -55,6 +56,10 @@ export class Scene2 extends GameScene {
         // bullet.pos = new Vec2(460, 600);
         // this.addObject(bullet);
 
+        // const bullet: Bullet = Bullets.chain();
+        // bullet.pos = new Vec2(460, 600);
+        // this.addObject(bullet);
+
         // const emitter: Emitter = BulletEmitters.trace();
         // emitter.pos = new Vec2(360, 500);
         // this.addObject(emitter);
@@ -63,7 +68,14 @@ export class Scene2 extends GameScene {
         // emitter2.pos = new Vec2(360, 500);
         // this.addObject(emitter2);
 
-        const emitter3: Emitter = BulletEmitters.meteorite(this, () => this.time >= 10);
-        this.addObject(emitter3);
+        // const emitter3: Emitter = BulletEmitters.meteorite(this, () => this.time >= 10);
+        // this.addObject(emitter3);
+
+        // const emitter4: Emitter = BulletEmitters.circleBack();
+        // emitter4.pos = new Vec2(360, 500);
+        // this.addObject(emitter4);
+
+        const emitter5: Emitter = Emitters.edgeShoot(Bullets.chain);
+        this.addObject(emitter5);
     }
 }

@@ -6,8 +6,10 @@ import {Emitters} from "@/scripts/data/Emitters";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Entities} from "@/scripts/data/Entities";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
-import {PropChanger} from "@/scripts/engine/PropTransformer";
+import {PropChanger, PropTween} from "@/scripts/engine/PropTransformer";
 import {Emitter} from "@/scripts/game/Emitter";
+import {liner} from "@/scripts/data/Functions";
+import {Random} from "@/scripts/engine/Random";
 
 export abstract class Bullets {
     static default() {
@@ -15,7 +17,7 @@ export abstract class Bullets {
     }
 
     //朝上方喷射的子弹
-    static fire(){
+    static fire() {
         const bullet: Bullet = bulletPool.get();
         const emitter: Emitter = Emitters.fire(Emitters.line1());
         bullet.texture = 'bullet_2';
@@ -61,13 +63,44 @@ export abstract class Bullets {
     }
 
     //缓慢停下后朝反方向运动的子弹
-    static stopBack(){
+    static stopBack() {
         const bullet: Bullet = bulletPool.get();
-        const emitter: Emitter = Emitters.fire(Emitters.line1());
-        bullet.texture = 'bullet_2';
-        bullet.radius = 20;
-        emitter.angle = -90;
+        bullet.texture = 'bullet_4';
+        bullet.speed = 300;
+        bullet.updateExtension = (time) => {
+            if (bullet.speed > -300)
+                bullet.speed -= 160 * time;
+        }
+
+        return bullet;
+    }
+
+    //原地停留一段时间后朝反方向随机运动的子弹
+    static stopBackRandom() {
+        const bullet: Bullet = bulletPool.get();
+        bullet.texture = 'bullet_4';
+        bullet.speed = 0;
+        bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 10, () => {
+            bullet.speed = -300;
+            bullet.angle += Random.range(-30, 30);
+        }));
+
+        return bullet;
+    }
+
+    //锁链
+    static chain() {
+        const bullet: Bullet = bulletPool.get();
+        bullet.texture = 'bullet_1';
+        bullet.speed = 400;
+
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.stopBackRandom);// Emitters.line1(this.stopBackRandom);
+        emitter.period = 0.1;
+        emitter.numberAtOnce = 1;
+        emitter.duration = -1;
+        emitter.angle = bullet.angle;
         bullet.addEmitter(emitter);
+
         return bullet;
     }
 }
