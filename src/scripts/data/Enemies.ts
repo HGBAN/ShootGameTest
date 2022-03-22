@@ -203,9 +203,8 @@ export abstract class Enemies {
             return bullet;
         });
         emitter.numberAtOnce = 16;
-        emitter.period = 99;
+        emitter.period = -1;
         emitter.duration = -1;
-        emitter.active = false;
         emitter.bindingObj = enemy;
 
         emitter.eventList.addEvent(new EntityEvent(() => enemy.dead,
@@ -221,6 +220,7 @@ export abstract class Enemies {
     static fire(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(200);
+        enemy.speed = 60;
         // const emitter: Emitter = Emitters.fire(Emitters.line1(Bullets.default));
         const emitter = BulletEmitters.fire();
         emitter.numberAtOnce = 1;
@@ -234,8 +234,20 @@ export abstract class Enemies {
 
     static randomCircle(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.setMaxLife(800);
-        enemy.addEmitter(BulletEmitters.randomCircle());
+        enemy.speed = 400;
+        enemy.setMaxLife(1200);
+
+        const emitter = BulletEmitters.randomCircle();
+        emitter.active = false;
+        enemy.addEmitter(emitter);
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1, () => {
+            enemy.speed = 0;
+            emitter.active = true
+        }));
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 9, () => {
+            enemy.speed = -400;
+            emitter.active = false;
+        }));
         // enemy.width = enemy.height = 100;
 
         return enemy;
@@ -244,6 +256,7 @@ export abstract class Enemies {
     static unDownThree(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(100);
+        enemy.speed = 100;
         let emitter = Emitters.three();
         emitter.angle = 90;
         enemy.addEmitter(emitter);
@@ -268,12 +281,18 @@ export abstract class Enemies {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(5000);
         enemy.normalColor = new Color('#d37c0a');
+        enemy.speed = 400;
 
         //亮血条
         enemy.eventList.addEvent(new EntityEvent(null,
             () => {
                 if (enemy.scene)
                     enemy.scene.playerUI.boss = enemy;
+            }));
+
+        enemy.eventList.addEvent(new EntityEvent(() => enemy.survivalTime >= 1,
+            () => {
+                enemy.speed = 0;
                 enemy.states.changeState('mine');
             }));
 
@@ -309,15 +328,15 @@ export abstract class Enemies {
             enemy.speed = 150;
             enemy.angle = 180;
         }));
-        meteoriteState.events.addEvent(new EntityEvent(()=>meteoriteState.time >= 2, () => {
+        meteoriteState.events.addEvent(new EntityEvent(() => meteoriteState.time >= 2, () => {
             enemy.speed = 150;
             enemy.angle = 0;
         }));
-        meteoriteState.events.addEvent(new EntityEvent(()=>meteoriteState.time >= 6, () => {
+        meteoriteState.events.addEvent(new EntityEvent(() => meteoriteState.time >= 6, () => {
             enemy.speed = 150;
             enemy.angle = 180;
         }));
-        meteoriteState.events.addEvent(new EntityEvent(()=>meteoriteState.time >= 8, () => {
+        meteoriteState.events.addEvent(new EntityEvent(() => meteoriteState.time >= 8, () => {
             enemy.speed = 0;
         }));
 

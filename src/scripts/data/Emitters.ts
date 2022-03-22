@@ -8,10 +8,31 @@ import {Bullet} from "@/scripts/game/Bullet";
 import {bulletPool} from "@/scripts/game/ObjectPool";
 import {GameScene} from "@/scripts/game/GameScene";
 import {Random} from "@/scripts/engine/Random";
+import {PropChanger, PropMutation} from "@/scripts/engine/PropTransformer";
 
 export abstract class Emitters {
     static line1(entity: EntityGenerator = Enemies.sniper1): Emitter {
         const emitter: Emitter = new Emitter(Vec2.zero, entity);
+        return emitter;
+    }
+
+    static sin(entity: EntityGenerator = Bullets.default, reverse: boolean = false): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, entity);
+
+        emitter.entityEvent = (entity) => {
+            const eventList: EntityEventList = new EntityEventList(null, -1);
+            if (!reverse) {
+                eventList.addEvent(new EntityEvent(null, new PropMutation(entity, 'angle', entity.angle + 45)));
+                eventList.addEvent(new EntityEvent(null, new PropChanger(entity, 'angle', 1, -90, (x) => (Math.sin((2 * x - 1) * Math.PI / 2) + 1) / 2)));
+                eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 1, new PropChanger(entity, 'angle', 1, 90, (x) => (Math.sin((2 * x - 1) * Math.PI / 2) + 1) / 2)));
+            } else {
+                eventList.addEvent(new EntityEvent(null, new PropMutation(entity, 'angle', entity.angle - 45)));
+                eventList.addEvent(new EntityEvent(null, new PropChanger(entity, 'angle', 1, 90, (x) => (Math.sin((2 * x - 1) * Math.PI / 2) + 1) / 2)));
+                eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 1, new PropChanger(entity, 'angle', 1, -90, (x) => (Math.sin((2 * x - 1) * Math.PI / 2) + 1) / 2)));
+            }
+            entity.eventList.addEvent(eventList);
+        };
+
         return emitter;
     }
 
@@ -62,7 +83,7 @@ export abstract class Emitters {
         eventList.repeatTime = -1;
         let currentRepeat = 0;
         eventList.addEvent(new EntityEvent(null, () => {
-            if(!emitter.active)
+            if (!emitter.active)
                 return;
             for (let i = 0; i < numberAtOnce; i++) {
                 //0右，1下，2左，3上

@@ -51,7 +51,7 @@ export class EntityEventList extends EntityEvent {
     private readonly events: Set<EntityEvent>;
     private currentEvents: Set<EntityEvent>;
     repeatTime: number;
-    private currentRepeatTime: number = 0;
+    private currentRepeatTime: number = 1;
     currentPeriodTime = 0;
 
     constructor(condition: ConditionFunc | null = null, repeatTime: number = 1) {

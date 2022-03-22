@@ -2,7 +2,7 @@ import {Scene} from "@/scripts/engine/Scene";
 import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Emitter} from "@/scripts/game/Emitter";
-import {EntityEvent} from "@/scripts/game/EntityEventList";
+import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
 import {BulletEmitters} from "@/scripts/data/BulletEmitters";
 import {Player} from "@/scripts/game/Player";
@@ -22,16 +22,168 @@ import {Emitters} from "@/scripts/data/Emitters";
 export class Scene2 extends GameScene {
     back: Background;
 
+    events: EntityEventList = new EntityEventList();
+
     constructor(gameMain: GameMain) {
         super(gameMain);
+        this.transition.openText.text = 'Stage 2';
+
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);
 
         const explosionEnemy = Enemies.explosion.bind(undefined, this);
 
-        const enemyEmitter: Emitter = new Emitter(new Vec2(200, 0), explosionEnemy);
-        enemyEmitter.angle = 90;
+        this.events.addEvent(new EntityEvent(() => this.time >= 1, () => {
+            let emitter: Emitter = Emitters.sin(explosionEnemy);
+            emitter.pos = new Vec2(0, 100);
+            emitter.duration = 5;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            this.addObject(emitter);
 
+            emitter = Emitters.sin(explosionEnemy);
+            emitter.pos = new Vec2(720, 200);
+            emitter.duration = 5;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 180;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 8, () => {
+            const emitter: Emitter = Emitters.line1();
+            emitter.pos = new Vec2(100, 1280);
+            emitter.duration = 3;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = -90;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 12, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.fire);
+            emitter.pos = new Vec2(720, 300);
+            emitter.duration = 6;
+            emitter.period = 2;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 180;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 24, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.unDownThree);
+            emitter.pos = new Vec2(0, 200);
+            emitter.duration = 4;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 0;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 28, () => {
+            const emitter: Emitter = Emitters.sin(explosionEnemy);
+            emitter.pos = new Vec2(720, 100);
+            emitter.duration = 5;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 120;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 32, () => {
+            const emitter: Emitter = Emitters.line1();
+            emitter.pos = new Vec2(620, 0);
+            emitter.duration = 4;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 90;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 34, () => {
+            const emitter: Emitter = Emitters.sin(explosionEnemy);
+            emitter.pos = new Vec2(0, 200);
+            emitter.duration = 5;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 60;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 38, () => {
+            let emitter: Emitter = Emitters.line1(Enemies.unDownThree);
+            emitter.pos = new Vec2(720, 100);
+            emitter.duration = 8;
+            emitter.period = 2;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 180;
+            this.addObject(emitter);
+
+            emitter = Emitters.line1(Enemies.unDownThree);
+            emitter.pos = new Vec2(0, 200);
+            emitter.duration = 8;
+            emitter.period = 2;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 0;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 47, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.randomCircle);
+            emitter.pos = new Vec2(360, 0);
+            emitter.duration = 1;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 90;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 54, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.lineRandom);
+            emitter.pos = new Vec2(0, 200);
+            emitter.duration = 4;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 30;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 59, () => {
+            const emitter: Emitter = Emitters.sin(explosionEnemy);
+            emitter.pos = new Vec2(360, 0);
+            emitter.duration = 5;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 90;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 63, () => {
+            const emitter: Emitter = Emitters.line1();
+            emitter.pos = new Vec2(620, 1280);
+            emitter.duration = 4;
+            emitter.period = 1;
+            emitter.numberAtOnce = 1;
+            emitter.angle = -90;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 65, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.unDownThree);
+            emitter.pos = new Vec2(0, 200);
+            emitter.duration = 8;
+            emitter.period = 2;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 0;
+            this.addObject(emitter);
+        }));
+
+        this.events.addEvent(new EntityEvent(() => this.time >= 75, () => {
+            const boss: Enemy = Enemies.boss2(this);
+            boss.pos = new Vec2(360, 0);
+            boss.angle = 90;
+            this.addObject(boss);
+        }));
 
         // const enemy: Enemy = Enemies.explosion(this);
         // enemy.pos = new Vec2(360, 300);
@@ -84,8 +236,13 @@ export class Scene2 extends GameScene {
         // const emitter5: Emitter = Emitters.edgeShoot(Bullets.chain);
         // this.addObject(emitter5);
 
-        const boss: Enemy = Enemies.boss2(this);
-        boss.pos = new Vec2(360, 500);
-        this.addObject(boss);
+        // const boss: Enemy = Enemies.boss2(this);
+        // boss.pos = new Vec2(360, 500);
+        // this.addObject(boss);
+    }
+
+    fixedUpdate(time: number) {
+        super.fixedUpdate(time);
+        this.events.update(time);
     }
 }

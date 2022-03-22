@@ -45,6 +45,7 @@ export class Emitter extends Entity {
             return;
         if(!this.active)
             return;
+        // console.log(1);
         const addAngle = this.fixedAngle / this.numberAtOnce;
         let currentAngle = this.angle;
         if (this.numberAtOnce % 2 == 0)
