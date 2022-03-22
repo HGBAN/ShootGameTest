@@ -22,9 +22,9 @@ import {Emitters} from "@/scripts/data/Emitters";
 export class Scene2 extends GameScene {
     back: Background;
 
-    events: EntityEventList = new EntityEventList();
+    // events: EntityEventList = new EntityEventList();
 
-    constructor(gameMain: GameMain, player: Player) {
+    constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
         this.transition.openText.text = 'Stage 2';
 
@@ -192,7 +192,8 @@ export class Scene2 extends GameScene {
                 this.transition.triggerOut();
             }));
             this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
-                alert('恭喜！本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。');
+                alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
+
             }));
         }));
 
@@ -255,5 +256,9 @@ export class Scene2 extends GameScene {
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
         this.events.update(time);
+    }
+
+    createCurrentScene(): GameScene {
+        return new Scene2(this.gameMain, this.player);
     }
 }

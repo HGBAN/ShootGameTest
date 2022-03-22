@@ -23,10 +23,10 @@ export class Scene1 extends GameScene {
     // playerUI: PlayerUI;
 
     // emitterLine1: Emitter;
-    events: EntityEventList = new EntityEventList();
+    // events: EntityEventList = new EntityEventList();
 
-    constructor(gameMain: GameMain) {
-        super(gameMain);
+    constructor(gameMain: GameMain, player?: Player) {
+        super(gameMain, player);
         this.transition.openText.text = 'Stage 1';
 
         const emitterLine1: Emitter = EnemyEmitters.line1();
@@ -227,5 +227,9 @@ export class Scene1 extends GameScene {
     addObject(obj: GameObject) {
         super.addObject(obj);
         // console.log(bulletPool.queue.length);
+    }
+
+    createCurrentScene(): GameScene {
+        return new Scene1(this.gameMain, this.player);
     }
 }

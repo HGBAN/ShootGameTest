@@ -79,6 +79,8 @@ export class Player extends Entity {
         this.collision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.radius);
         this.collision.entity = this;
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.rubRadius);
+        this.dead = false;
+        this.life = this.maxLife;
     }
 
     initGraphics() {
@@ -227,8 +229,10 @@ export class Player extends Entity {
         if (!this.hitTimer.isOver)
             return;
         this.life -= damage;
-        if (this.life < 0)
+        if (this.life <= 0) {
             this.life = 0;
+            this.dead = true;
+        }
         this.hitTimer.reset();
     }
 
