@@ -181,13 +181,17 @@ export abstract class BulletEmitters {
 
     //限制走位的电风扇
     static trace(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.default);
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet = Bullets.default();
+            bullet.rubValue = 3;
+            return bullet;
+        });
         emitter.duration = -1;
         emitter.period = 0.1;
         emitter.numberAtOnce = 4;
         emitter.updateExtension = (time) => {
             emitter.angle += time * 20;
-        }
+        };
 
         return emitter;
     }

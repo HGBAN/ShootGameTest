@@ -13,6 +13,8 @@ export class Bullet extends Entity implements IndexObject, PoolObject {
 
     damage = 10;
     rubbed = false;
+    //擦此弹可以获得的消弹条的数值
+    rubValue = 20;
     // radius = 20;
     // speed = 200;
     // direction = new Vec2(1, 0);

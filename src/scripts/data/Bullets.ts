@@ -66,6 +66,7 @@ export abstract class Bullets {
     static stopBack() {
         const bullet: Bullet = new Bullet(Vec2.zero);
         bullet.texture = 'bullet_4';
+        bullet.rubValue = 10;
         bullet.speed = 300;
         bullet.updateExtension = (time) => {
             if (bullet.speed > -300)

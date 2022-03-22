@@ -266,7 +266,7 @@ export abstract class Enemies {
 
     static boss2(scene: GameScene): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.setMaxLife(4000);
+        enemy.setMaxLife(5000);
         enemy.normalColor = new Color('#d37c0a');
 
         //亮血条
