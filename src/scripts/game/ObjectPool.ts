@@ -1,7 +1,11 @@
 import {Bullet} from "@/scripts/game/Bullet";
 import {Vec2} from "@/scripts/engine/Vec2";
 
-export class ObjectPool<T> {
+export interface PoolObject {
+    init(): void;
+}
+
+export class ObjectPool<T extends PoolObject> {
     stack: Array<T> = [];
 
     createCallback: () => T;
@@ -13,6 +17,7 @@ export class ObjectPool<T> {
     get(): T {
         const obj = this.stack.pop();
         if (obj) {
+            obj.init();
             return obj;
         } else {
             return this.createCallback();

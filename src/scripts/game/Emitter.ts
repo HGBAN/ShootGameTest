@@ -19,6 +19,7 @@ export class Emitter extends Entity {
     // randomMinAngle = 0;
     // randomMaxAngle = 0;
     random = false;
+    // shootAtOnce = true;
     fixedAngle = 360;
     duration = 5;
 
@@ -26,7 +27,7 @@ export class Emitter extends Entity {
 
     entityEvent: EntityEventGenerator | null;
     entity: EntityGenerator;
-    entityDecorator?: (entity:Entity) => void;
+    entityDecorator?: (entity: Entity) => void;
 
     constructor(pos: Vec2, entity: EntityGenerator, bulletEvent: EntityEventGenerator | null = null) {
         super(pos);
@@ -74,6 +75,8 @@ export class Emitter extends Entity {
             return;
         }
 
+        if (this.period == -1)
+            return;
         if (this.duration != -1 && this.survivalTime >= this.duration) return;
         if (this.currentPeriod < this.survivalTime / this.period) {
             this.currentPeriod++;

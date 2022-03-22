@@ -7,9 +7,9 @@ import {Entity} from "@/scripts/game/Entity";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {Scene, SSCD} from "@/scripts/engine/Scene";
 import {Graphics, Sprite, utils} from "pixi.js";
-import {bulletPool} from "@/scripts/game/ObjectPool";
+import {bulletPool, PoolObject} from "@/scripts/game/ObjectPool";
 
-export class Bullet extends Entity implements IndexObject {
+export class Bullet extends Entity implements IndexObject, PoolObject {
 
     damage = 10;
     rubbed = false;
@@ -75,7 +75,7 @@ export class Bullet extends Entity implements IndexObject {
 
     destroy() {
         super.destroy();
-        this.init();
+        // this.init();
         this.pushPool();
     }
 

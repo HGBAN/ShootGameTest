@@ -1,5 +1,5 @@
 import {Emitter} from "@/scripts/game/Emitter";
-import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
+import {ConditionFunc, EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropMutation, PropTween} from "@/scripts/engine/PropTransformer";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullet} from "@/scripts/game/Bullet";
@@ -9,6 +9,7 @@ import {bulletPool} from "@/scripts/game/ObjectPool";
 import {Emitters} from "@/scripts/data/Emitters";
 import {Bullets} from "@/scripts/data/Bullets";
 import {Entities} from "@/scripts/data/Entities";
+import {GameScene} from "@/scripts/game/GameScene";
 
 export abstract class BulletEmitters {
     static bulletGenerator() {
@@ -130,16 +131,7 @@ export abstract class BulletEmitters {
     }
 
     static fire(): Emitter {
-        const emitter: Emitter = new Emitter(Vec2.zero, () => {
-            const bullet: Bullet = bulletPool.get();
-            const emitter: Emitter = Emitters.fire(Emitters.line1());
-            // emitter.radius = 10;
-            bullet.texture = 'bullet_2';
-            bullet.radius = 20;
-            emitter.angle = -90;
-            bullet.addEmitter(emitter);
-            return bullet;
-        });
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.fire);
 
         return emitter;
     }
@@ -164,6 +156,75 @@ export abstract class BulletEmitters {
             entity.speed = Random.range(700, 900);
             Entities.drop(entity, new Vec2(0, -1));
         }
+
+        return emitter;
+    }
+
+    //地雷发射器
+    static mineShooter(scene: GameScene): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = Bullets.mine(scene);
+            bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 1, () => bullet.speed = 0));
+            bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 21, () => bullet.speed = 200));
+            return bullet;
+        });
+        emitter.duration = -1;
+        emitter.period = 9999;
+        emitter.numberAtOnce = 22;
+        emitter.random = true;
+        emitter.entityDecorator = (entity) => {
+            entity.speed = Random.range(100, 400);
+        }
+
+        return emitter;
+    }
+
+    //限制走位的电风扇
+    static trace(): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.default);
+        emitter.duration = -1;
+        emitter.period = 0.1;
+        emitter.numberAtOnce = 4;
+        emitter.updateExtension = (time) => {
+            emitter.angle += time * 20;
+        }
+
+        return emitter;
+    }
+
+    //从屏幕上方随机掉落子弹
+    static meteorite(scene: GameScene, destroyCondition: ConditionFunc): Emitter {
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.fire);
+        emitter.duration = -1;
+        emitter.period = -1;
+        emitter.active = false;
+        emitter.angle = 90;
+        emitter.numberAtOnce = 1;
+        const eventList: EntityEventList = new EntityEventList();
+        eventList.repeatTime = -1;
+        eventList.addEvent(new EntityEvent(null, () => {
+            emitter.pos.x = Random.range(10, 710);
+            emitter.shoot();
+        }));
+        eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 1.5, () => {
+        }));
+        emitter.eventList.addEvent(eventList);
+        emitter.eventList.addEvent(new EntityEvent(destroyCondition, () => emitter.destroy()));
+
+        scene.addObject(emitter);
+        return emitter;
+    }
+
+    //发射后一段时间返回的子弹
+    static circleBack(){
+        const emitter: Emitter = new Emitter(Vec2.zero, Bullets.stopBack);
+        emitter.duration = -1;
+        emitter.period = 0.1;
+        emitter.numberAtOnce = 8;
+        emitter.updateExtension = (time) => {
+            emitter.angle += time * 20;
+        }
+
 
         return emitter;
     }

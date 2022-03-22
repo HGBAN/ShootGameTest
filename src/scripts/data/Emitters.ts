@@ -4,6 +4,8 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Bullets} from "@/scripts/data/Bullets";
 import {Entities} from "@/scripts/data/Entities";
 import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
+import {Bullet} from "@/scripts/game/Bullet";
+import {bulletPool} from "@/scripts/game/ObjectPool";
 
 export abstract class Emitters {
     static line1(entity: EntityGenerator = Enemies.sniper1): Emitter {

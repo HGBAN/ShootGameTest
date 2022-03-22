@@ -40,6 +40,7 @@ export class GameMain {
             this.resources.set('bullet_1', require('@/assets/1.png'));
             this.resources.set('bullet_2', require('@/assets/2.png'));
             this.resources.set('bullet_3', require('@/assets/3.png'));
+            this.resources.set('bullet_4', require('@/assets/4.png'));
             this.resources.set('back_1', require('@/assets/back_1.png'));
 
             for (const path of this.resources.values()) {
