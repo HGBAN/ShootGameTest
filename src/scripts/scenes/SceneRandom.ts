@@ -20,6 +20,11 @@ export class SceneRandom extends GameScene {
 
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
+        this.player.elimination = 1;
+        this.player.rubValue = 0;
+        Player.score = 0;
+        Player.rubTimes = 0;
+
         this.transition.openText.text = 'Stage ?';
 
         this.back = new Background(this, 'back_1');
