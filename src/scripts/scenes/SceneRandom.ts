@@ -70,13 +70,17 @@ export class SceneRandom extends GameScene {
 
         emitter.eventList.addEvent(eventList);
 
+        this.events.addEvent(new EntityEvent(() => this.player ? this.player.dead : false, () => {
+            const time = this.time;
+            this.events.addEvent(new EntityEvent(() => this.time - time >= 2, () => {
+                alert(`您的分数为${Player.score}`);
+            }));
+        }));
+
         this.addObject(emitter);
     }
 
     fixedUpdate(time: number) {
-        if (this.player.dead) {
-            alert(`您的分数为${Player.score}`);
-        }
         super.fixedUpdate(time);
         this.events.update(time);
     }
