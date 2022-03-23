@@ -34,21 +34,21 @@ Gitee地址：
 
 非常普通的小游戏，唯一需要说明的是，当玩家靠近子弹时，会积攒消弹槽：
 
-![1](.\screenshot\1.jpg)
+![1](https://github.com/HGBAN/ShootGameTest/blob/master/screenshot/1.jpg)
 
 当消弹槽满了以后，会增加下方的数字，代表可进行全屏消弹的次数：
 
-![1](.\screenshot\2.jpg)
+![1](https://github.com/HGBAN/ShootGameTest/blob/master/screenshot/2.jpg)
 
 之后就可以按下k键或双击屏幕来释放消弹效果了
 
 # 截图
 
-![1](.\screenshot\1.gif)
+![1](https://github.com/HGBAN/ShootGameTest/blob/master/screenshot/1.gif)
 
-![1](.\screenshot\2.gif)
+![1](https://github.com/HGBAN/ShootGameTest/blob/master/screenshot/2.gif)
 
-![1](.\screenshot\3.gif)
+![1](https://github.com/HGBAN/ShootGameTest/blob/master/screenshot/3.gif)
 
 # 库
 
