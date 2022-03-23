@@ -18,6 +18,7 @@ import {bulletPool} from "@/scripts/game/ObjectPool";
 import {Background} from "@/scripts/game/Background";
 import {Bullets} from "@/scripts/data/Bullets";
 import {Emitters} from "@/scripts/data/Emitters";
+import {SceneRandom} from "@/scripts/scenes/SceneRandom";
 
 export class Scene2 extends GameScene {
     back: Background;
@@ -204,7 +205,7 @@ export class Scene2 extends GameScene {
             }));
             this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
                 alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
-
+                this.gameMain.setScene(new SceneRandom(this.gameMain));
             }));
         }));
 
@@ -267,7 +268,7 @@ export class Scene2 extends GameScene {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
-        this.events.update(time);
+        // this.events.update(time);
     }
 
     createCurrentScene(): GameScene {

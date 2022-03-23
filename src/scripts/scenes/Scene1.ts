@@ -15,7 +15,7 @@ import {PlayerUI} from "@/scripts/ui/PlayerUI";
 import {GameScene} from "@/scripts/game/GameScene";
 import {GameMain} from "@/scripts/engine/GameMain";
 import {bulletPool} from "@/scripts/game/ObjectPool";
-import {Scene2} from "@/scripts/game/Scene2";
+import {Scene2} from "@/scripts/scenes/Scene2";
 
 export class Scene1 extends GameScene {
     // time = 0;
@@ -220,7 +220,7 @@ export class Scene1 extends GameScene {
 
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
-        this.events.update(time);
+        // this.events.update(time);
         // this.time += time;
     }
 

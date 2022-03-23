@@ -2,13 +2,14 @@
 import {Time} from "@/scripts/engine/Time";
 import {Fps} from "@/scripts/engine/Fps";
 import {Scene} from "@/scripts/engine/Scene";
-import {Scene1} from "@/scripts/game/Scene1";
+import {Scene1} from "@/scripts/scenes/Scene1";
 import {Timer} from "@/scripts/engine/Timer";
 import {Input} from "@/scripts/engine/Input";
 import {TestScene} from "@/scripts/game/TestScene";
 
 import * as PIXI from 'pixi.js';
-import {Scene2} from "@/scripts/game/Scene2";
+import {Scene2} from "@/scripts/scenes/Scene2";
+import {SceneRandom} from "@/scripts/scenes/SceneRandom";
 
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
@@ -26,7 +27,8 @@ export class GameMain {
 
         this.loadResources().then(() => {
             // this.setScene(new Scene1(this));
-            this.setScene(new Scene2(this));
+            // this.setScene(new Scene2(this));
+            this.setScene(new SceneRandom(this));
         });
 
     }

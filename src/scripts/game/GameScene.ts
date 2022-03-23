@@ -5,7 +5,6 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {GameMain} from "@/scripts/engine/GameMain";
 import {Background} from "@/scripts/game/Background";
 import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
-import {Scene2} from "@/scripts/game/Scene2";
 
 export class GameScene extends Scene {
     time = 0;
@@ -47,6 +46,7 @@ export class GameScene extends Scene {
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
         this.time += time;
+        this.events.update(time);
         if (this.player.dead && this.transition.transitionIn) {
             this.transition.triggerOut();
             const outTime = this.time;
