@@ -270,6 +270,7 @@ export abstract class Enemies {
     static shot(): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
         enemy.setMaxLife(150);
+        enemy.speed = 100;
         const emitter: Emitter = BulletEmitters.shot();
         emitter.angle = 90;
         enemy.addEmitter(emitter);
@@ -302,6 +303,16 @@ export abstract class Enemies {
         const meteoriteEmitter: Emitter = BulletEmitters.meteorite(scene, () => enemy.dead);
 
         const circleEmitter: Emitter = BulletEmitters.circleBack();
+        const enemyEmitter: Emitter = Emitters.line1(Enemies.shot);
+        enemyEmitter.pos = new Vec2(720, 400);
+        enemyEmitter.duration = -1;
+        enemyEmitter.period = 2;
+        enemyEmitter.numberAtOnce = 1;
+        enemyEmitter.angle = 180;
+        scene.addObject(enemyEmitter);
+        enemyEmitter.eventList.addEvent(new EntityEvent(() => enemy.dead, () => {
+            enemyEmitter.destroy()
+        }));
 
         const chainEmitter: Emitter = Emitters.edgeShoot(Bullets.chain);
         chainEmitter.eventList.addEvent(new EntityEvent(() => enemy.dead, () => {
@@ -342,7 +353,10 @@ export abstract class Enemies {
 
         //圆环阶段
         const circleState: EntityState = new EntityState(new EntityEventList());
-        circleState.addEmitters(circleEmitter);
+        circleState.addEmitters(circleEmitter, enemyEmitter);
+        circleState.events.addEvent(new EntityEvent(() => circleState.time >= 8, () => {
+            enemyEmitter.active = false;
+        }));
         circleState.events.addEvent(new EntityEvent(() => circleState.time >= 10, () => {
             enemy.states.changeState('chain');
         }));

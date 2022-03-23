@@ -178,8 +178,19 @@ export class Scene2 extends GameScene {
             this.addObject(emitter);
         }));
 
+        this.events.addEvent(new EntityEvent(() => this.time >= 74, () => {
+            const emitter: Emitter = Emitters.line1(Enemies.shot);
+            emitter.pos = new Vec2(0, 300);
+            emitter.duration = 8;
+            emitter.period = 2;
+            emitter.numberAtOnce = 1;
+            emitter.angle = 0;
+            this.addObject(emitter);
+        }));
+
+
         let boss: Enemy | undefined = undefined;
-        this.events.addEvent(new EntityEvent(() => this.time >= 75, () => {
+        this.events.addEvent(new EntityEvent(() => this.time >= 84, () => {
             boss = Enemies.boss2(this);
             boss.pos = new Vec2(360, 0);
             boss.angle = 90;
@@ -250,6 +261,7 @@ export class Scene2 extends GameScene {
 
         // const boss: Enemy = Enemies.boss2(this);
         // boss.pos = new Vec2(360, 500);
+        // boss.speed = 0;
         // this.addObject(boss);
     }
 

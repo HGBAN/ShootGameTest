@@ -184,6 +184,7 @@ export abstract class BulletEmitters {
         const emitter: Emitter = new Emitter(Vec2.zero, () => {
             const bullet = Bullets.default();
             bullet.rubValue = 3;
+            bullet.radius = 15;
             return bullet;
         });
         emitter.duration = -1;

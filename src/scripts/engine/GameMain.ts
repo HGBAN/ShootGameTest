@@ -25,7 +25,8 @@ export class GameMain {
         this.fps = new Fps();
 
         this.loadResources().then(() => {
-            this.setScene(new Scene1(this));
+            // this.setScene(new Scene1(this));
+            this.setScene(new Scene2(this));
         });
 
     }
