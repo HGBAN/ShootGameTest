@@ -1,17 +1,9 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <SideBar></SideBar>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+<script lang="ts" setup>
+import SideBar from '@/components/SideBar/SideBar.vue'
 </script>
