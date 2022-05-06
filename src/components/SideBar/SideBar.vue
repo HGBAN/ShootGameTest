@@ -1,10 +1,11 @@
 <template>
   <div class="sidebar-outer">
-    <div class="sidebar-expand-container" :class="{'sidebar-expand-container-reverse':!expand}" @click="expand=!expand;$refs.items.hideAll()">
+    <div class="sidebar-expand-container" :class="{'sidebar-expand-container-reverse':!expand}"
+         @click="expand=!expand;$refs.items.hideAll()">
       ∧
     </div>
     <div class="sidebar-container" :class="{'sidebar-container-hide':!expand}">
-      <TreeItem :outer-expand="expand" ref="items" :nav="nav"></TreeItem>
+      <TreeItem @outer-expand="this.expand=true" :outer-expand="expand" ref="items" :nav="nav"></TreeItem>
     </div>
   </div>
 </template>
@@ -19,6 +20,7 @@ import {defineComponent} from "vue";
 export interface Nav {
   label: string;
   link: string;
+  icon?: string;
   children?: Nav[];
 }
 
@@ -31,7 +33,8 @@ export default defineComponent({
       nav: [
         {
           label: '主页',
-          link: ''
+          link: '',
+          icon: 'home'
         },
         {
           label: '选项',
@@ -135,6 +138,12 @@ export default defineComponent({
           font-size: 18px;
           line-height: 40px;
           transition: opacity 0.5s;
+          display: inline-block;
+
+          word-break: keep-all;
+          white-space: nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
         }
 
         &:hover {
@@ -147,6 +156,7 @@ export default defineComponent({
 
         div.sidebar-label {
           left: 20px;
+          display: inline-block;
         }
       }
     }
@@ -160,8 +170,9 @@ export default defineComponent({
     & > div {
       div.sidebar-label {
         opacity: 0;
-        width: 300px;
+        //width: 300px;
       }
+
     }
   }
 }
@@ -187,14 +198,29 @@ export default defineComponent({
   color: #a7a3ad;
   transform: rotateZ(-90deg);
   transition: transform 0.4s;
+
+  cursor: pointer;
   //background-color: #36424b;
   //box-shadow: 2px 2px 4px #000000;
   //text-shadow: 2px 2px 4px #000;
 }
 
-.sidebar-expand-container-reverse{
+.sidebar-expand-container-reverse {
   transform: rotateZ(90deg);
 }
+
+
+.sidebar-icon-container {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  position: relative;
+
+  .sidebar-icon {
+    color: #a7a3ad;
+  }
+}
+
 
 @media screen and (max-width: 768px) {
   .sidebar-outer {

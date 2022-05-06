@@ -13,6 +13,7 @@
     "pixi.js": "^6.2.2",
     "seedrandom": "^3.0.5",
     "sscd": "^1.5.1",
+    "svg-sprite-loader": "^6.0.11",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },
