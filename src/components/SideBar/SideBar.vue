@@ -1,25 +1,28 @@
 <template>
-  <div class="sidebar-outer">
+  <div>
     <div class="sidebar-expand-container" :class="{'sidebar-expand-container-reverse':!expand}"
          @click="expand=!expand;$refs.items.hideAll()">
       ∧
     </div>
-    <div class="sidebar-container" :class="{'sidebar-container-hide':!expand}">
-      <TreeItem @outer-expand="this.expand=true" :outer-expand="expand" ref="items" :nav="nav"></TreeItem>
+    <div class="sidebar-outer" :class="{'sidebar-outer-hide':!expand}">
+      <!--      <div class="sidebar-expand-container" :class="{'sidebar-expand-container-reverse':!expand}"-->
+      <!--           @click="expand=!expand;$refs.items.hideAll()">-->
+      <!--        ∧-->
+      <!--      </div>-->
+      <div class="sidebar-container" :class="{'sidebar-container-hide':!expand}">
+        <TreeItem @outer-expand="this.expand=true" :outer-expand="expand" ref="items" :nav="nav"></TreeItem>
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import TreeItem from "@/components/SideBar/TreeItem.vue";
-</script>
-
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
+import TreeItem from "@/components/SideBar/TreeItem.vue";
 
 export interface Nav {
   label: string;
-  link: string;
+  link?: string;
   icon?: string;
   children?: Nav[];
 }
@@ -27,53 +30,74 @@ export interface Nav {
 export default defineComponent({
   name: "SideBar",
 
+  components: {
+    TreeItem
+  },
+
+  emits: ['expand-changed'],
+
+  watch: {
+    expand() {
+      this.$emit('expand-changed', this.expand);
+    }
+  },
+
+  props: {
+    nav: {
+      type: Array as PropType<Nav[]>,
+      required: true
+    }
+  },
+
+  mounted() {
+    const onResize = () => {
+      if (window.innerWidth <= 768) {
+        this.expand = false;
+      }
+    };
+    window.addEventListener('resize', onResize);
+  },
+
   data() {
     return {
-      expand: true,
-      nav: [
-        {
-          label: '主页',
-          link: '',
-          icon: 'home'
-        },
-        {
-          label: '选项',
-          link: '',
-          children: [
-            {
-              label: '选项1',
-              link: '',
-            },
-            {
-              label: '选项2',
-              link: '',
-            }
-          ]
-        },
-        {
-          label: '选项',
-          link: '',
-          children: [
-            {
-              label: '选项1',
-              link: '',
-              children: [
-                {
-                  label: '选项1-1',
-                  link: '',
-                },
-                {
-                  label: '选项1-2',
-                  link: '',
-                }]
-            },
-            {
-              label: '选项2',
-              link: '',
-            }
-          ]
-        }
-      ] as Nav[]
+      expand: true
+      // nav: [
+      //   {
+      //     label: '主页',
+      //     icon: 'home'
+      //   },
+      //   {
+      //     label: '选项',
+      //     children: [
+      //       {
+      //         label: '选项1',
+      //         link: '/main/game'
+      //       },
+      //       {
+      //         label: '选项2',
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     label: '选项',
+      //     children: [
+      //       {
+      //         label: '选项1',
+      //         children: [
+      //           {
+      //             label: '选项1-1',
+      //             link: '/main/about',
+      //           },
+      //           {
+      //             label: '选项1-2',
+      //           }]
+      //       },
+      //       {
+      //         label: '选项2',
+      //       }
+      //     ]
+      //   }
+      // ] as Nav[]
     };
   }
 
@@ -81,6 +105,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+* {
+  box-sizing: border-box;
+}
+
 .sidebar-outer {
   position: fixed;
   top: 0;
@@ -130,6 +158,10 @@ export default defineComponent({
       div.sidebar-label-container {
         background-color: #252d33;
         transition: background-color 0.5s;
+        height: 40px;
+        border-left-style: solid;
+        border-left-width: 3px;
+        border-left-color: transparent;
 
         div.sidebar-label {
           left: 40px;
@@ -142,8 +174,8 @@ export default defineComponent({
 
           word-break: keep-all;
           white-space: nowrap;
-          overflow:hidden;
-          text-overflow:ellipsis;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         &:hover {
@@ -159,12 +191,21 @@ export default defineComponent({
           display: inline-block;
         }
       }
+
+      div.sidebar-label-container-active {
+        background-color: #44535e;
+        border-left-color: #a5bcce;
+
+        &:hover {
+          background-color: #667c8d;
+        }
+      }
     }
   }
 }
 
 .sidebar-container-hide {
-  width: 50px;
+  width: 55px;
 
   & > div {
     & > div {
@@ -191,7 +232,7 @@ export default defineComponent({
 .sidebar-expand-container {
   position: fixed;
   z-index: 11;
-  left: 20px;
+  left: 22px;
   top: 5px;
 
   font-size: 20px;
@@ -209,12 +250,16 @@ export default defineComponent({
   transform: rotateZ(90deg);
 }
 
+.sidebar-expand-mobile {
+  display: none;
+}
 
 .sidebar-icon-container {
   width: 25px;
   height: 25px;
   display: inline-block;
   position: relative;
+  top: -12px;
 
   .sidebar-icon {
     color: #a7a3ad;
@@ -226,15 +271,27 @@ export default defineComponent({
   .sidebar-outer {
     right: 0;
     background-color: transparent;
+    transition: transform 0.5s;
+  }
+
+  .sidebar-outer-hide {
+    //pointer-events: none
+    transform: translateX(-100%);
+
   }
 
   .sidebar-container {
     width: 100%;
     background-color: #36424b;
+    //opacity: 0.8;
   }
 
   .sidebar-container-hide {
-    width: 0;
+    width: 100%;
   }
+
+  //.sidebar-expand-mobile{
+  //  display: block;
+  //}
 }
 </style>
