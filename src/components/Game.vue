@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, PropType} from 'vue';
 import {GameMain} from "@/scripts/engine/GameMain";
 import {Input} from "@/scripts/engine/Input";
 import {Vec2} from "@/scripts/engine/Vec2";
@@ -20,9 +20,16 @@ export default defineComponent({
     };
   },
   methods: {
-    resize() {
-      let width = document.body.clientWidth;
+    resize(width: number) {
+      // const container: HTMLDivElement = this.$refs.container as HTMLDivElement;
+      // console.log(container.clientHeight,document.body.clientHeight);
+      // let width: number;
+      // if (this.clientWidth)
+      //   width = this.clientWidth;
+      // else
+      //   width = document.body.clientWidth;
       let height = document.body.clientHeight;
+      console.log(width, height);
 
       if (width * 16 / 9 > height) {
         this.width = height * 9 / 16;
@@ -34,35 +41,50 @@ export default defineComponent({
 
       this.gameMain.app.view.style.width = this.width + 'px';
       this.gameMain.app.view.style.height = this.height + 'px';
+    },
+
+    onVisibilityChange(){
+      this.gameMain.resetTime = true;
+      Input.reset();
+    },
+
+    onKeyDown(e:KeyboardEvent){
+      Input.keyDown(e.key);
+    },
+
+    onKeyUp(e:KeyboardEvent){
+      Input.keyUp(e.key);
     }
   },
   props: {
-    msg: String,
+    msg: String as PropType<string>
+    // clientWidth: Number as PropType<number>
   },
+
+  unmounted() {
+    document.removeEventListener('visibilitychange',this.onVisibilityChange);
+
+    document.removeEventListener('keydown', this.onKeyDown);
+
+    document.removeEventListener('keyup', this.onKeyUp);
+  },
+
   mounted() {
     // const gameMain = new GameMain();
     let container = this.$refs.container as HTMLDivElement;
     this.gameMain.app.view.className = 'canvas';
     container.appendChild(this.gameMain.app.view);
 
-    this.resize();
-    window.addEventListener('resize', (e) => {
-      // console.log(e);
-      this.resize();
-    });
+    // this.resize();
+    // window.addEventListener('resize', this.resize);
 
-    document.addEventListener('visibilitychange', () => {
-      this.gameMain.resetTime = true;
-      Input.reset();
-    });
+    // container.add
 
-    document.addEventListener('keydown', (e) => {
-      Input.keyDown(e.key);
-    });
+    document.addEventListener('visibilitychange',this.onVisibilityChange);
 
-    document.addEventListener('keyup', (e) => {
-      Input.keyUp(e.key);
-    });
+    document.addEventListener('keydown', this.onKeyDown);
+
+    document.addEventListener('keyup', this.onKeyUp);
 
     const hammer = new Hammer(document.querySelector('.canvas'));
     hammer.get('pan').set({direction: Hammer.DIRECTION_ALL});

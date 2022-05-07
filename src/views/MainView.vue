@@ -6,7 +6,7 @@
         <td class="left" :class="{'left-expand':sideBarExpand}">
 
         </td>
-        <td class="container">
+        <td style="padding: 0" class="container">
           <router-view/>
         </td>
       </tr>
@@ -47,13 +47,15 @@ export default defineComponent({
 
 <style scoped>
 .table-layout{
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
+  width: 100%;
 }
 
 .left {
   width: 55px;
   transition: width 0.5s;
+  padding: 0;
 }
 
 .left-expand {
