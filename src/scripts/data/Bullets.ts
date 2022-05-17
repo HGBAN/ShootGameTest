@@ -114,4 +114,11 @@ export abstract class PlayerBullets {
         bullet.dir = new Vec2(0, -1);
         return bullet;
     }
+
+    //跟踪导弹
+    static missile(){
+        const bullet: PlayerBullet = new PlayerBullet(Vec2.zero);
+
+        return bullet;
+    }
 }

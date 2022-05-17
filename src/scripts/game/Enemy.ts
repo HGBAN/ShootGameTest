@@ -23,6 +23,8 @@ export class Enemy extends Entity {
     // showBar = false;
     display = new Graphics();
 
+    tag = 'enemy';
+
     constructor(pos: Vec2) {
         super(pos);
         // this.life = this.maxLife;
@@ -127,6 +129,8 @@ export class Enemy extends Entity {
 
     destroy() {
         super.destroy();
+        // // eslint-disable-next-line no-debugger
+        // debugger;
         Player.score += Math.floor(this.score * (1 + Player.rubTimes / 100));
     }
 }

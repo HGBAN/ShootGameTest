@@ -11,12 +11,14 @@ export const SSCD = require('sscd').sscd;
 
 export class Scene extends PIXI.Container {
     objects: Set<GameObject> = new Set<GameObject>();
+    objectsWithTag: Map<string, Set<GameObject>>;
     collisionWorld: any = new SSCD.World({grid_size: 200});
     gameMain: GameMain;
     transition: Transition = new Transition(Vec2.zero);
 
     constructor(gameMain: GameMain) {
         super();
+        this.objectsWithTag = new Map<string, Set<GameObject>>();
         this.gameMain = gameMain;
         this.sortableChildren = true;
         this.addObject(this.transition);

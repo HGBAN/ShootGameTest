@@ -25,8 +25,8 @@ export abstract class Weapon {
         if (slot >= 0) {
             if (this.player.weapons[slot]) {
                 this.player.weapons[slot].destroy();
-                this.player.weapons[slot] = this;
             }
+            this.player.weapons[slot] = this;
         } else {
             this.player.weapons.push(this);
         }
@@ -37,6 +37,10 @@ export abstract class Weapon {
         for (const emitter of this.emitters) {
             emitter.destroy();
         }
+    }
+
+    update(time: number) {
+
     }
 
     // addEmitter(...emitters: Emitter[]) {

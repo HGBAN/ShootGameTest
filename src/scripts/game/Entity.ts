@@ -98,6 +98,12 @@ export class Entity extends GameObject {
         if (this.scene == scene)
             return;
         this.scene = scene;
+        if (this.tag) {
+            if (!this.scene.objectsWithTag.get(this.tag)) {
+                this.scene.objectsWithTag.set(this.tag, new Set<GameObject>());
+            }
+            this.scene.objectsWithTag.get(this.tag)?.add(this);
+        }
         this.initGraphics();
         if (this.display)
             this.scene.addChild(this.display);

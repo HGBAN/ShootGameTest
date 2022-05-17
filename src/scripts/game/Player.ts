@@ -57,7 +57,8 @@ export class Player extends Entity {
         }
         // this.initGraphics();
 
-        new Weapons.Primary(this, 10, 0);
+        new Weapons.Primary(this, 4, 1);
+        new Weapons.MissileLauncher(this, 4, 0);
     }
 
     set pos(value: Vec2) {
@@ -214,9 +215,9 @@ export class Player extends Entity {
         }
 
         //更新武器
-        // for (const weapon of this.weapons) {
-        //     weapon.update(time);
-        // }
+        for (const weapon of this.weapons) {
+            weapon.update(time);
+        }
     }
 
     shoot() {

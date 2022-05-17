@@ -9,6 +9,7 @@ export abstract class GameObject {
     dead = false;
     display?: PIXI.DisplayObject;
     bindingObj?: GameObject;
+    protected readonly tag: string | null = null;
 
     protected constructor(pos: Vec2 = Vec2.zero) {
         // this.scene = scene;
@@ -40,6 +41,9 @@ export abstract class GameObject {
     destroy(): void {
         if (this.scene) {
             this.scene.objects.delete(this);
+            if (this.tag) {
+                this.scene.objectsWithTag.get(this.tag)?.delete(this);
+            }
             if (this.display)
                 this.scene.removeChild(this.display);
         }
@@ -48,6 +52,12 @@ export abstract class GameObject {
 
     setScene(scene: Scene) {
         this.scene = scene;
+        if (this.tag) {
+            if (!this.scene.objectsWithTag.get(this.tag)) {
+                this.scene.objectsWithTag.set(this.tag, new Set<GameObject>());
+            }
+            this.scene.objectsWithTag.get(this.tag)?.add(this);
+        }
         this.initGraphics();
         if (this.display)
             this.scene.addChild(this.display);
