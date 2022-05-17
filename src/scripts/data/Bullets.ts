@@ -3,7 +3,7 @@ import {GameScene} from "@/scripts/game/GameScene";
 import {Enemy} from "@/scripts/game/Enemy";
 import {Vec2} from "@/scripts/engine/Vec2";
 import {Emitters} from "@/scripts/data/Emitters";
-import {Bullet} from "@/scripts/game/Bullet";
+import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {Entities} from "@/scripts/data/Entities";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {PropChanger, PropTween} from "@/scripts/engine/PropTransformer";
@@ -102,6 +102,16 @@ export abstract class Bullets {
         emitter.angle = bullet.angle;
         bullet.addEmitter(emitter);
 
+        return bullet;
+    }
+}
+
+//玩家子弹
+export abstract class PlayerBullets {
+    //默认子弹
+    static default() {
+        const bullet: PlayerBullet = new PlayerBullet(Vec2.zero);
+        bullet.dir = new Vec2(0, -1);
         return bullet;
     }
 }

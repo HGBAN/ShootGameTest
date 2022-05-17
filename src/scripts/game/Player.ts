@@ -7,6 +7,8 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Elimination} from "@/scripts/game/Elimination";
 import {Container, Graphics} from "pixi.js";
 import {GameObject} from "@/scripts/engine/GameObject";
+import {Weapon} from "@/scripts/game/weapon/Weapon";
+import {Weapons} from "@/scripts/data/Weapons";
 
 interface RubEffect {
     timer: Timer;
@@ -36,6 +38,9 @@ export class Player extends Entity {
 
     display = new Graphics();
 
+    //武器
+    weapons: Weapon[] = [];
+
     // selfDisplay = new Graphics();
 
     constructor(pos: Vec2) {
@@ -51,6 +56,8 @@ export class Player extends Entity {
             this.initGraphics();
         }
         // this.initGraphics();
+
+        new Weapons.Primary(this, 10, 0);
     }
 
     set pos(value: Vec2) {
@@ -159,13 +166,13 @@ export class Player extends Entity {
             Player.playerPos = this.pos;
         }
 
-        this.shootTimer.update(time);
-        if (this.shootTimer.isOver) {
-            // if (Input.getKey('j').isDown) {
-            this.shoot();
-            this.shootTimer.reset();
-            // }
-        }
+        // this.shootTimer.update(time);
+        // if (this.shootTimer.isOver) {
+        //     // if (Input.getKey('j').isDown) {
+        //     this.shoot();
+        //     this.shootTimer.reset();
+        //     // }
+        // }
 
         // for (const timer of this.rubTimer)
         //     timer.update(time);
@@ -206,7 +213,10 @@ export class Player extends Entity {
             }
         }
 
-
+        //更新武器
+        // for (const weapon of this.weapons) {
+        //     weapon.update(time);
+        // }
     }
 
     shoot() {

@@ -120,6 +120,7 @@ export class Enemy extends Entity {
         Player.score += Math.floor(100 * (1 + Player.rubTimes / 100));
         this.hitTimer.reset();
         if (this.life <= 0) {
+            this.life = 0;
             this.destroy();
         }
     }

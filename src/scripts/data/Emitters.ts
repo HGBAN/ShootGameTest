@@ -1,14 +1,15 @@
 import {Emitter, EntityGenerator} from "@/scripts/game/Emitter";
 import {Enemies} from "@/scripts/data/Enemies";
 import {Vec2} from "@/scripts/engine/Vec2";
-import {Bullets} from "@/scripts/data/Bullets";
+import {Bullets, PlayerBullets} from "@/scripts/data/Bullets";
 import {Entities} from "@/scripts/data/Entities";
 import {EntityEvent, EntityEventList} from "@/scripts/game/EntityEventList";
-import {Bullet} from "@/scripts/game/Bullet";
+import {Bullet, PlayerBullet} from "@/scripts/game/Bullet";
 import {bulletPool} from "@/scripts/game/ObjectPool";
 import {GameScene} from "@/scripts/game/GameScene";
 import {Random} from "@/scripts/engine/Random";
 import {PropChanger, PropMutation} from "@/scripts/engine/PropTransformer";
+import {Entity} from "@/scripts/game/Entity";
 
 export abstract class Emitters {
     static line1(entity: EntityGenerator = Enemies.sniper1): Emitter {
@@ -113,3 +114,78 @@ export abstract class Emitters {
         return emitter;
     }
 }
+
+// //玩家发射器
+// export abstract class PlayerEmitters {
+//
+//     //默认发射器
+//
+//     //发射器等级参数
+//     static playerPrimaryArgs = {
+//         // //子弹数量
+//         // num: [2, 2, 3, 3, 3, 5, 5, 5, 7, 7] as number[],
+//         //射击间隔时间
+//         period: [0.2, 0.19, 0.18, 0.17, 0.16, 0.15, 0.13, 0.11, 0.1, 0.08] as number[],
+//         //伤害
+//         damage: [10, 15, 15, 18, 20, 20, 23, 25, 25, 27] as number[],
+//     };
+//
+//     static playerPrimary(level: number) {
+//         // const num = this.playerPrimaryArgs.num[level];
+//         const period = this.playerPrimaryArgs.period[level - 1];
+//         const damage = this.playerPrimaryArgs.damage[level - 1];
+//
+//         const emitters: Emitter[] = [];
+//
+//         const bulletGenerator = () => {
+//             const bullet: PlayerBullet = new PlayerBullet(Vec2.zero);
+//             bullet.damage = damage;
+//             return bullet;
+//         }
+//
+//         const emitter1: Emitter = new Emitter(Vec2.zero, bulletGenerator);
+//         emitter1.numberAtOnce = 1;
+//         emitter1.entityDecorator = (entity: Entity) => {
+//             entity.pos = entity.pos.add(new Vec2(-10));
+//         }
+//
+//         const emitter2: Emitter = new Emitter(Vec2.zero, bulletGenerator);
+//         emitter2.numberAtOnce = 1;
+//         emitter2.entityDecorator = (entity: Entity) => {
+//             entity.pos = entity.pos.add(new Vec2(10));
+//         }
+//
+//         emitters.push(emitter1, emitter2);
+//
+//         if (level > 2) {
+//             const emitter: Emitter = new Emitter(Vec2.zero, bulletGenerator);
+//             emitter.numberAtOnce = 1;
+//             emitter.entityDecorator = (entity: Entity) => {
+//                 entity.pos = entity.pos.add(new Vec2(0, -5));
+//             }
+//             emitters.push(emitter);
+//         }
+//
+//         if (level > 5) {
+//             const emitter: Emitter = new Emitter(Vec2.zero, bulletGenerator);
+//             if (level > 8)
+//                 emitter.numberAtOnce = 4;
+//             else
+//                 emitter.numberAtOnce = 2;
+//             emitter.fixedAngle = 45;
+//             emitters.push(emitter);
+//         }
+//
+//         for (const emitter of emitters) {
+//             emitter.duration = -1;
+//             emitter.period = period;
+//             emitter.dir = new Vec2(0, -1);
+//         }
+//
+//         // if (level > 8) {
+//         //
+//         // }
+//
+//         return emitters;
+//     }
+// }
