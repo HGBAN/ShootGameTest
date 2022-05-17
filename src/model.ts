@@ -6,6 +6,8 @@ export interface Pair<K, T> {
 
 //武器信息
 export interface WeaponInfo {
+    //武器标签名
+    tag:string;
     //武器名
     name: string;
     //武器各个等级的价格

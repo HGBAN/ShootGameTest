@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="item" v-for="item in items" :key="item.name" @click="onMouseEnter(item)"
-         :class="{'item-choose':item===currentInfo}">
+    <div class="item" v-for="item in items" :key="item.tag" @click="onMouseEnter(item)"
+         :class="{'item-choose':item===currentInfo,'item-equip':equipInfo[item.tag],'item-equip-choose':item===currentInfo&&equipInfo[item.tag]}">
       <div class="mask" v-if="item.currentLevel===0">
         <svg-icon class-name="lock-icon" icon-name="lock"></svg-icon>
       </div>
       <div style="display: flex">
-        <div class="select-icon">
+        <div class="select-icon" :class="{'select-icon-active':equipInfo[item.tag]}">
           <svg-icon class-name="icon" icon-name="select"></svg-icon>
         </div>
         <span style="vertical-align: middle;margin-left: 10px">{{ item.name }}</span>
         <div class="money">
-          <span style="vertical-align: middle;margin-right: 5px">50</span>
+          <span style="vertical-align: middle;margin-right: 5px">{{ weaponPrice(item) }}</span>
           <svg-icon class-name="icon" icon-name="coin"></svg-icon>
         </div>
       </div>
@@ -46,15 +46,30 @@ export default defineComponent({
     onMouseEnter(info: WeaponInfo) {
       this.currentInfo = info;
       this.$emit('itemChoose', info);
+    },
+
+    weaponPrice(info: WeaponInfo) {
+      if (info.currentLevel < info.maxLevel) {
+        return info.price[info.currentLevel].toString();
+      } else {
+        return 'MAX';
+      }
     }
   },
 
   props: {
+    //需要显示在列表中的武器信息
     items: {
       type: Array as PropType<WeaponInfo[]>,
-      default: [] as WeaponInfo[]
+      default: (): WeaponInfo[] => []
     },
-
+    //装备的武器信息
+    equipInfo: {
+      type: Object as PropType<{ [index: string]: boolean }>,
+      default: (): { [index: string]: boolean } => {
+        return {};
+      }
+    }
   }
 });
 </script>
@@ -86,6 +101,19 @@ export default defineComponent({
   background-color: #617786;
 }
 
+.item-equip {
+  background-color: #61867d;
+  border-color: #4f6c65;
+
+  &:hover {
+    background-color: #6c988d;
+  }
+}
+
+.item-equip-choose {
+  background-color: #6c988d;
+}
+
 //等级条容器
 .level-bar-container {
   display: flex;
@@ -114,12 +142,12 @@ export default defineComponent({
   color: #394650;
 }
 
-//选中图标
+//选中图标激活
 .select-icon-active {
   width: 20px;
   height: 20px;
   display: inline-block;
-  color: #64b059;
+  color: #92c588;
 }
 
 .icon {
