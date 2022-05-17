@@ -3,10 +3,10 @@
     <div v-for="(item,index) in nav" :key="index">
       <div style="white-space:nowrap" class="sidebar-label-container" @click="onItemClick(index)"
            :class="{'sidebar-label-container-active':$route.path===item.link||(childrenActive[index]&&!expand[index])}">
-        <div :style="{left:(17+level*20)+'px'}" class="sidebar-icon-container">
+        <div :style="{left:(15+level*20)+'px'}" class="sidebar-icon-container">
           <svg-icon v-if="item.icon" :icon-name="item.icon" class-name="sidebar-icon"/>
         </div>
-        <div :style="{left:(17+level*20)+'px'}" class="sidebar-label">
+        <div :style="{left:(15+level*20)+'px'}" class="sidebar-label">
           {{ item.label }}
           <span :class="{'sidebar-arrow-reverse':expand[index]}" class="sidebar-arrow" v-if="item.children">∧</span>
         </div>

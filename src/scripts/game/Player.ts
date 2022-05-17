@@ -90,6 +90,11 @@ export class Player extends Entity {
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.rubRadius);
         this.dead = false;
         this.life = this.maxLife;
+        for (const weapon of this.weapons) {
+            if (weapon)
+                weapon.destroy();
+        }
+        new Weapons.MissileLauncher(this, 4, 0);
     }
 
     initGraphics() {

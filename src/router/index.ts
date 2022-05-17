@@ -4,49 +4,49 @@ import {Nav} from "@/components/SideBar/SideBar.vue";
 
 const sideBarNav: Nav[] = [
     {
-        label: '主页',
-        icon: 'home'
+        label: '介绍',
+        icon: 'home',
+        link: '/description'
     },
     {
-        label: '选项',
-        children: [
-            {
-                label: '选项1',
-                link: '/main/game'
-            },
-            {
-                label: '选项2',
-            }
-        ]
+        label: '游戏',
+        link: '/game',
+        icon: 'game'
+        // children: [
+        //     {
+        //         label: '选项1',
+        //         link: '/main/game'
+        //     },
+        //     {
+        //         label: '选项2',
+        //     }
+        // ]
     },
     {
-        label: '选项',
-        children: [
-            {
-                label: '选项1',
-                children: [
-                    {
-                        label: '选项1-1',
-                        link: '/main/about',
-                    },
-                    {
-                        label: '选项1-2',
-                    }]
-            },
-            {
-                label: '选项2',
-            }
-        ]
+        label: '武器',
+        icon: 'weapon',
+        link: '/weapon'
+        // children: [
+        //     {
+        //         label: '选项1',
+        //         children: [
+        //             {
+        //                 label: '选项1-1',
+        //                 link: '/main/about',
+        //             },
+        //             {
+        //                 label: '选项1-2',
+        //             }]
+        //     },
+        //     {
+        //         label: '选项2',
+        //     }
+        // ]
     }]
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
-    },
-    {
-        path: '/main',
         name: 'MainView',
         props: {
             nav: sideBarNav
@@ -54,15 +54,25 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/MainView.vue'),
         children: [
             {
-                path: 'game',
+                path: '/description',
+                name: 'Description',
+                component: () => import('../views/Description.vue')
+            },
+            {
+                path: '/game',
                 name: 'Game',
                 component: () => import('../views/Game.vue')
             },
             {
-                path: 'about',
-                name: 'About',
-                component: () => import('../views/About.vue')
+                path: '/weapon',
+                name: 'Weapon',
+                component: () => import('../views/Weapon.vue')
             },
+            // {
+            //     path: 'about',
+            //     name: 'About',
+            //     component: () => import('../views/About.vue')
+            // },
         ]
     },
 ]

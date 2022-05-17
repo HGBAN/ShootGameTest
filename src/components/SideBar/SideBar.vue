@@ -259,10 +259,12 @@ export default defineComponent({
   height: 25px;
   display: inline-block;
   position: relative;
-  top: -12px;
+  top: -10px;
 
   .sidebar-icon {
     color: #a7a3ad;
+    width: 20px;
+    height: 20px;
   }
 }
 
