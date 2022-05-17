@@ -14,6 +14,7 @@ import {Vec2} from "@/scripts/engine/Vec2";
 import {Entity} from "@/scripts/game/Entity";
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Timer} from "@/scripts/engine/Timer";
+import {EntityEvent} from "@/scripts/game/EntityEventList";
 
 //玩家武器数据
 export namespace Weapons {
@@ -146,6 +147,8 @@ export namespace Weapons {
             const bulletGenerator = () => {
                 const bullet: PlayerBullet = new PlayerBullet(Vec2.zero);
                 bullet.speed = bulletSpeed;
+                bullet.texture = 'player_bullet_missile';
+                bullet.radius = 10;
                 bullet.updateExtension = (time: number) => {
                     if (this.target) {
                         const dir: Vec2 = this.target.pos.sub(bullet.pos).normalize;
@@ -224,6 +227,91 @@ export namespace Weapons {
         shoot() {
             for (const emitter of this.emitters) {
                 emitter.shoot();
+            }
+        }
+    }
+
+    //喷火器
+    export class Fire extends Weapon {
+        //射击间隔计时器
+        shootTimer: Timer;
+        //喷火持续时间计时器
+        fireTimer: Timer;
+
+        //等级参数
+        static args = {
+            //两次发射之间的间隔，不包括发射的持续时间
+            period: [3, 2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1] as number[],
+            //发射的持续时间
+            fireDuration: [2, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8] as number[],
+            //子弹伤害
+            damage: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29] as number[],
+            //发射器的发射间隔
+            emitterPeriod: [0.1, 0.097, 0.094, 0.091, 0.088, 0.085, 0.082, 0.079, 0.076, 0.073] as number[],
+            //子弹存在时间
+            existTime: [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9] as number[]
+        };
+
+        update(time: number) {
+            super.update(time);
+            this.shootTimer.update(time);
+
+            if (this.shootTimer.isOver) {
+                this.fireTimer.update(time);
+                // if (this.fireTimer.isOver) {
+                //     this.shootTimer.reset();
+                // }
+            }
+        }
+
+        constructor(player: Player, level: number, slot: number) {
+            super(player, level, slot);
+            this.shootTimer = new Timer(Fire.args.period[level - 1]);
+            this.shootTimer.timeOverCallback = () => {
+                for (const emitter of this.emitters) {
+                    emitter.active = true;
+                }
+            };
+            this.fireTimer = new Timer(Fire.args.fireDuration[level - 1]);
+            this.fireTimer.timeOverCallback = () => {
+                this.shootTimer.reset();
+                this.fireTimer.reset();
+                for (const emitter of this.emitters) {
+                    emitter.active = false;
+                }
+            };
+
+            // const damage = MissileLauncher.args.damage[level - 1];
+            // const bulletSpeed = MissileLauncher.args.speed[level - 1];
+            // const turningSpeed = MissileLauncher.args.turningSpeed[level - 1];
+
+            const emitters: Emitter[] = [];
+
+            const existTime = Fire.args.existTime[level - 1];
+            const bulletGenerator = () => {
+                const bullet: PlayerBullet = new PlayerBullet(Vec2.zero);
+                bullet.damage = Fire.args.damage[level - 1];
+                bullet.speed = 300;
+                bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= existTime, () => bullet.destroy()))
+                bullet.updateExtension = (time: number) => {
+                    bullet.display.scale.set(Math.sin(Math.PI * (bullet.survivalTime / existTime)));
+                }
+                return bullet;
+            }
+
+            const emitter1: Emitter = new Emitter(Vec2.zero, bulletGenerator);
+            emitter1.numberAtOnce = 2;
+            emitter1.duration = -1;
+            emitter1.period = Fire.args.emitterPeriod[level - 1];
+            emitter1.active = false;
+            emitter1.random = true;
+            emitter1.dir = new Vec2(0, -1);
+            emitter1.fixedAngle = 45;
+            emitters.push(emitter1);
+
+            for (const emitter of emitters) {
+                this.emitters.add(emitter);
+                this.player.addEmitter(emitter);
             }
         }
     }

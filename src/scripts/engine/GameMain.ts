@@ -42,6 +42,7 @@ export class GameMain {
     loadResources() {
         return new Promise((resolve) => {
             this.resources.set('player_bullet', require('@/assets/player_bullet.png'));
+            this.resources.set('player_bullet_missile', require('@/assets/player_bullet_missile.png'));
             this.resources.set('bullet_1', require('@/assets/1.png'));
             this.resources.set('bullet_2', require('@/assets/2.png'));
             this.resources.set('bullet_3', require('@/assets/3.png'));

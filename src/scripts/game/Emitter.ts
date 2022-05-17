@@ -89,7 +89,7 @@ export class Emitter extends Entity {
         if (this.period == -1)
             return;
         if (this.duration != -1 && this.survivalTime >= this.duration) return;
-        if (this.currentPeriod < this.survivalTime / this.period) {
+        if (this.currentPeriod < this.activeTime / this.period) {
             this.currentPeriod++;
             this.shoot();
         }

@@ -33,6 +33,8 @@ export abstract class GameObject {
     // abstract draw(ctx: CanvasRenderingContext2D): void;
 
     fixedUpdate(time: number): void {
+        if (this.dead)
+            return;
         if (this.bindingObj) {
             this.pos = this.bindingObj.pos;
         }
