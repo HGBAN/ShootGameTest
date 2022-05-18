@@ -4,6 +4,6 @@
 
 <style lang="scss">
 body {
-  background-color: #1d2328;
+  background-color: #303941;
 }
 </style>

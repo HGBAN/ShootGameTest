@@ -21,6 +21,7 @@ import SideBar from "@/components/SideBar/SideBar.vue";
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import {Nav} from "@/components/SideBar/SideBar.vue";
+import axios from "axios";
 export default defineComponent({
   name: "MainView",
 
@@ -41,7 +42,29 @@ export default defineComponent({
       type: Array as PropType<Nav[]>,
       required: true
     }
-  }
+  },
+
+  created() {
+    axios({
+      url: "/user/userInfo",
+    })
+        .then((res) => {
+          if (res.data.errCode != 101) {
+            // this.config.user = res.data.data;
+            this.$store.commit("setUser", res.data.data);
+            // this.nickname = res.data.data.nickname;
+            // console.log(this.$route.path);
+          } else {
+            // console.log(this.$route.path);
+            if (this.$route.path != "/login")
+              this.$router.push("/login?path=" + this.$route.path);
+          }
+        })
+        .catch(() => {
+          if (this.$route.path != "/login")
+            this.$router.push("/login?path=" + this.$route.path);
+        });
+  },
 });
 </script>
 

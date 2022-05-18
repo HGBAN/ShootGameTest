@@ -4,10 +4,17 @@ export interface Pair<K, T> {
     value: T;
 }
 
+//用户信息
+export interface User {
+    id: number;
+    username: string;
+    nickname: string;
+}
+
 //武器信息
 export interface WeaponInfo {
     //武器标签名
-    tag:string;
+    tag: string;
     //武器名
     name: string;
     //武器各个等级的价格
@@ -18,4 +25,23 @@ export interface WeaponInfo {
     maxLevel: number;
     //武器描述
     description: string;
+}
+
+//后台错误代码
+export const enum ErrCode {
+    SUCCESS = 0,
+
+    NO_LOGIN = 101,
+    LOGIN_FAILED = 102,
+
+    INSERT_FAILED = 201,
+    QUERY_FAILED = 202,
+    DELETE_FAILED = 203,
+}
+
+//后台响应格式
+export interface ResponseData {
+    errCode: number;
+    errMsg: string;
+    data: any;
 }
