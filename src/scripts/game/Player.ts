@@ -56,6 +56,7 @@ export class Player extends Entity {
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.rubRadius);
         this.coinCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.coinRadius);
         Player.playerPos = pos;
+        Player.rubTimes = Player.score = 0;
 
         this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
         this.collision.entity = this;

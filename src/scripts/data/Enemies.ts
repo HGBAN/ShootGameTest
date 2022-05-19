@@ -133,6 +133,8 @@ export abstract class Enemies {
                 const bullet: Bullet = new Bullet(Vec2.zero);
                 bullet.speed = 300;
                 bullet.texture = 'bullet_1';
+                // // eslint-disable-next-line no-debugger
+                // debugger;
                 return bullet;
             }
         }));

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="box">
-      登录
+      注册
       <form>
         <div class="item">
           <div class="label">用户名：</div>
@@ -11,12 +11,35 @@
           <div class="label">密码：</div>
           <input autocomplete="off" v-model="password" type="password" class="input"/>
         </div>
+        <div class="item">
+          <div class="label">昵称：</div>
+          <input autocomplete="off" v-model="nickname" class="input"/>
+        </div>
       </form>
       <div style="margin-top: 10px">
-        <button class="btn" @click="login">登录</button>
-        <button class="btn btn-blue" @click="$router.push('/register')">注册</button>
+        <button class="btn" @click="register">注册</button>
+        <button class="btn btn-blue" @click="$router.push('/login')">去登录</button>
       </div>
     </div>
+    <Dialog v-model:show="showSucDialog">
+      <template #title>
+        注册成功
+      </template>
+      <div style="margin-bottom: 20px">账号已创建</div>
+      <div style="text-align: center">
+        <button class="btn" @click="$router.push('/login')">去登录</button>
+        <button class="btn btn-blue" @click="showSucDialog=false">关闭</button>
+      </div>
+    </Dialog>
+    <Dialog v-model:show="showErrDialog">
+      <template #title>
+        错误
+      </template>
+      <div style="margin-bottom: 20px;color: #ec9371">{{ errMsg }}</div>
+      <div style="text-align: center">
+        <button class="btn btn-blue" @click="showErrDialog=false">确认</button>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -25,48 +48,50 @@ import {defineComponent} from "vue";
 import axios from "axios";
 import {ErrCode, ResponseData} from "@/model";
 
+import Dialog from "@/components/Dialog.vue";
+
 export default defineComponent({
-  name: "Login",
+  name: "Register",
+
+  components: {
+    Dialog
+  },
 
   data() {
     return {
-      jumpPath: null as null | string,
       username: '',
-      password: ''
+      password: '',
+      nickname: '',
+
+      showSucDialog: false,
+      showErrDialog: false,
+      errMsg: ''
     };
   },
 
   methods: {
-    login() {
-      axios.post('/user/login', {
+    register() {
+      axios.put('/user/register', {
         username: this.username,
-        password: this.password
+        password: this.password,
+        nickname: this.nickname
       }).then((res) => {
         const data: ResponseData = res.data;
         if (data.errCode == ErrCode.SUCCESS) {
-          if (this.jumpPath) {
-            this.$router.push(this.jumpPath);
-          } else {
-            this.$router.push('/description');
-          }
+          this.showSucDialog = true;
+        } else {
+          throw new Error(data.errMsg);
         }
       }).catch((err) => {
-        alert(err);
+        // alert(err);
+        this.errMsg = err.message;
+        this.showErrDialog = true;
       });
     }
   },
 
   created() {
-    this.jumpPath = this.$route.query.path as string;
-    axios({
-      url: "/user/userInfo",
-    })
-        .then((res) => {
-          if (res.data.errCode != 101) {
-            this.$store.commit("setUser", res.data.data);
-            this.$router.push('/description');
-          }
-        });
+
   },
 });
 </script>
@@ -93,7 +118,7 @@ export default defineComponent({
   width: 300px;
   padding: 10px;
   margin: 10px 0;
-  min-height: 200px;
+  min-height: 230px;
 
   display: flex;
   align-items: center;

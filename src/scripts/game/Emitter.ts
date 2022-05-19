@@ -23,6 +23,9 @@ export class Emitter extends Entity {
     fixedAngle = 360;
     duration = 5;
 
+    //锁定边缘，子弹的两端从边缘处发出
+    lockEdge = false;
+
     bindingEntity?: Entity;
 
     entityEvent: EntityEventGenerator | null;
@@ -48,13 +51,18 @@ export class Emitter extends Entity {
         // console.log(1);
         // const addAngle = this.fixedAngle / (this.numberAtOnce - 1);
         // let currentAngle = this.angle - this.fixedAngle / 2;
+        let fixedAngle = this.fixedAngle;
+        if (!this.lockEdge) {
+            fixedAngle -= this.fixedAngle / this.numberAtOnce;
+        }
+
         let addAngle, currentAngle;
         if (this.numberAtOnce == 1) {
             addAngle = 0;
             currentAngle = this.angle;
         } else {
-            addAngle = this.fixedAngle / (this.numberAtOnce - 1);
-            currentAngle = this.angle - this.fixedAngle / 2;
+            addAngle = fixedAngle / (this.numberAtOnce - 1);
+            currentAngle = this.angle - fixedAngle / 2;
         }
         // if (this.numberAtOnce % 2 == 0)
         //     currentAngle += addAngle / 2;
@@ -65,7 +73,7 @@ export class Emitter extends Entity {
                 const rad = currentAngle * Math.PI / 180;
                 entity.dir = new Vec2(Math.cos(rad), Math.sin(rad));
             } else {
-                entity.angle = this.angle + Random.range(-this.fixedAngle / 2, this.fixedAngle / 2);
+                entity.angle = this.angle + Random.range(-fixedAngle / 2, fixedAngle / 2);
             }
             entity.pos = this.pos.add(entity.dir.mul(this.radius));
             this.entityDecorator?.(entity);

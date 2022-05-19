@@ -18,7 +18,7 @@ import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {WeaponInfo} from "@/model";
 
 //武器商店数据
-export function weaponInfos():WeaponInfo[]{
+export function weaponInfos(): WeaponInfo[] {
     return [
         {
             tag: 'primary',
@@ -27,7 +27,7 @@ export function weaponInfos():WeaponInfo[]{
             currentLevel: 1,
             maxLevel: 10,
             description: '会向正前方发射连续、密集的子弹',
-            equip: false
+            equip: true
         },
         {
             tag: 'missile',
@@ -117,6 +117,7 @@ export namespace Weapons {
                 emitter.duration = -1;
                 emitter.period = period;
                 emitter.dir = new Vec2(0, -1);
+                emitter.lockEdge = true;
             }
 
             for (const emitter of emitters) {
@@ -254,6 +255,7 @@ export namespace Weapons {
             // }
 
             for (const emitter of emitters) {
+                emitter.lockEdge = true;
                 this.emitters.add(emitter);
                 this.player.addEmitter(emitter);
             }
@@ -345,6 +347,7 @@ export namespace Weapons {
             emitters.push(emitter1);
 
             for (const emitter of emitters) {
+                emitter.lockEdge = true;
                 this.emitters.add(emitter);
                 this.player.addEmitter(emitter);
             }
