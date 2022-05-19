@@ -32,17 +32,17 @@
             <span style="vertical-align: middle">）</span>
           </button>
           <button @click="equip" v-if="this.currentInfo.currentLevel>0" class="btn btn-blue">
-            <svg-icon style="margin-right: 3px" v-if="equipInfo[currentInfo.tag]" class-name="btn-icon"
+            <svg-icon style="margin-right: 3px" v-if="weaponInfoIndex[currentInfo.tag].equip" class-name="btn-icon"
                       icon-name="select"></svg-icon>
             <span style="vertical-align: middle">
-              {{ equipInfo[currentInfo.tag] ? '已装备' : '装备' }}
+              {{ weaponInfoIndex[currentInfo.tag].equip ? '已装备' : '装备' }}
             </span>
           </button>
         </div>
       </div>
     </div>
     <div class="box">
-      <WeaponChooseBox @item-choose="onItemChoose" :items="weaponInfo" :equip-info="equipInfo">
+      <WeaponChooseBox @item-choose="onItemChoose" :items="weaponInfo" :weapon-info-index="weaponInfoIndex">
 
       </WeaponChooseBox>
     </div>
@@ -52,8 +52,10 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import WeaponChooseBox from "@/components/WeaponChooseBox.vue";
-import {WeaponInfo} from "@/model";
+import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import SvgIcon from "@/components/SvgIcon.vue";
+import axios from "axios";
+import {weaponInfos} from "@/scripts/data/Weapons";
 
 export default defineComponent({
   name: "Weapon",
@@ -74,7 +76,8 @@ export default defineComponent({
       if (!this.currentInfo)
         return;
       const tag = this.currentInfo.tag;
-      this.equipInfo[tag] = !this.equipInfo[tag];
+      this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+      this.updateWeaponInfo(this.currentInfo);
     },
 
     //升级当前武器
@@ -88,6 +91,40 @@ export default defineComponent({
         this.money -= price;
         this.currentInfo.currentLevel++;
       }
+      this.updateWeaponMoney(this.currentInfo);
+    },
+
+    //更新武器数据
+    updateWeaponInfo(info: WeaponInfo) {
+      axios.put('/game/addWeaponInfo', {
+        tag: info.tag,
+        level: info.currentLevel,
+        equip: info.equip
+      }).then((res) => {
+        const data: ResponseData = res.data;
+        if (data.errCode != ErrCode.SUCCESS) {
+          throw new Error(data.errMsg);
+        }
+      }).catch((err) => {
+        console.log(err.message);
+      });
+    },
+
+    //更新武器和金钱数据
+    updateWeaponMoney(info: WeaponInfo) {
+      axios.put('/game/updateWeaponMoney', {
+        money: this.money,
+        tag: info.tag,
+        level: info.currentLevel,
+        equip: info.equip
+      }).then((res) => {
+        const data: ResponseData = res.data;
+        if (data.errCode != ErrCode.SUCCESS) {
+          throw new Error(data.errMsg);
+        }
+      }).catch((err) => {
+        console.log(err.message);
+      });
     }
   },
 
@@ -107,37 +144,29 @@ export default defineComponent({
   data() {
     return {
       currentInfo: null as WeaponInfo | null,
-      money: 100000,
-      weaponInfo: [
-        {
-          tag: 'primary',
-          name: '主炮',
-          price: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
-          currentLevel: 3,
-          maxLevel: 10,
-          description: '会向正前方发射连续、密集的子弹'
-        },
-        {
-          tag: 'missile',
-          name: '导弹发射器',
-          price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
-          currentLevel: 5,
-          maxLevel: 7,
-          description: '发射会自动跟踪敌人的导弹'
-        },
-        {
-          tag: 'fire',
-          name: '火焰喷射器',
-          price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
-          currentLevel: 0,
-          maxLevel: 9,
-          description: '每隔一段时间发射一道火焰'
-        }
-      ] as WeaponInfo[],
-      equipInfo: {
-        'missile': true
-      } as { [index: string]: boolean }
+      money: 100,
+      weaponInfo: weaponInfos(),
+      weaponInfoIndex: {
+        // 'missile': true
+      } as { [index: string]: WeaponInfo }
     };
+  },
+
+  created() {
+    //建立索引
+    for (const info of this.weaponInfo) {
+      this.weaponInfoIndex[info.tag] = info;
+    }
+    axios.get('/game/shopInfo').then((res) => {
+      const data: ResponseData = res.data;
+      if (data.errCode == ErrCode.SUCCESS) {
+        this.money = data.data.money;
+        for (const info of data.data.weaponInfos) {
+          this.weaponInfoIndex[info.tag].currentLevel = info.level;
+          this.weaponInfoIndex[info.tag].equip = info.equip;
+        }
+      }
+    });
   }
 });
 </script>

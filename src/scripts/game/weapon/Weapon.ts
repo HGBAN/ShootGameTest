@@ -28,6 +28,7 @@ export abstract class Weapon {
             }
             this.player.weapons[slot] = this;
         } else {
+            this.slot = this.player.weapons.length;
             this.player.weapons.push(this);
         }
     }

@@ -8,7 +8,10 @@ import {Elimination} from "@/scripts/game/Elimination";
 import {Container, Graphics} from "pixi.js";
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Weapon} from "@/scripts/game/weapon/Weapon";
-import {Weapons} from "@/scripts/data/Weapons";
+import {weaponInfos, Weapons} from "@/scripts/data/Weapons";
+import {ErrCode, ResponseData, WeaponInfo} from "@/model";
+import axios from "axios";
+import Primary = Weapons.Primary;
 
 interface RubEffect {
     timer: Timer;
@@ -18,7 +21,7 @@ interface RubEffect {
 export class Player extends Entity {
     radius = 2;
     shootTimer: Timer;
-    life = 100;
+    life = 10;
     maxLife = 100;
     hitTimer: Timer = new Timer(1, false);
     static playerPos: Vec2;
@@ -57,9 +60,12 @@ export class Player extends Entity {
         }
         // this.initGraphics();
 
+
         // new Weapons.Primary(this, 4, 1);
-        new Weapons.MissileLauncher(this, 4, 0);
+        // new Weapons.MissileLauncher(this, 4, 0);
         // new Weapons.Fire(this, 10, 0);
+        // this.weaponInfo = weaponInfos();
+
     }
 
     set pos(value: Vec2) {
@@ -81,6 +87,7 @@ export class Player extends Entity {
         this.collision.set_collision_tags('player');
         this.scene?.collisionWorld.add(this.rubCollision);
         this.rubCollision.set_collision_tags('rub');
+        this.setWeapons();
     }
 
     reset() {
@@ -90,11 +97,34 @@ export class Player extends Entity {
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.rubRadius);
         this.dead = false;
         this.life = this.maxLife;
+        // for (const weapon of this.weapons) {
+        //     if (weapon)
+        //         weapon.destroy();
+        // }
+        // new Weapons.MissileLauncher(this, 4, 0);
+        // this.setWeapons();
+    }
+
+    setWeapons() {
+        if (!this.scene)
+            return;
         for (const weapon of this.weapons) {
-            if (weapon)
+            if (weapon) {
                 weapon.destroy();
+            }
         }
-        new Weapons.MissileLauncher(this, 4, 0);
+        for (const info of this.scene.gameMain.weaponInfo) {
+            // console.log(info);
+            if (info.equip) {
+                if (info.tag == 'primary') {
+                    new Weapons.Primary(this, info.currentLevel, -1);
+                } else if (info.tag == 'missile') {
+                    new Weapons.MissileLauncher(this, info.currentLevel, -1);
+                } else if (info.tag == 'fire') {
+                    new Weapons.Fire(this, info.currentLevel, -1);
+                }
+            }
+        }
     }
 
     initGraphics() {
@@ -228,6 +258,7 @@ export class Player extends Entity {
         }
     }
 
+    //弃用，由武器代替
     shoot() {
         const bullet: PlayerBullet = new PlayerBullet(this.pos.sub(new Vec2(-10, 0)));
         bullet.dir = new Vec2(0, -1);

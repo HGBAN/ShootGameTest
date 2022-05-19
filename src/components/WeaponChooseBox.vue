@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="item" v-for="item in items" :key="item.tag" @click="onMouseEnter(item)"
-         :class="{'item-choose':item===currentInfo,'item-equip':equipInfo[item.tag],'item-equip-choose':item===currentInfo&&equipInfo[item.tag]}">
+         :class="{'item-choose':item===currentInfo,'item-equip':weaponInfoIndex[item.tag].equip,'item-equip-choose':item===currentInfo&&weaponInfoIndex[item.tag].equip}">
       <div class="mask" v-if="item.currentLevel===0">
         <svg-icon class-name="lock-icon" icon-name="lock"></svg-icon>
       </div>
       <div style="display: flex">
-        <div class="select-icon" :class="{'select-icon-active':equipInfo[item.tag]}">
+        <div class="select-icon" :class="{'select-icon-active':weaponInfoIndex[item.tag].equip}">
           <svg-icon class-name="icon" icon-name="select"></svg-icon>
         </div>
         <span style="vertical-align: middle;margin-left: 10px">{{ item.name }}</span>
@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
-import {Pair, WeaponInfo} from "@/model";
+import { WeaponInfo} from "@/model";
 import SvgIcon from "@/components/SvgIcon.vue";
 
 export default defineComponent({
@@ -64,9 +64,9 @@ export default defineComponent({
       default: (): WeaponInfo[] => []
     },
     //装备的武器信息
-    equipInfo: {
-      type: Object as PropType<{ [index: string]: boolean }>,
-      default: (): { [index: string]: boolean } => {
+    weaponInfoIndex: {
+      type: Object as PropType<{ [index: string]: WeaponInfo }>,
+      default: (): { [index: string]: WeaponInfo } => {
         return {};
       }
     }

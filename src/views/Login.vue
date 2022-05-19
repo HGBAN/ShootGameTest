@@ -49,8 +49,8 @@ export default defineComponent({
             this.$router.push('/description');
           }
         }
-      }).catch(() => {
-
+      }).catch((err) => {
+        alert(err);
       });
     }
   },

@@ -25,6 +25,8 @@ export interface WeaponInfo {
     maxLevel: number;
     //武器描述
     description: string;
+    //是否已经装备
+    equip: boolean;
 }
 
 //后台错误代码

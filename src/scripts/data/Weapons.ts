@@ -15,9 +15,44 @@ import {Entity} from "@/scripts/game/Entity";
 import {GameObject} from "@/scripts/engine/GameObject";
 import {Timer} from "@/scripts/engine/Timer";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
+import {WeaponInfo} from "@/model";
+
+//武器商店数据
+export function weaponInfos():WeaponInfo[]{
+    return [
+        {
+            tag: 'primary',
+            name: '主炮',
+            price: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+            currentLevel: 1,
+            maxLevel: 10,
+            description: '会向正前方发射连续、密集的子弹',
+            equip: false
+        },
+        {
+            tag: 'missile',
+            name: '导弹发射器',
+            price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+            currentLevel: 0,
+            maxLevel: 10,
+            description: '发射会自动跟踪敌人的导弹',
+            equip: false
+        },
+        {
+            tag: 'fire',
+            name: '火焰喷射器',
+            price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+            currentLevel: 0,
+            maxLevel: 10,
+            description: '每隔一段时间发射一道火焰',
+            equip: false
+        }
+    ];
+}
 
 //玩家武器数据
 export namespace Weapons {
+
     //主武器，向前发射子弹
     export class Primary extends Weapon {
         static args = {

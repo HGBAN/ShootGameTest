@@ -10,6 +10,9 @@ import {TestScene} from "@/scripts/game/TestScene";
 import * as PIXI from 'pixi.js';
 import {Scene2} from "@/scripts/scenes/Scene2";
 import {SceneRandom} from "@/scripts/scenes/SceneRandom";
+import axios from "axios";
+import {ErrCode, ResponseData, WeaponInfo} from "@/model";
+import {weaponInfos} from "@/scripts/data/Weapons";
 
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
@@ -20,17 +23,36 @@ export class GameMain {
     resetTime = false;
     resources: Map<string, string> = new Map<string, string>();
 
+    //金钱数据
+    money: number;
+    //武器数据
+    weaponInfo: WeaponInfo[];
+    //武器数据索引
+    weaponInfoIndex: { [index: string]: WeaponInfo };
+
     constructor() {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
         this.app.renderer.backgroundColor = 0x36424B;
         this.fps = new Fps();
 
-        this.loadResources().then(() => {
-            this.setScene(new Scene1(this));
-            // this.setScene(new Scene2(this));
-            // this.setScene(new SceneRandom(this));
-        });
+        this.weaponInfo = weaponInfos();
+        this.weaponInfoIndex = {};
+        this.money = 0;
 
+        //建立武器索引
+        for (const info of this.weaponInfo) {
+            this.weaponInfoIndex[info.tag] = info;
+        }
+
+        //等待所有异步执行完成后加载场景
+        Promise.all([this.loadResources(), this.loadWeaponInfo()]).then(() => {
+            this.setScene(new Scene1(this));
+        });
+        // this.loadResources().then(() => {
+        //     this.setScene(new Scene1(this));
+        //     // this.setScene(new Scene2(this));
+        //     // this.setScene(new SceneRandom(this));
+        // });
     }
 
     setScene(scene: Scene) {
@@ -55,6 +77,19 @@ export class GameMain {
             this.app.loader.load(() => {
                 resolve(null);
             });
+        });
+    }
+
+    loadWeaponInfo() {
+        return axios.get('/game/shopInfo').then((res) => {
+            const data: ResponseData = res.data;
+            if (data.errCode == ErrCode.SUCCESS) {
+                this.money = data.data.money;
+                for (const info of data.data.weaponInfos) {
+                    this.weaponInfoIndex[info.tag].currentLevel = info.level;
+                    this.weaponInfoIndex[info.tag].equip = info.equip;
+                }
+            }
         });
     }
 
