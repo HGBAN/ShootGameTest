@@ -12,6 +12,7 @@ import {weaponInfos, Weapons} from "@/scripts/data/Weapons";
 import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import axios from "axios";
 import Primary = Weapons.Primary;
+import {Coin} from "@/scripts/game/Coin";
 
 interface RubEffect {
     timer: Timer;
@@ -21,12 +22,15 @@ interface RubEffect {
 export class Player extends Entity {
     radius = 2;
     shootTimer: Timer;
-    life = 10;
+    life = 100;
     maxLife = 100;
     hitTimer: Timer = new Timer(1, false);
     static playerPos: Vec2;
     rubRadius = 35;
     rubCollision: any;
+    //金币碰撞箱
+    coinRadius = 70;
+    coinCollision: any;
     // rubTimer: Set<Timer> = new Set<Timer>();
     rubEffects: Set<RubEffect> = new Set<RubEffect>();
 
@@ -50,6 +54,7 @@ export class Player extends Entity {
         super(pos);
         this.shootTimer = new Timer(0.1);
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.rubRadius);
+        this.coinCollision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.coinRadius);
         Player.playerPos = pos;
 
         this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
@@ -72,6 +77,7 @@ export class Player extends Entity {
         super.pos = value;
         // this.d.position.set(this.pos.x, this.pos.y);
         this.rubCollision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
+        this.coinCollision.set_position(new SSCD.Vector(this._pos.x, this._pos.y));
     }
 
     get pos() {
@@ -86,7 +92,9 @@ export class Player extends Entity {
         super.setScene(scene);
         this.collision.set_collision_tags('player');
         this.scene?.collisionWorld.add(this.rubCollision);
+        this.scene?.collisionWorld.add(this.coinCollision);
         this.rubCollision.set_collision_tags('rub');
+        this.coinCollision.set_collision_tags('coin_collision');
         this.setWeapons();
     }
 
@@ -95,6 +103,7 @@ export class Player extends Entity {
         this.collision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.radius);
         this.collision.entity = this;
         this.rubCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.rubRadius);
+        this.coinCollision = new SSCD.Circle(new SSCD.Vector(this.pos.x, this.pos.y), this.coinRadius);
         this.dead = false;
         this.life = this.maxLife;
         // for (const weapon of this.weapons) {
@@ -222,6 +231,7 @@ export class Player extends Entity {
         }
 
         if (this.scene) {
+            //判断擦弹的碰撞
             const rubCollisionObjs: Array<any> = [];
             this.scene.collisionWorld.test_collision(this.rubCollision, 'bullet', rubCollisionObjs);
             for (const obj of rubCollisionObjs) {
@@ -240,6 +250,7 @@ export class Player extends Entity {
                     }
                 }
             }
+            //判断子弹的碰撞
             if (rubCollisionObjs.length > 0) {
                 const collisionObj = this.scene.collisionWorld.pick_object(this.collision, 'bullet');
                 if (collisionObj != null) {
@@ -247,6 +258,20 @@ export class Player extends Entity {
                     bullet.destroy();
                     this.hit(bullet.damage);
                 }
+            }
+            //判断与金币的碰撞
+            let coinCollisionObjs: Array<any> = [];
+            this.scene.collisionWorld.test_collision(this.coinCollision, 'coin', coinCollisionObjs);
+            for (const obj of coinCollisionObjs) {
+                const coin = obj.entity as Coin;
+                coin.adsorbent = true;
+            }
+
+            coinCollisionObjs = [];
+            this.scene.collisionWorld.test_collision(this.collision, 'coin', coinCollisionObjs);
+            for (const obj of coinCollisionObjs) {
+                const coin = obj.entity as Coin;
+                coin.destroy();
             }
         }
 

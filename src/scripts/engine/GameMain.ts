@@ -70,6 +70,7 @@ export class GameMain {
             this.resources.set('bullet_3', require('@/assets/3.png'));
             this.resources.set('bullet_4', require('@/assets/4.png'));
             this.resources.set('back_1', require('@/assets/back_1.png'));
+            this.resources.set('crystal', require('@/assets/crystal.png'));
 
             for (const path of this.resources.values()) {
                 this.app.loader.add(path);

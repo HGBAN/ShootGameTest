@@ -10,4 +10,8 @@ export abstract class Random {
     static range(min: number, max: number): number {
         return Math.floor(this.ran() * (max - min + 1)) + min;
     }
+
+    static probability(rate: number) {
+        return this.ran() <= rate;
+    }
 }

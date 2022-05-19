@@ -7,6 +7,8 @@ import {Color} from "@/scripts/engine/Color";
 import {Player} from "@/scripts/game/Player";
 import {Graphics} from "pixi.js";
 import {GameScene} from "@/scripts/game/GameScene";
+import {Random} from "@/scripts/engine/Random";
+import {Coin} from "@/scripts/game/Coin";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
@@ -24,6 +26,9 @@ export class Enemy extends Entity {
     display = new Graphics();
 
     tag = 'enemy';
+
+    //金币掉落概率
+    coinDropRate = 0.5;
 
     constructor(pos: Vec2) {
         super(pos);
@@ -123,6 +128,11 @@ export class Enemy extends Entity {
         this.hitTimer.reset();
         if (this.life <= 0) {
             this.life = 0;
+            //掉落金币
+            if (Random.probability(this.coinDropRate)) {
+                const coin: Coin = new Coin(this.pos.clone);
+                this.scene?.addObject(coin);
+            }
             this.destroy();
         }
     }
