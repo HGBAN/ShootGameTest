@@ -42,6 +42,10 @@
       </div>
     </div>
     <div class="box">
+      <div style="display: flex">
+        <div>主武器</div>
+        <div style="margin-left: auto">{{ primaryCurrent }}/{{ primaryMax }}</div>
+      </div>
       <WeaponChooseBox @item-choose="onItemChoose" :items="weaponInfo" :weapon-info-index="weaponInfoIndex">
 
       </WeaponChooseBox>
@@ -77,6 +81,14 @@ export default defineComponent({
         return;
       const tag = this.currentInfo.tag;
       this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+      if (this.weaponInfoIndex[tag].equip) {
+        this.primaryCurrent++;
+        if (this.primaryCurrent > this.primaryMax) {
+          this.primaryCurrent--;
+          this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+        }
+      } else
+        this.primaryCurrent--;
       this.updateWeaponInfo(this.currentInfo);
     },
 
@@ -148,7 +160,12 @@ export default defineComponent({
       weaponInfo: weaponInfos(),
       weaponInfoIndex: {
         // 'missile': true
-      } as { [index: string]: WeaponInfo }
+      } as { [index: string]: WeaponInfo },
+
+      //主武器装备数量上限
+      primaryMax: 2,
+      //当前主武器装备数量
+      primaryCurrent: 0
     };
   },
 
@@ -165,6 +182,10 @@ export default defineComponent({
           this.weaponInfoIndex[info.tag].currentLevel = info.level;
           this.weaponInfoIndex[info.tag].equip = info.equip;
         }
+      }
+      for (const info of this.weaponInfo) {
+        if (info.equip)
+          this.primaryCurrent++;
       }
     });
     this.currentInfo = this.weaponInfoIndex['primary'];

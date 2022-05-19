@@ -213,6 +213,8 @@ export default defineComponent({
   transition: transform 0.4s;
 
   cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
   //background-color: #36424b;
   //box-shadow: 2px 2px 4px #000000;
   //text-shadow: 2px 2px 4px #000;
