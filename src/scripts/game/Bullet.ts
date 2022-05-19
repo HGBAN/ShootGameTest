@@ -87,8 +87,9 @@ export class Bullet extends Entity implements IndexObject, PoolObject {
 
     setScene(scene: Scene) {
         super.setScene(scene);
-        this.display = new Sprite(this.scene?.gameMain.getTexture(this.texture));
-        this.scene?.addChild(this.display);
+
+        // this.display = new Sprite(this.scene?.gameMain.getTexture(this.texture));
+        // this.scene?.addChild(this.display);
         this.display.angle = this.angle;
         this.display.anchor.x = 0.5;
         this.display.anchor.y = 0.5;
@@ -108,6 +109,7 @@ export class Bullet extends Entity implements IndexObject, PoolObject {
     }
 
     initGraphics() {
+        this.display = new Sprite(this.scene?.gameMain.getTexture(this.texture));
         // this.display.lineStyle(2, 0xDD2222, 1);
         // this.display.beginFill(0xE5E5D1);
         // this.display.drawCircle(0, 0, this.radius);
@@ -173,12 +175,13 @@ export class PlayerBullet extends Bullet {
         this.collision.set_collision_tags('player_bullet');
     }
 
-    initGraphics() {
-        // this.display.lineStyle(2, 0x2279dd, 1);
-        // this.display.beginFill(0xe5e5d1);
-        // this.display.drawCircle(0, 0, this.radius);
-        // this.display.endFill();
-    }
+    // initGraphics() {
+    //
+    //     // this.display.lineStyle(2, 0x2279dd, 1);
+    //     // this.display.beginFill(0xe5e5d1);
+    //     // this.display.drawCircle(0, 0, this.radius);
+    //     // this.display.endFill();
+    // }
 
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);

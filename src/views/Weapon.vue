@@ -167,6 +167,7 @@ export default defineComponent({
         }
       }
     });
+    this.currentInfo = this.weaponInfoIndex['primary'];
   }
 });
 </script>

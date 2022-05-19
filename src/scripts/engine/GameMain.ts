@@ -55,10 +55,16 @@ export class GameMain {
         // });
     }
 
+    destroy() {
+        this.app.destroy();
+    }
+
     setScene(scene: Scene) {
-        this.scene = scene;
-        this.scene.addObject(this.fps);
-        this.app.stage = this.scene;
+        this.updateMoney().then(() => {
+            this.scene = scene;
+            this.scene.addObject(this.fps);
+            this.app.stage = this.scene;
+        })
     }
 
     loadResources() {
@@ -71,6 +77,7 @@ export class GameMain {
             this.resources.set('bullet_4', require('@/assets/4.png'));
             this.resources.set('back_1', require('@/assets/back_1.png'));
             this.resources.set('crystal', require('@/assets/crystal.png'));
+            this.resources.set('coin', require('@/assets/coin.png'));
 
             for (const path of this.resources.values()) {
                 this.app.loader.add(path);
@@ -91,6 +98,14 @@ export class GameMain {
                     this.weaponInfoIndex[info.tag].equip = info.equip;
                 }
             }
+        });
+    }
+
+    updateMoney() {
+        return axios.put('/game/updateMoney', {
+            money: this.money
+        }).then(res => {
+            // const data: ResponseData = res.data;
         });
     }
 
@@ -117,6 +132,7 @@ export class GameMain {
     // }
 
     gameLoopCallback = (delta: number): void => {
+
         let time = (delta / 60);
         if (this.resetTime) {
             time = 0;

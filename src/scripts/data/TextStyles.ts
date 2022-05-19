@@ -32,6 +32,14 @@ export const eliminationText = new PIXI.TextStyle(
     }
 );
 
+export const moneyText = new PIXI.TextStyle(
+    {
+            fontFamily: "Arial",
+            fontSize: 36,
+            fill: "#d0b634"
+    }
+);
+
 export const openText = new PIXI.TextStyle(
     {
         fontFamily: "Arial",

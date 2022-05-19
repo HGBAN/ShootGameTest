@@ -32,7 +32,7 @@ export function weaponInfos():WeaponInfo[]{
         {
             tag: 'missile',
             name: '导弹发射器',
-            price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+            price: [200, 300, 350, 450, 500, 700, 900, 1100, 1350, 1500],
             currentLevel: 0,
             maxLevel: 10,
             description: '发射会自动跟踪敌人的导弹',
@@ -41,7 +41,7 @@ export function weaponInfos():WeaponInfo[]{
         {
             tag: 'fire',
             name: '火焰喷射器',
-            price: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+            price: [200, 300, 350, 450, 500, 700, 900, 1100, 1350, 1500],
             currentLevel: 0,
             maxLevel: 10,
             description: '每隔一段时间发射一道火焰',

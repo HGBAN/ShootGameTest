@@ -207,10 +207,20 @@ export class Player extends Entity {
         }
 
         const newPos = this.pos.add(dir.mul(200 * time));
-        if (newPos.x > 0 && newPos.y > 0 && newPos.x < 720 && newPos.y < 1280) {
-            this.pos = newPos;
-            Player.playerPos = this.pos;
-        }
+        if (newPos.x < 0)
+            newPos.x = 0;
+        if (newPos.y < 0)
+            newPos.y = 0;
+        if (newPos.x > 720)
+            newPos.x = 720;
+        if (newPos.y > 1280)
+            newPos.y = 1280;
+        this.pos = newPos;
+        Player.playerPos = this.pos;
+        // if (newPos.x > 0 && newPos.y > 0 && newPos.x < 720 && newPos.y < 1280) {
+        //     this.pos = newPos;
+        //     Player.playerPos = this.pos;
+        // }
 
         // this.shootTimer.update(time);
         // if (this.shootTimer.isOver) {
@@ -271,6 +281,7 @@ export class Player extends Entity {
             this.scene.collisionWorld.test_collision(this.collision, 'coin', coinCollisionObjs);
             for (const obj of coinCollisionObjs) {
                 const coin = obj.entity as Coin;
+                this.scene.gameMain.money += coin.value;
                 coin.destroy();
             }
         }

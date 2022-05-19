@@ -1,8 +1,9 @@
 import {GameObject} from "@/scripts/engine/GameObject";
-import {Container, Graphics, Text} from "pixi.js";
+import {Container, Graphics, Sprite, Text} from "pixi.js";
 import {Player} from "@/scripts/game/Player";
 import * as TextStyles from "@/scripts/data/TextStyles";
 import {Enemy} from "@/scripts/game/Enemy";
+import {Scene} from "@/scripts/engine/Scene";
 
 export class PlayerUI extends GameObject {
     display = new Container();
@@ -10,8 +11,10 @@ export class PlayerUI extends GameObject {
     rubTimesText: Text;
     scoreText: Text;
     eliminationText: Text;
+    moneyText: Text;
     player: Player;
     boss?: Enemy;
+    coinIcon = new Sprite();
 
     constructor(player: Player) {
         super();
@@ -19,6 +22,7 @@ export class PlayerUI extends GameObject {
         this.rubTimesText = new Text(Player.rubTimes.toString(), TextStyles.rubTimesText);
         this.scoreText = new Text(Player.score.toString(), TextStyles.scoreValueText);
         this.eliminationText = new Text(player.elimination.toString(), TextStyles.eliminationText);
+        this.moneyText = new Text('0', TextStyles.moneyText);
     }
 
     updateStatusBar() {
@@ -44,7 +48,7 @@ export class PlayerUI extends GameObject {
         if (this.boss) {
             if (this.boss.dead) {
                 this.boss = undefined;
-            }else {
+            } else {
                 this.statusBar.lineStyle(0);
                 this.statusBar.beginFill(0xd93f3f, 1);
                 this.statusBar.drawRect(83, 43, 554 * this.boss.life / this.boss.maxLife, 14);
@@ -55,14 +59,21 @@ export class PlayerUI extends GameObject {
         }
     }
 
+    setScene(scene: Scene) {
+        super.setScene(scene);
+    }
+
     updateTexts() {
         this.scoreText.text = Player.score.toString();
         this.rubTimesText.text = Player.rubTimes.toString();
         this.eliminationText.text = this.player.elimination.toString();
+        if (this.scene)
+            this.moneyText.text = this.scene.gameMain.money.toString();
 
         this.scoreText.position.set(360 - this.scoreText.width / 2, 1124);
         this.rubTimesText.position.set(360 - this.rubTimesText.width / 2, 1184);
         this.eliminationText.position.set(658 - this.eliminationText.width / 2, 245);
+        // this.moneyText.position.set(628, 285);
     }
 
     initGraphics(): void {
@@ -70,9 +81,15 @@ export class PlayerUI extends GameObject {
         this.scoreText.position.set(360, 1124);
         this.rubTimesText.position.set(360, 1184);
         this.eliminationText.position.set(658, 245);
+        this.moneyText.position.set(628, 285);
 
-        this.display.addChild(this.statusBar, this.rubTimesText, this.eliminationText, this.scoreText);
+        this.display.addChild(this.statusBar, this.rubTimesText, this.eliminationText, this.scoreText, this.moneyText);
 
+        this.coinIcon = new Sprite(this.scene?.gameMain.getTexture('coin'));
+        this.coinIcon.width = 30;
+        this.coinIcon.height = 30;
+        this.coinIcon.position.set(590, 290);
+        this.display.addChild(this.coinIcon);
     }
 
     update(): void {

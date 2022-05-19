@@ -46,8 +46,11 @@ export abstract class GameObject {
             if (this.tag) {
                 this.scene.objectsWithTag.get(this.tag)?.delete(this);
             }
-            if (this.display)
+            if (this.display) {
+                // console.log(this.scene.children.length);
                 this.scene.removeChild(this.display);
+                // console.log(this.scene.children.length);
+            }
         }
         this.dead = true;
     }

@@ -67,6 +67,8 @@ export default defineComponent({
     document.removeEventListener('keydown', this.onKeyDown);
 
     document.removeEventListener('keyup', this.onKeyUp);
+
+    this.gameMain.destroy();
   },
 
   mounted() {
