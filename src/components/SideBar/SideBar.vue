@@ -10,7 +10,8 @@
       <!--        ∧-->
       <!--      </div>-->
       <div class="sidebar-container" :class="{'sidebar-container-hide':!expand}">
-        <TreeItem @outer-expand="this.expand=true" :outer-expand="expand" ref="items" :nav="nav"></TreeItem>
+        <TreeItem @hide-bar="this.expand=false" @outer-expand="this.expand=true" :outer-expand="expand" ref="items"
+                  :nav="nav"></TreeItem>
       </div>
     </div>
   </div>
@@ -49,55 +50,26 @@ export default defineComponent({
     }
   },
 
+  unmounted() {
+    window.removeEventListener('resize', this.onResize);
+  },
+
   mounted() {
-    const onResize = () => {
+    this.onResize = () => {
       if (window.innerWidth <= 768) {
         this.expand = false;
       }
     };
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
   },
 
   data() {
     return {
-      expand: true
-      // nav: [
-      //   {
-      //     label: '主页',
-      //     icon: 'home'
-      //   },
-      //   {
-      //     label: '选项',
-      //     children: [
-      //       {
-      //         label: '选项1',
-      //         link: '/main/game'
-      //       },
-      //       {
-      //         label: '选项2',
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     label: '选项',
-      //     children: [
-      //       {
-      //         label: '选项1',
-      //         children: [
-      //           {
-      //             label: '选项1-1',
-      //             link: '/main/about',
-      //           },
-      //           {
-      //             label: '选项1-2',
-      //           }]
-      //       },
-      //       {
-      //         label: '选项2',
-      //       }
-      //     ]
-      //   }
-      // ] as Nav[]
+      expand: true,
+      onResize: () => {
+
+      }
     };
   }
 

@@ -12,6 +12,7 @@
         </div>
       </div>
       <TreeItem :ref="'item'+index" v-if="item.children"
+                @hide-bar="$emit('hide-bar')"
                 @outer-expand="$emit('outer-expand')"
                 :style="{height:expand[index]?item.children.length*40+'px':'0'}"
                 :class="{'sidebar-item-show':expand[index],'sidebar-item-hide-show':!outerExpand}" :nav="item.children"
@@ -64,8 +65,12 @@ export default defineComponent({
       if (link) {
         this.$router.push(link);
       }
-      if (!this.nav[index].children)
+      if (!this.nav[index].children) {
+        if (window.innerWidth <= 768) {
+          this.$emit('hide-bar');
+        }
         return;
+      }
       if (this.expand[index]) {
         this.expand[index] = false;
         (this.$refs['item' + index] as any)[0].hideAll();
@@ -112,7 +117,7 @@ export default defineComponent({
     }
   },
 
-  emits: ['outer-expand', 'active'],
+  emits: ['outer-expand', 'active', 'hide-bar'],
 
   props: {
     nav: {
