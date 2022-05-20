@@ -17,7 +17,7 @@ export class Coin extends Entity {
 
     constructor(pos: Vec2) {
         super(pos);
-        this.speed = 300;
+        this.speed = 100;
         this.dir = new Vec2(0, -1);
 
         this.collision = new SSCD.Circle(new SSCD.Vector(pos.x, pos.y), this.radius);
@@ -36,7 +36,7 @@ export class Coin extends Entity {
         super.setScene(scene);
         this.display = new Sprite(this.scene?.gameMain.getTexture(this.texture));
         this.scene?.addChild(this.display);
-        this.display.angle = this.angle;
+        this.display.angle = -90;
         this.display.anchor.x = 0.5;
         this.display.anchor.y = 0.5;
         this.display.width = this.display.height = this.radius * 2;
@@ -56,8 +56,9 @@ export class Coin extends Entity {
             this.speed = 300;
             return;
         }
-        if (this.dir.equals(new Vec2(0, 1)) && this.speed >= 200) {
+        if (this.dir.y > 0 && this.speed >= 200) {
             this.speed = 200;
+            this.dir = new Vec2(0, 1);
         } else {
             let velocity = this.dir.mul(this.speed);
             velocity = velocity.add(new Vec2(0, 1).mul(500 * time));

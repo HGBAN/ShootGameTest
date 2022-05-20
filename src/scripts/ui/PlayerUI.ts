@@ -15,6 +15,7 @@ export class PlayerUI extends GameObject {
     player: Player;
     boss?: Enemy;
     coinIcon = new Sprite();
+    coinIcon2 = new Sprite();
 
     constructor(player: Player) {
         super();
@@ -40,10 +41,23 @@ export class PlayerUI extends GameObject {
         this.statusBar.drawRect(653, 43 + 194 * (1 - rubRate), 14, 194 * rubRate);
         this.statusBar.endFill();
 
+        let urgentRate;
+        if (!this.player.urgent) {
+            urgentRate = this.player.urgentValue / this.player.urgentValueMax;
+        } else {
+            urgentRate = 1 - this.player.urgentTimer.progress;
+        }
+        this.statusBar.beginFill(0xd0b634, 1);
+        // this.statusBar.drawCircle(630, 25, 10);
+        this.statusBar.drawRect(623, 43 + 194 * (1 - urgentRate), 14, 194 * urgentRate);
+        this.statusBar.endFill();
+
         this.statusBar.lineStyle(2, 0xDD2222, 1);
         this.statusBar.drawRect(680, 40, 20, 200);
         this.statusBar.lineStyle(2, 0x3c79d5, 1);
         this.statusBar.drawRect(650, 40, 20, 200);
+        this.statusBar.lineStyle(2, 0xd0b634, 1);
+        this.statusBar.drawRect(620, 40, 20, 200);
 
         if (this.boss) {
             if (this.boss.dead) {
@@ -90,6 +104,12 @@ export class PlayerUI extends GameObject {
         this.coinIcon.height = 30;
         this.coinIcon.position.set(590, 290);
         this.display.addChild(this.coinIcon);
+
+        this.coinIcon2 = new Sprite(this.scene?.gameMain.getTexture('coin'));
+        this.coinIcon2.width = 22;
+        this.coinIcon2.height = 22;
+        this.coinIcon2.position.set(619, 14);
+        this.display.addChild(this.coinIcon2);
     }
 
     update(): void {

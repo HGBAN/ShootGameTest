@@ -130,10 +130,15 @@ export class Enemy extends Entity {
             this.life = 0;
 
             //掉落金币
-            if (Random.probability(this.coinDropRate)) {
-                const coin: Coin = new Coin(this.pos.clone);
-                this.scene?.addObject(coin);
+            if(this.scene) {
+                this.scene.createCoins(this.pos);
+                // this.scene.player.urgentValue += 20;
+                this.scene.player.addUrgentValue(20);
             }
+            // if (Random.probability(this.coinDropRate)) {
+            //     const coin: Coin = new Coin(this.pos.clone);
+            //     this.scene?.addObject(coin);
+            // }
             this.destroy();
         }
     }

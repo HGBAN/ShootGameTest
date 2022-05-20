@@ -13,6 +13,7 @@ import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import axios from "axios";
 import Primary = Weapons.Primary;
 import {Coin} from "@/scripts/game/Coin";
+import {Range} from "@/scripts/engine/Range";
 
 interface RubEffect {
     timer: Timer;
@@ -37,6 +38,10 @@ export class Player extends Entity {
     static rubTimes = 0;
     rubValue = 0;
     rubValueMax = 1000;
+    urgentValue = 0;
+    urgentValueMax = 500;
+    urgentTimes = 0;
+    urgentTimer = new Timer(10, false);
     //允许消弹次数
     elimination = 1;
     eliminationTimer = new Timer(1, false);
@@ -47,6 +52,9 @@ export class Player extends Entity {
 
     //武器
     weapons: Weapon[] = [];
+
+    //是否处于急迫状态，急迫状态下可以获取额外金币
+    // urgent = true;
 
     // selfDisplay = new Graphics();
 
@@ -63,8 +71,15 @@ export class Player extends Entity {
 
         this.hitTimer.timeOverCallback = () => {
             this.initGraphics();
-        }
+        };
         // this.initGraphics();
+
+        this.urgentTimer.timeOverCallback = () => {
+            if (this.urgentTimes > 0) {
+                this.urgentTimer.reset();
+                this.urgentTimes--;
+            }
+        };
 
 
         // new Weapons.Primary(this, 4, 1);
@@ -72,6 +87,10 @@ export class Player extends Entity {
         // new Weapons.Fire(this, 10, 0);
         // this.weaponInfo = weaponInfos();
 
+    }
+
+    get urgent() {
+        return !this.urgentTimer.isOver;
     }
 
     set pos(value: Vec2) {
@@ -174,6 +193,18 @@ export class Player extends Entity {
         }
     }
 
+    addUrgentValue(value: number) {
+        this.urgentValue += value;
+        while (this.urgentValue >= this.urgentValueMax) {
+            this.urgentValue -= this.urgentValueMax;
+            this.urgentTimes++;
+        }
+        if (this.urgentTimes > 0) {
+            this.urgentTimes--;
+            this.urgentTimer.reset();
+        }
+    }
+
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
         // if (Input.getKey('a').isDown) {
@@ -181,6 +212,7 @@ export class Player extends Entity {
         // }
         this.hitTimer.update(time);
         this.eliminationTimer.update(time);
+        this.urgentTimer.update(time);
         let dir: Vec2 = Vec2.zero;
         if (Input.doubleTap) {
             this.eliminate();
@@ -255,10 +287,20 @@ export class Player extends Entity {
                     this.addRubEffect();
                     Player.rubTimes++;
                     this.rubValue += bullet.rubValue;
-                    if (this.rubValue >= this.rubValueMax) {
+                    while (this.rubValue >= this.rubValueMax) {
                         this.rubValue -= this.rubValueMax;
                         this.elimination++;
                     }
+                    this.addUrgentValue(bullet.rubValue);
+                    // this.urgentValue += bullet.rubValue;
+                    // while (this.urgentValue >= this.urgentValueMax) {
+                    //     this.urgentValue -= this.urgentValueMax;
+                    //     this.urgentTimes++;
+                    // }
+                    // if (this.urgentTimes > 0) {
+                    //     this.urgentTimes--;
+                    //     this.urgentTimer.reset();
+                    // }
                 }
             }
             //判断子弹的碰撞
