@@ -41,6 +41,8 @@ export abstract class GameObject {
     }
 
     destroy(): void {
+        if(this.dead)
+            return;
         if (this.scene) {
             this.scene.objects.delete(this);
             if (this.tag) {

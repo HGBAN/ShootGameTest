@@ -306,9 +306,10 @@ export class Player extends Entity {
     }
 
     destroy() {
+        if (this.dead)
+            return;
         super.destroy();
         this.scene?.collisionWorld.remove(this.rubCollision);
-
     }
 
     hit(damage: number) {

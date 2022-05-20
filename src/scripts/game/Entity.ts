@@ -39,7 +39,7 @@ export class Entity extends GameObject {
 
     }
 
-    get eventList(){
+    get eventList() {
         return this.states.currentState.events;
     }
 
@@ -74,7 +74,7 @@ export class Entity extends GameObject {
 
     addEmitter(...emitters: Emitter[]) {
         // this.emitter = emitter;
-        for(const emitter of emitters) {
+        for (const emitter of emitters) {
             if (this.scene)
                 this.scene.addObject(emitter);
             emitter.pos = this._pos.clone;
@@ -175,6 +175,8 @@ export class Entity extends GameObject {
     }
 
     destroy(): void {
+        if (this.dead)
+            return;
         super.destroy();
         // this.emitter?.destroy();
         for (const emitter of this.emitters) {

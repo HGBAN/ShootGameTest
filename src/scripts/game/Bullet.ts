@@ -76,6 +76,8 @@ export class Bullet extends Entity implements IndexObject, PoolObject {
     }
 
     destroy() {
+        if (this.dead)
+            return;
         super.destroy();
         // this.init();
         // this.pushPool();

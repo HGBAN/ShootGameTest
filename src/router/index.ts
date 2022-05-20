@@ -23,8 +23,8 @@ const sideBarNav: Nav[] = [
         // ]
     },
     {
-        label: '武器',
-        icon: 'weapon',
+        label: '商店',
+        icon: 'store',
         link: '/weapon'
         // children: [
         //     {

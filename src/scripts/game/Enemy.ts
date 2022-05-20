@@ -128,6 +128,7 @@ export class Enemy extends Entity {
         this.hitTimer.reset();
         if (this.life <= 0) {
             this.life = 0;
+
             //掉落金币
             if (Random.probability(this.coinDropRate)) {
                 const coin: Coin = new Coin(this.pos.clone);
@@ -138,6 +139,8 @@ export class Enemy extends Entity {
     }
 
     destroy() {
+        if (this.dead)
+            return;
         super.destroy();
         // // eslint-disable-next-line no-debugger
         // debugger;

@@ -104,6 +104,8 @@ export class Emitter extends Entity {
     }
 
     destroy() {
+        if (this.dead)
+            return;
         super.destroy();
         this.bindingEntity?.removeEmitter(this);
     }

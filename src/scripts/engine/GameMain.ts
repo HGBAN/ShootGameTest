@@ -29,6 +29,8 @@ export class GameMain {
     weaponInfo: WeaponInfo[];
     //武器数据索引
     weaponInfoIndex: { [index: string]: WeaponInfo };
+    //金币掉率，大于1则必定掉落对应数量的金币，余下的小数点按概率计算
+    coinDropRate = 0.5;
 
     constructor() {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
