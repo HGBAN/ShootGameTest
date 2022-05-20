@@ -9,6 +9,9 @@ export interface User {
     id: number;
     username: string;
     nickname: string;
+    money: number;
+    registerTime: number;
+    lastLoginTime: number;
 }
 
 //武器信息

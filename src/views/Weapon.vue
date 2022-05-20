@@ -108,6 +108,7 @@ export default defineComponent({
 
     //更新武器数据
     updateWeaponInfo(info: WeaponInfo) {
+      this.$store.commit('setLoading', true);
       axios.put('/game/addWeaponInfo', {
         tag: info.tag,
         level: info.currentLevel,
@@ -119,11 +120,14 @@ export default defineComponent({
         }
       }).catch((err) => {
         console.log(err.message);
+      }).finally(()=>{
+        this.$store.commit('setLoading', false);
       });
     },
 
     //更新武器和金钱数据
     updateWeaponMoney(info: WeaponInfo) {
+      this.$store.commit('setLoading', true);
       axios.put('/game/updateWeaponMoney', {
         money: this.money,
         tag: info.tag,
@@ -136,6 +140,8 @@ export default defineComponent({
         }
       }).catch((err) => {
         console.log(err.message);
+      }).finally(()=>{
+        this.$store.commit('setLoading', false);
       });
     }
   },
@@ -174,6 +180,7 @@ export default defineComponent({
     for (const info of this.weaponInfo) {
       this.weaponInfoIndex[info.tag] = info;
     }
+    this.$store.commit('setLoading', true);
     axios.get('/game/shopInfo').then((res) => {
       const data: ResponseData = res.data;
       if (data.errCode == ErrCode.SUCCESS) {
@@ -187,6 +194,8 @@ export default defineComponent({
         if (info.equip)
           this.primaryCurrent++;
       }
+    }).finally(()=>{
+      this.$store.commit('setLoading', false);
     });
     this.currentInfo = this.weaponInfoIndex['primary'];
   }

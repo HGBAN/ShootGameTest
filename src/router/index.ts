@@ -42,7 +42,13 @@ const sideBarNav: Nav[] = [
         //         label: '选项2',
         //     }
         // ]
-    }]
+    },
+    {
+        label: '信息',
+        icon: 'personal',
+        link: '/personal'
+    }
+]
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -77,6 +83,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/weapon',
                 name: 'Weapon',
                 component: () => import('../views/Weapon.vue')
+            },
+            {
+                path: '/personal',
+                name: 'Personal',
+                component: () => import('../views/Personal.vue')
             },
             // {
             //     path: 'about',
