@@ -50,6 +50,15 @@
 
       </WeaponChooseBox>
     </div>
+    <div class="box">
+      <div style="display: flex">
+        <div>辅助装备</div>
+        <div style="margin-left: auto">{{ assistCurrent }}/{{ assistMax }}</div>
+      </div>
+      <WeaponChooseBox @item-choose="onItemChoose" :items="assistInfo" :weapon-info-index="weaponInfoIndex">
+
+      </WeaponChooseBox>
+    </div>
     <Dialog v-model:show="showErrDialog">
       <template #title>
         错误
@@ -90,19 +99,50 @@ export default defineComponent({
     equip() {
       if (!this.currentInfo)
         return;
-      const tag = this.currentInfo.tag;
-      this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
-      if (this.weaponInfoIndex[tag].equip) {
-        this.primaryCurrent++;
-        if (this.primaryCurrent > this.primaryMax) {
+      // const tag = this.currentInfo.tag;
+      const type = this.currentInfo.type;
+
+      if (type == 'primary') {
+        if (!this.currentInfo.equip) {
+          if (this.primaryCurrent + 1 > this.primaryMax) {
+            this.errMsg = '装备已达上限';
+            this.showErrDialog = true;
+            return;
+          }
+          this.currentInfo.equip = true;
+          this.primaryCurrent++;
+        } else {
+          this.currentInfo.equip = false;
           this.primaryCurrent--;
-          this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
-          this.errMsg = '装备已达上限';
-          this.showErrDialog = true;
         }
-      } else
-        this.primaryCurrent--;
-      this.updateWeaponInfo(this.currentInfo);
+        this.updateWeaponInfo(this.currentInfo);
+      } else if (type == 'assist') {
+        if (!this.currentInfo.equip) {
+          if (this.assistCurrent + 1 > this.assistMax) {
+            this.errMsg = '装备已达上限';
+            this.showErrDialog = true;
+            return;
+          }
+          this.currentInfo.equip = true;
+          this.assistCurrent++;
+        } else {
+          this.currentInfo.equip = false;
+          this.assistCurrent--;
+        }
+        this.updateWeaponInfo(this.currentInfo);
+      }
+      // this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+      // if (this.weaponInfoIndex[tag].equip) {
+      //   this.primaryCurrent++;
+      //   if (this.primaryCurrent > this.primaryMax) {
+      //     this.primaryCurrent--;
+      //     this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+      //     this.errMsg = '装备已达上限';
+      //     this.showErrDialog = true;
+      //   }
+      // } else
+      //   this.primaryCurrent--;
+      // this.updateWeaponInfo(this.currentInfo);
     },
 
     //升级当前武器
@@ -182,7 +222,8 @@ export default defineComponent({
     return {
       currentInfo: null as WeaponInfo | null,
       money: 100,
-      weaponInfo: weaponInfos(),
+      weaponInfo: [] as WeaponInfo[],
+      assistInfo: [] as WeaponInfo[],
       weaponInfoIndex: {
         // 'missile': true
       } as { [index: string]: WeaponInfo },
@@ -192,16 +233,28 @@ export default defineComponent({
       //当前主武器装备数量
       primaryCurrent: 0,
 
+      assistMax: 2,
+      assistCurrent: 0,
+
       showErrDialog: false,
       errMsg: ''
     };
   },
 
   created() {
-    //建立索引
-    for (const info of this.weaponInfo) {
+    const infos = weaponInfos();
+    for (const info of infos) {
+      if (info.type == 'primary')
+        this.weaponInfo.push(info);
+      else if (info.type == 'assist')
+        this.assistInfo.push(info);
+      //建立索引
       this.weaponInfoIndex[info.tag] = info;
     }
+    // //建立索引
+    // for (const info of infos) {
+    //   this.weaponInfoIndex[info.tag] = info;
+    // }
     this.$store.commit('setLoading', true);
     axios.get('/game/shopInfo').then((res) => {
       const data: ResponseData = res.data;

@@ -29,6 +29,7 @@ export default defineComponent({
 <style lang="scss">
 body {
   background-color: #303941;
+  overflow-x: hidden;
 }
 
 @keyframes rotate {

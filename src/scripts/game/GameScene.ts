@@ -78,11 +78,23 @@ export class GameScene extends Scene {
     //生成金币
     createCoins(pos: Vec2) {
         if (this.player.urgent) {
+            let urgentCoinDrop;
+            if (this.player.coinWeaponSlot) {
+                urgentCoinDrop = this.player.coinWeaponSlot.urgentCoinDrop;
+            } else {
+                urgentCoinDrop = this.urgentCoinDrop;
+            }
             this.coinEmitter.pos = pos.clone;
-            this.coinEmitter.numberAtOnce = this.urgentCoinDrop.num[Random.choose(this.urgentCoinDrop.rate)];
+            this.coinEmitter.numberAtOnce = urgentCoinDrop.num[Random.choose(urgentCoinDrop.rate)];
             this.coinEmitter.shoot();
         } else {
-            if (Random.probability(this.coinDropRate)) {
+            let coinDropRate;
+            if (this.player.coinWeaponSlot) {
+                coinDropRate = this.player.coinWeaponSlot.coinDropRate;
+            } else {
+                coinDropRate = this.coinDropRate;
+            }
+            if (Random.probability(coinDropRate)) {
                 this.coinEmitter.pos = pos.clone;
                 this.coinEmitter.numberAtOnce = 1;
                 this.coinEmitter.shoot();

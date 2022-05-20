@@ -16,6 +16,7 @@ import {GameObject} from "@/scripts/engine/GameObject";
 import {Timer} from "@/scripts/engine/Timer";
 import {EntityEvent} from "@/scripts/game/EntityEventList";
 import {WeaponInfo} from "@/model";
+import {Elimination} from "@/scripts/game/Elimination";
 
 //武器商店数据
 export function weaponInfos(): WeaponInfo[] {
@@ -27,7 +28,8 @@ export function weaponInfos(): WeaponInfo[] {
             currentLevel: 1,
             maxLevel: 10,
             description: '会向正前方发射连续、密集的子弹',
-            equip: true
+            equip: true,
+            type: 'primary'
         },
         {
             tag: 'missile',
@@ -36,7 +38,8 @@ export function weaponInfos(): WeaponInfo[] {
             currentLevel: 0,
             maxLevel: 10,
             description: '发射会自动跟踪敌人的导弹',
-            equip: false
+            equip: false,
+            type: 'primary'
         },
         {
             tag: 'fire',
@@ -45,7 +48,39 @@ export function weaponInfos(): WeaponInfo[] {
             currentLevel: 0,
             maxLevel: 10,
             description: '每隔一段时间发射一道火焰',
-            equip: false
+            equip: false,
+            type: 'primary'
+        },
+
+        {
+            tag: 'pulseShield',
+            name: '脉冲护盾',
+            price: [300, 500, 700, 900, 1100],
+            currentLevel: 0,
+            maxLevel: 5,
+            description: '每隔一段时间发射一道抵消子弹的力场',
+            equip: false,
+            type: 'assist'
+        },
+        {
+            tag: 'coin',
+            name: '金币收集',
+            price: [400, 800, 1500],
+            currentLevel: 0,
+            maxLevel: 3,
+            description: '增加获得金币的概率和数量',
+            equip: false,
+            type: 'assist'
+        },
+        {
+            tag: 'recovery',
+            name: '生命回复',
+            price: [300, 500, 700, 900, 1100],
+            currentLevel: 0,
+            maxLevel: 5,
+            description: '缓慢回复生命值',
+            equip: false,
+            type: 'assist'
         }
     ];
 }
@@ -353,4 +388,103 @@ export namespace Weapons {
             }
         }
     }
+
+    //脉冲护盾
+    export class PulseShield extends Weapon {
+
+        static args = {
+            //发射间隔
+            period: [5, 4.8, 4.6, 4.4, 4.2],
+            //半径
+            radius: [100, 110, 120, 130, 140],
+
+        };
+
+        shootTimer: Timer;
+        radius: number;
+
+        constructor(player: Player, level: number, slot: number) {
+            super(player, level, slot);
+            this.radius = PulseShield.args.radius[level - 1];
+            this.shootTimer = new Timer(PulseShield.args.period[level - 1]);
+        }
+
+        update(time: number) {
+            super.update(time);
+            this.shootTimer.update(time);
+            if (this.shootTimer.isOver) {
+                this.shootTimer.reset();
+                // console.log(1);
+                if (this.player.scene) {
+                    const elimination: Elimination = new Elimination(this.player.pos.clone, this.player.scene);
+                    elimination.maxRadius = this.radius;
+                    this.player.scene.addObject(elimination);
+                }
+            }
+        }
+    }
+
+    //增加金币掉率的装备
+    export class CoinWeapon extends Weapon {
+
+        static args = {
+            coinDropRate: [0.7, 0.85, 1],
+            urgentCoinDrop: [
+                {
+                    num: [1, 2, 3, 4, 5],
+                    rate: [0.1, 0.3, 0.3, 0.2]
+                },
+                {
+                    num: [2, 3, 4, 5, 6],
+                    rate: [0.1, 0.3, 0.3, 0.2]
+                },
+                {
+                    num: [3, 4, 5, 6, 7],
+                    rate: [0.1, 0.3, 0.3, 0.2]
+                }
+            ]
+        };
+
+        coinDropRate: number;
+        urgentCoinDrop: { num: number[]; rate: number[] };
+
+        constructor(player: Player, level: number, slot: number) {
+            super(player, level, slot);
+            this.player.coinWeaponSlot = this;
+            this.coinDropRate = CoinWeapon.args.coinDropRate[level - 1];
+            this.urgentCoinDrop = CoinWeapon.args.urgentCoinDrop[level - 1];
+        }
+
+        update(time: number) {
+            super.update(time);
+
+        }
+
+        destroy() {
+            super.destroy();
+            this.player.coinWeaponSlot = null;
+        }
+    }
+
+    //回血的装备
+    export class Recovery extends Weapon {
+
+        static args = {
+            value: [0.5, 0.7, 0.9, 1.1, 1.3]
+        };
+
+        //回复量
+        value: number;
+
+        constructor(player: Player, level: number, slot: number) {
+            super(player, level, slot);
+            this.value = Recovery.args.value[level - 1];
+        }
+
+        update(time: number) {
+            super.update(time);
+            this.player.addHP(this.value * time);
+        }
+    }
+
 }

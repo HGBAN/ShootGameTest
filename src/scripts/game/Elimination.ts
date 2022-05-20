@@ -20,13 +20,13 @@ export class Elimination extends Entity {
     }
 
     initGraphics() {
-        this.display.lineStyle(2, 0xDD2222, 1);
+        this.display.lineStyle(2, 0x226DDD, 1);
         this.display.drawCircle(0, 0, this.radius);
     }
 
     update() {
         this.display.clear();
-        this.display.lineStyle(2, 0xDD2222, 1 - this.eliminationTimer.progress);
+        this.display.lineStyle(2, 0x226DDD, 1 - this.eliminationTimer.progress);
         this.display.drawCircle(0, 0, this.radius);
     }
 
@@ -35,7 +35,7 @@ export class Elimination extends Entity {
         ctx.beginPath();
         ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, 2 * Math.PI);
 
-        ctx.strokeStyle = '#DD2222';
+        ctx.strokeStyle = '#226ddd';
         ctx.globalAlpha = 1 - this.eliminationTimer.progress;
         ctx.stroke();
 

@@ -30,6 +30,8 @@ export interface WeaponInfo {
     description: string;
     //是否已经装备
     equip: boolean;
+    //武器类型
+    type: string;
 }
 
 //后台错误代码

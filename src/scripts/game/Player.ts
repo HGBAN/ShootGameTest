@@ -52,6 +52,8 @@ export class Player extends Entity {
 
     //武器
     weapons: Weapon[] = [];
+    //增加金币掉率的特殊装备槽
+    coinWeaponSlot: Weapons.CoinWeapon | null = null;
 
     //是否处于急迫状态，急迫状态下可以获取额外金币
     // urgent = true;
@@ -85,6 +87,7 @@ export class Player extends Entity {
         // new Weapons.Primary(this, 4, 1);
         // new Weapons.MissileLauncher(this, 4, 0);
         // new Weapons.Fire(this, 10, 0);
+        // new Weapons.PulseShield(this, 10, -1);
         // this.weaponInfo = weaponInfos();
 
     }
@@ -134,6 +137,12 @@ export class Player extends Entity {
         // this.setWeapons();
     }
 
+    addHP(val: number) {
+        this.life += val;
+        if (this.life > this.maxLife)
+            this.life = this.maxLife;
+    }
+
     setWeapons() {
         if (!this.scene)
             return;
@@ -151,9 +160,18 @@ export class Player extends Entity {
                     new Weapons.MissileLauncher(this, info.currentLevel, -1);
                 } else if (info.tag == 'fire') {
                     new Weapons.Fire(this, info.currentLevel, -1);
+                } else if (info.tag == 'pulseShield') {
+                    new Weapons.PulseShield(this, info.currentLevel, -1);
+                } else if (info.tag == 'coin') {
+                    new Weapons.CoinWeapon(this, info.currentLevel, -1);
+                } else if (info.tag == 'recovery') {
+                    new Weapons.Recovery(this, info.currentLevel, -1);
                 }
             }
         }
+        // new Weapons.PulseShield(this, 5, -1);
+        // new Weapons.CoinWeapon(this, 3, -1);
+        // new Weapons.Recovery(this, 1, -1);
     }
 
     initGraphics() {
