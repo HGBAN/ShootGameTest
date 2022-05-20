@@ -70,6 +70,7 @@ export default defineComponent({
 .header {
   width: 100%;
   text-align: center;
+  color: aliceblue;
 }
 
 .content {

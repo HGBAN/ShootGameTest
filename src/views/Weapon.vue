@@ -50,6 +50,15 @@
 
       </WeaponChooseBox>
     </div>
+    <Dialog v-model:show="showErrDialog">
+      <template #title>
+        错误
+      </template>
+      <div style="margin-bottom: 20px;color: #ec9371">{{ errMsg }}</div>
+      <div style="text-align: center">
+        <button class="btn btn-blue" @click="showErrDialog=false">确认</button>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -60,13 +69,15 @@ import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import SvgIcon from "@/components/SvgIcon.vue";
 import axios from "axios";
 import {weaponInfos} from "@/scripts/data/Weapons";
+import Dialog from "@/components/Dialog.vue";
 
 export default defineComponent({
   name: "Weapon",
 
   components: {
     SvgIcon,
-    WeaponChooseBox
+    WeaponChooseBox,
+    Dialog
   },
 
   methods: {
@@ -86,6 +97,8 @@ export default defineComponent({
         if (this.primaryCurrent > this.primaryMax) {
           this.primaryCurrent--;
           this.weaponInfoIndex[tag].equip = !this.weaponInfoIndex[tag].equip;
+          this.errMsg = '装备已达上限';
+          this.showErrDialog = true;
         }
       } else
         this.primaryCurrent--;
@@ -96,14 +109,20 @@ export default defineComponent({
     upgrade() {
       if (!this.currentInfo)
         return;
-      if (this.currentInfo.currentLevel >= this.currentInfo.maxLevel)
+      if (this.currentInfo.currentLevel >= this.currentInfo.maxLevel) {
+        this.errMsg = '等级已达上限';
+        this.showErrDialog = true;
         return;
+      }
       const price = this.currentInfo.price[this.currentInfo.currentLevel];
       if (this.money - price >= 0) {
         this.money -= price;
         this.currentInfo.currentLevel++;
+        this.updateWeaponMoney(this.currentInfo);
+      } else {
+        this.errMsg = '金币不足';
+        this.showErrDialog = true;
       }
-      this.updateWeaponMoney(this.currentInfo);
     },
 
     //更新武器数据
@@ -120,7 +139,7 @@ export default defineComponent({
         }
       }).catch((err) => {
         console.log(err.message);
-      }).finally(()=>{
+      }).finally(() => {
         this.$store.commit('setLoading', false);
       });
     },
@@ -140,7 +159,7 @@ export default defineComponent({
         }
       }).catch((err) => {
         console.log(err.message);
-      }).finally(()=>{
+      }).finally(() => {
         this.$store.commit('setLoading', false);
       });
     }
@@ -171,7 +190,10 @@ export default defineComponent({
       //主武器装备数量上限
       primaryMax: 2,
       //当前主武器装备数量
-      primaryCurrent: 0
+      primaryCurrent: 0,
+
+      showErrDialog: false,
+      errMsg: ''
     };
   },
 
@@ -194,7 +216,7 @@ export default defineComponent({
         if (info.equip)
           this.primaryCurrent++;
       }
-    }).finally(()=>{
+    }).finally(() => {
       this.$store.commit('setLoading', false);
     });
     this.currentInfo = this.weaponInfoIndex['primary'];
