@@ -46,7 +46,8 @@
         <div>主武器</div>
         <div style="margin-left: auto">{{ primaryCurrent }}/{{ primaryMax }}</div>
       </div>
-      <WeaponChooseBox @item-choose="onItemChoose" :items="weaponInfo" :weapon-info-index="weaponInfoIndex">
+      <WeaponChooseBox @item-choose="onItemChoose" :items="weaponInfo" :weapon-info-index="weaponInfoIndex"
+                       :current-weapon="currentInfo">
 
       </WeaponChooseBox>
     </div>
@@ -55,7 +56,8 @@
         <div>辅助装备</div>
         <div style="margin-left: auto">{{ assistCurrent }}/{{ assistMax }}</div>
       </div>
-      <WeaponChooseBox @item-choose="onItemChoose" :items="assistInfo" :weapon-info-index="weaponInfoIndex">
+      <WeaponChooseBox @item-choose="onItemChoose" :items="assistInfo" :weapon-info-index="weaponInfoIndex"
+                       :current-weapon="currentInfo">
 
       </WeaponChooseBox>
     </div>
@@ -268,6 +270,10 @@ export default defineComponent({
       for (const info of this.weaponInfo) {
         if (info.equip)
           this.primaryCurrent++;
+      }
+      for (const info of this.assistInfo) {
+        if (info.equip)
+          this.assistCurrent++;
       }
     }).finally(() => {
       this.$store.commit('setLoading', false);
