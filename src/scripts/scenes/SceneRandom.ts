@@ -18,6 +18,8 @@ export class SceneRandom extends GameScene {
 
     back: Background;
 
+    levelName = 'Stage ?';
+
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
         this.player.elimination = 1;
@@ -25,7 +27,7 @@ export class SceneRandom extends GameScene {
         Player.score = 0;
         Player.rubTimes = 0;
 
-        this.transition.openText.text = 'Stage ?';
+        this.transition.openText.text = this.levelName;
 
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);

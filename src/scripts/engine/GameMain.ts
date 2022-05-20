@@ -30,6 +30,11 @@ export class GameMain {
     //武器数据索引
     weaponInfoIndex: { [index: string]: WeaponInfo };
 
+    //---游戏记录数据---
+    gameId = 0;
+    highScore = 0;
+    rubTimes = 0;
+    level = '未通过';
 
     constructor() {
         this.app.ticker.add(delta => this.gameLoopCallback(delta));
@@ -46,7 +51,7 @@ export class GameMain {
         }
 
         //等待所有异步执行完成后加载场景
-        Promise.all([this.loadResources(), this.loadWeaponInfo()]).then(() => {
+        Promise.all([this.loadResources(), this.loadWeaponInfo(), this.createGameRecord()]).then(() => {
             this.setScene(new Scene1(this));
         });
         // this.loadResources().then(() => {
@@ -98,6 +103,35 @@ export class GameMain {
                     this.weaponInfoIndex[info.tag].currentLevel = info.level;
                     this.weaponInfoIndex[info.tag].equip = info.equip;
                 }
+            }
+        });
+    }
+
+    //向后台服务器创建游戏记录
+    createGameRecord() {
+        return axios.put('/game/addGameRecord', {
+            score: this.highScore,
+            rubTimes: this.rubTimes,
+            level: this.level
+        }).then((res) => {
+            const data: ResponseData = res.data;
+            if (data.errCode == ErrCode.SUCCESS) {
+                this.gameId = data.data;
+            }
+        });
+    }
+
+    //更新游戏记录
+    updateGameRecord() {
+        axios.put('/game/updateGameRecord', {
+            id: this.gameId,
+            score: this.highScore,
+            rubTimes: this.rubTimes,
+            level: this.level
+        }).then((res) => {
+            const data: ResponseData = res.data;
+            if (data.errCode == ErrCode.SUCCESS) {
+                // this.gameId = data.data;
             }
         });
     }

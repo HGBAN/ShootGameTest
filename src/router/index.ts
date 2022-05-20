@@ -47,6 +47,11 @@ const sideBarNav: Nav[] = [
         label: '信息',
         icon: 'personal',
         link: '/personal'
+    },
+    {
+        label: '排行榜',
+        icon: 'weapon',
+        link: '/rankingList'
     }
 ]
 
@@ -88,6 +93,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/personal',
                 name: 'Personal',
                 component: () => import('../views/Personal.vue')
+            },
+            {
+                path: '/rankingList',
+                name: 'RankingList',
+                component: () => import('../views/RankingList.vue')
             },
             // {
             //     path: 'about',

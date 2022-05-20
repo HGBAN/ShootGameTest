@@ -24,10 +24,11 @@ export class Scene1 extends GameScene {
 
     // emitterLine1: Emitter;
     // events: EntityEventList = new EntityEventList();
+    levelName = 'Stage 1';
 
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
-        this.transition.openText.text = 'Stage 1';
+        this.transition.openText.text = this.levelName;
 
         const emitterLine1: Emitter = EnemyEmitters.line1();
         emitterLine1.active = false;
@@ -153,6 +154,10 @@ export class Scene1 extends GameScene {
                 this.transition.triggerOut();
             }));
             this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
+                this.gameMain.highScore = Player.score;
+                this.gameMain.level = this.levelName;
+                this.gameMain.rubTimes = Player.rubTimes;
+                this.gameMain.updateGameRecord();
                 this.gameMain.setScene(new Scene2(this.gameMain, this.player));
             }));
         }));

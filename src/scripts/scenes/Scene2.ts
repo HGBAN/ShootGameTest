@@ -23,11 +23,13 @@ import {SceneRandom} from "@/scripts/scenes/SceneRandom";
 export class Scene2 extends GameScene {
     back: Background;
 
+    levelName = 'Stage 2';
+
     // events: EntityEventList = new EntityEventList();
 
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
-        this.transition.openText.text = 'Stage 2';
+        this.transition.openText.text = this.levelName;
 
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);
@@ -204,6 +206,10 @@ export class Scene2 extends GameScene {
                 this.transition.triggerOut();
             }));
             this.events.addEvent(new EntityEvent(() => this.time - time >= 4, () => {
+                this.gameMain.highScore = Player.score;
+                this.gameMain.level = this.levelName;
+                this.gameMain.rubTimes = Player.rubTimes;
+                this.gameMain.updateGameRecord();
                 alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
                 this.gameMain.setScene(new SceneRandom(this.gameMain));
             }));
