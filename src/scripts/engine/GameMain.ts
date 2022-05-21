@@ -53,6 +53,7 @@ export class GameMain {
         //等待所有异步执行完成后加载场景
         Promise.all([this.loadResources(), this.loadWeaponInfo(), this.createGameRecord()]).then(() => {
             this.setScene(new Scene1(this));
+            // this.setScene(new TestScene(this));
         });
         // this.loadResources().then(() => {
         //     this.setScene(new Scene1(this));

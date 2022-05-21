@@ -141,8 +141,8 @@ export class Scene1 extends GameScene {
 
         let boss: Enemy | undefined;
 
-        this.events.addEvent(new EntityEvent(() => this.time >= 22, () => {
-            boss = Enemies.boss1();
+        this.events.addEvent(new EntityEvent(() => this.time >= 32, () => {
+            boss = Enemies.boss1(this);
             boss.pos = new Vec2(360, 0);
             boss.angle = 90;
             this.addObject(boss);

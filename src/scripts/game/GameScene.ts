@@ -81,8 +81,10 @@ export class GameScene extends Scene {
             let urgentCoinDrop;
             if (this.player.coinWeaponSlot) {
                 urgentCoinDrop = this.player.coinWeaponSlot.urgentCoinDrop;
+                // console.log(1)
             } else {
                 urgentCoinDrop = this.urgentCoinDrop;
+                // console.log(2)
             }
             this.coinEmitter.pos = pos.clone;
             this.coinEmitter.numberAtOnce = urgentCoinDrop.num[Random.choose(urgentCoinDrop.rate)];
