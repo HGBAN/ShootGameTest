@@ -257,7 +257,7 @@ export class Player extends Entity {
             dir = Input.moveDir;
         }
 
-        const newPos = this.pos.add(dir.mul(200 * time));
+        const newPos = this.pos.add(dir.mul(225 * time));
         if (newPos.x < 0)
             newPos.x = 0;
         if (newPos.y < 0)

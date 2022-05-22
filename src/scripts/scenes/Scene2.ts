@@ -212,65 +212,9 @@ export class Scene2 extends GameScene {
                 this.gameMain.rubTimes = Player.rubTimes;
                 this.gameMain.updateGameRecord();
                 // alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
-                this.gameMain.setScene(new Scene3(this.gameMain));
+                this.gameMain.setScene(new Scene3(this.gameMain, this.player));
             }));
         }));
-
-        // const enemy: Enemy = Enemies.explosion(this);
-        // enemy.pos = new Vec2(360, 300);
-        // enemy.speed = 0;
-        // this.addObject(enemy);
-        //
-        // const enemy2: Enemy = Enemies.fire();
-        // enemy2.pos = new Vec2(360, 400);
-        // enemy2.speed = 0;
-        // this.addObject(enemy2);
-        //
-        // const enemy3: Enemy = Enemies.randomCircle();
-        // enemy3.pos = new Vec2(360, 500);
-        // enemy3.speed = 0;
-        // this.addObject(enemy3);
-        //
-        // const enemy4: Enemy = Enemies.unDownThree();
-        // enemy4.pos = new Vec2(460, 500);
-        // enemy4.speed = 0;
-        // this.addObject(enemy4);
-        //
-        // const enemy5: Enemy = Enemies.shot();
-        // enemy5.pos = new Vec2(460, 400);
-        // enemy5.speed = 0;
-        // this.addObject(enemy5);
-
-        // const bullet: Bullet = Bullets.mine(this);
-        // bullet.pos = new Vec2(460, 600);
-        // this.addObject(bullet);
-
-        // const bullet: Bullet = Bullets.chain();
-        // bullet.pos = new Vec2(460, 600);
-        // this.addObject(bullet);
-
-        // const emitter: Emitter = BulletEmitters.trace();
-        // emitter.pos = new Vec2(360, 500);
-        // this.addObject(emitter);
-        //
-        // const emitter2: Emitter = BulletEmitters.mineShooter(this);
-        // emitter2.pos = new Vec2(360, 500);
-        // this.addObject(emitter2);
-
-        // const emitter3: Emitter = BulletEmitters.meteorite(this, () => this.time >= 10);
-        // this.addObject(emitter3);
-
-        // const emitter4: Emitter = BulletEmitters.circleBack();
-        // emitter4.pos = new Vec2(360, 500);
-        // this.addObject(emitter4);
-
-        // const emitter5: Emitter = Emitters.edgeShoot(Bullets.chain);
-        // this.addObject(emitter5);
-
-        // const boss: Enemy = Enemies.boss2(this);
-        // boss.pos = new Vec2(360, 500);
-        // boss.speed = 0;
-        // this.addObject(boss);
     }
 
     fixedUpdate(time: number) {
