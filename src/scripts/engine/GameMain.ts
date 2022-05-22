@@ -13,6 +13,7 @@ import {SceneRandom} from "@/scripts/scenes/SceneRandom";
 import axios from "axios";
 import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import {weaponInfos} from "@/scripts/data/Weapons";
+import {Scene3} from "@/scripts/scenes/Scene3";
 
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
@@ -52,8 +53,8 @@ export class GameMain {
 
         //等待所有异步执行完成后加载场景
         Promise.all([this.loadResources(), this.loadWeaponInfo()/*, this.createGameRecord()*/]).then(() => {
-            // this.setScene(new Scene1(this));
-            this.setScene(new TestScene(this));
+            this.setScene(new Scene1(this));
+            // this.setScene(new TestScene(this));
         });
         // this.loadResources().then(() => {
         //     this.setScene(new Scene1(this));

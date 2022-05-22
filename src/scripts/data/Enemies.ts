@@ -114,7 +114,7 @@ export abstract class Enemies {
 
     static boss1(scene: GameScene): Enemy {
         const enemy: Enemy = new Enemy(Vec2.zero);
-        enemy.setMaxLife(5000);
+        enemy.setMaxLife(6500);
         // enemy.showBar = true;
         enemy.speed = 400;
 

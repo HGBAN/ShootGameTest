@@ -19,6 +19,7 @@ import {Background} from "@/scripts/game/Background";
 import {Bullets} from "@/scripts/data/Bullets";
 import {Emitters} from "@/scripts/data/Emitters";
 import {SceneRandom} from "@/scripts/scenes/SceneRandom";
+import {Scene3} from "@/scripts/scenes/Scene3";
 
 export class Scene2 extends GameScene {
     back: Background;
@@ -210,8 +211,8 @@ export class Scene2 extends GameScene {
                 this.gameMain.level = this.levelName;
                 this.gameMain.rubTimes = Player.rubTimes;
                 this.gameMain.updateGameRecord();
-                alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
-                this.gameMain.setScene(new SceneRandom(this.gameMain));
+                // alert(`恭喜！您的分数为${Player.score}。本游戏还处于测试阶段，目前就做到这里。请等待后续更新，有什么意见欢迎提出。`);
+                this.gameMain.setScene(new Scene3(this.gameMain));
             }));
         }));
 
