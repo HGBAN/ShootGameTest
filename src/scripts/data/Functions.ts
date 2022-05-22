@@ -17,3 +17,9 @@ export function quadratic(start: number, end: number): Unary {
         return x * x * (end - start) + start;
     }
 }
+
+export function sin1(start: number, end: number): Unary {
+    return function (x: number): number {
+        return Math.sin(0.5 * Math.PI * x) * (end - start) + start;
+    }
+}

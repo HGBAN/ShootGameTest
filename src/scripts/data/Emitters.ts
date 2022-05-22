@@ -10,6 +10,7 @@ import {GameScene} from "@/scripts/game/GameScene";
 import {Random} from "@/scripts/engine/Random";
 import {PropChanger, PropMutation} from "@/scripts/engine/PropTransformer";
 import {Entity} from "@/scripts/game/Entity";
+import {Player} from "@/scripts/game/Player";
 
 export abstract class Emitters {
     static line1(entity: EntityGenerator = Enemies.sniper1): Emitter {
@@ -132,6 +133,101 @@ export abstract class Emitters {
 
         }));
         emitter.eventList.addEvent(eventList);
+        return emitter;
+    }
+
+    //落雨
+    static rain(entity: EntityGenerator = Bullets.default) {
+        const emitter: Emitter = new Emitter(Vec2.zero, entity);
+        emitter.period = -1;
+        emitter.numberAtOnce = 1;
+        emitter.duration = -1;
+        emitter.angle = 90;
+        emitter.active = false;
+
+        const eventList: EntityEventList = new EntityEventList();
+        eventList.repeatTime = -1;
+        eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 0, () => {
+            emitter.pos = new Vec2(Random.range(10, 710));
+            emitter.shoot();
+        }));
+        eventList.addEvent(new EntityEvent(() => eventList.currentPeriodTime >= 0.02, () => {
+
+        }));
+        emitter.eventList.addEvent(eventList);
+        return emitter;
+    }
+
+    //喷水
+    static spray(minAngle: number, maxAngle: number) {
+        const emitter: Emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = new Bullet(Vec2.zero);
+            bullet.speed = 100;
+            Entities.drop(bullet, new Vec2(0, 1), 30);
+            return bullet;
+        });
+
+        emitter.angle = minAngle;
+        let angle = emitter.angle;
+        let sign = 1;
+        emitter.updateExtension = (time) => {
+            // let angle = emitter.angle;
+            angle += sign * 50 * time;
+            if (angle >= maxAngle) {
+                angle = maxAngle;
+                sign = -1;
+            } else if (angle <= minAngle) {
+                angle = minAngle;
+                sign = 1;
+            }
+            emitter.angle = angle;
+        };
+
+        emitter.period = 0.2;
+        emitter.fixedAngle = 90;
+        // emitter.random = true;
+        emitter.numberAtOnce = 3;
+        emitter.duration = -1;
+        emitter.angle = 90;
+        emitter.active = false;
+
+        return emitter;
+    }
+
+    //朝玩家发射过一段时间定向爆裂的子弹
+    static bubble() {
+        const emitter = new Emitter(Vec2.zero, () => {
+            const bullet: Bullet = new Bullet(Vec2.zero);
+            bullet.speed = 200;
+            bullet.radius = 15;
+            bullet.texture = 'bullet_4';
+            const emitter1 = new Emitter(Vec2.zero, () => {
+                const bullet1: Bullet = new Bullet(Vec2.zero);
+                bullet1.speed = 300;
+                bullet1.texture = 'bullet_3';
+                return bullet1;
+            });
+            emitter1.period = -1;
+            emitter1.duration = -1;
+            emitter1.fixedAngle = 120;
+            emitter1.random = true;
+            emitter1.numberAtOnce = 16;
+            bullet.addEmitter(emitter1);
+            bullet.eventList.addEvent(new EntityEvent(() => bullet.survivalTime >= 2, () => {
+                bullet.destroy();
+                emitter1.angle = bullet.angle;
+                emitter1.shoot();
+            }));
+            return bullet;
+        });
+
+        emitter.entityEvent = (entity) => {
+            entity.dir = Player.toPlayerDir(entity.pos);
+        };
+        emitter.period = 1;
+        emitter.duration = -1;
+        emitter.numberAtOnce = 1;
+
         return emitter;
     }
 }

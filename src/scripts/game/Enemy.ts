@@ -9,6 +9,8 @@ import {Graphics} from "pixi.js";
 import {GameScene} from "@/scripts/game/GameScene";
 import {Random} from "@/scripts/engine/Random";
 import {Coin} from "@/scripts/game/Coin";
+import {PropTween} from "@/scripts/engine/PropTransformer";
+import {liner, quadratic, sin1, Unary} from "@/scripts/data/Functions";
 
 export class Enemy extends Entity {
     private _maxLife = 100;
@@ -26,6 +28,9 @@ export class Enemy extends Entity {
     display = new Graphics();
 
     tag = 'enemy';
+
+    moveTransformer: PropTween[] = [];
+    movingPos = Vec2.zero;
 
     //金币掉落概率
     coinDropRate = 0.5;
@@ -90,6 +95,17 @@ export class Enemy extends Entity {
     fixedUpdate(time: number) {
         super.fixedUpdate(time);
         this.hitTimer.update(time);
+        if (this.moveTransformer.length > 0) {
+            for (const transformer of this.moveTransformer) {
+                transformer.update(time);
+                // console.log(transformer.obj==this.pos);
+            }
+            this.pos = this.movingPos;
+            for (let i = 0; i < this.moveTransformer.length; i++) {
+                if (this.moveTransformer[i].isOver)
+                    this.moveTransformer.splice(i, 1);
+            }
+        }
         if (this.scene) {
             const collisionObjs: Array<any> = [];
             this.scene.collisionWorld.test_collision(this.collision, 'player_bullet', collisionObjs);
@@ -114,6 +130,13 @@ export class Enemy extends Entity {
         }
     }
 
+    moveTo(pos: Vec2, time: number, func = sin1) {
+        this.moveTransformer = [];
+        this.movingPos = this.pos;
+        this.moveTransformer[0] = new PropTween(this.movingPos, 'x', time, func(this.movingPos.x, pos.x));
+        this.moveTransformer[1] = new PropTween(this.movingPos, 'y', time, func(this.movingPos.y, pos.y));
+    }
+
     initGraphics() {
         this.display.clear();
         this.display.lineStyle(4, 0xfab2b2, 1);
@@ -130,7 +153,7 @@ export class Enemy extends Entity {
             this.life = 0;
 
             //掉落金币
-            if(this.scene) {
+            if (this.scene) {
                 this.scene.createCoins(this.pos);
                 // this.scene.player.urgentValue += 20;
                 this.scene.player.addUrgentValue(20);

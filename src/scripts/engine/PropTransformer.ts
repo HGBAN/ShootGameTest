@@ -12,7 +12,7 @@ export interface EventFunc {
 export type Transformer = PropTransformer | EventFunc | null;
 
 export class PropTransformer {
-    protected obj: IndexObject;
+    obj: IndexObject;
     protected prop: string;
     protected timer: Timer;
     // repeatTimes = 1;

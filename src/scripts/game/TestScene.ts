@@ -35,7 +35,7 @@ export class TestScene extends GameScene {
         // emitter.pos = new Vec2(360, 400);
         // this.addObject(emitter);
 
-        const boss1: Enemy = Enemies.boss1(this);
+        const boss1: Enemy = Enemies.boss3(this);
         boss1.pos = new Vec2(360, 0);
         boss1.dir = new Vec2(0, 1);
         // boss1.speed = 0;
