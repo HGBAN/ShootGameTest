@@ -118,7 +118,7 @@ export default defineComponent({
     }
   },
 
-  data(){
+  data() {
     return {
       rankingList: []
     }
@@ -132,6 +132,18 @@ export default defineComponent({
 
   created() {
     this.getList();
+
+    this.$store.commit('setLoading', true);
+    axios({
+      url: "/user/userInfo",
+    }).then((res) => {
+          if (res.data.errCode != 101) {
+            // console.log(res.data.data);
+            this.$store.commit("setUser", res.data.data);
+          }
+        }).finally(() => {
+      this.$store.commit('setLoading', false);
+    });
   }
 });
 </script>
@@ -160,8 +172,8 @@ export default defineComponent({
   margin-left: auto;
 }
 
-.table{
-  th{
+.table {
+  th {
     text-align: left;
   }
 }

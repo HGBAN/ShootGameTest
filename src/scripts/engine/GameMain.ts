@@ -51,7 +51,7 @@ export class GameMain {
         }
 
         //等待所有异步执行完成后加载场景
-        Promise.all([this.loadResources(), this.loadWeaponInfo(), this.createGameRecord()]).then(() => {
+        Promise.all([this.loadResources(), this.loadWeaponInfo()/*, this.createGameRecord()*/]).then(() => {
             this.setScene(new Scene1(this));
             // this.setScene(new TestScene(this));
         });
@@ -123,7 +123,10 @@ export class GameMain {
     }
 
     //更新游戏记录
-    updateGameRecord() {
+    async updateGameRecord() {
+        if(!this.gameId){
+            await this.createGameRecord();
+        }
         axios.put('/game/updateGameRecord', {
             id: this.gameId,
             score: this.highScore,
