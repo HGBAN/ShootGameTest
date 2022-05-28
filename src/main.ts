@@ -5,7 +5,8 @@ import axios from "axios";
 import {ErrCode} from "@/model";
 import store from './store'
 
-axios.defaults.baseURL = '/api';
+// axios.defaults.baseURL = '/api';
+axios.defaults.baseURL = 'http://139.9.58.231:8085/';
 axios.defaults.withCredentials = true;
 
 //配置axios拦截器

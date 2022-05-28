@@ -13,18 +13,18 @@ module.exports = {
                 symbolId: 'icon-[name]'
             });
     },
-    devServer: {
-        proxy: {
-            '/api': {
-                // target: 'http://139.9.58.231:8085/',
-                target: 'http://localhost:8085/',
-                // 允许跨域
-                changeOrigin: true,
-                ws: true,
-                pathRewrite: {
-                    '^/api': ''
-                }
-            }
-        }
-    }
+    // devServer: {
+    //     proxy: {
+    //         '/api': {
+    //             target: 'http://139.9.58.231:8085/',
+    //             // target: 'http://localhost:8085/',
+    //             // 允许跨域
+    //             changeOrigin: true,
+    //             ws: true,
+    //             pathRewrite: {
+    //                 '^/api': ''
+    //             }
+    //         }
+    //     }
+    // }
 }

@@ -7,7 +7,7 @@ import {Timer} from "@/scripts/engine/Timer";
 import {Elimination} from "@/scripts/game/Elimination";
 import {Container, Graphics} from "pixi.js";
 import {GameObject} from "@/scripts/engine/GameObject";
-import {Weapon} from "@/scripts/game/weapon/Weapon";
+import {Weapon} from "@/scripts/game/Weapon";
 import {weaponInfos, Weapons} from "@/scripts/data/Weapons";
 import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import axios from "axios";

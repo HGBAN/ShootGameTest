@@ -172,7 +172,6 @@ export class GameMain {
     // }
 
     gameLoopCallback = (delta: number): void => {
-
         let time = (delta / 60);
         if (this.resetTime) {
             time = 0;
@@ -180,10 +179,6 @@ export class GameMain {
         }
 
         Time.update(time);
-        // if (this.resetTime) {
-        //     Time.update(time);
-        //     this.resetTime = false;
-        // }
 
         this.update();
 

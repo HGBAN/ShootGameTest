@@ -5,7 +5,7 @@
 //     }
 // }
 
-import {Weapon} from "@/scripts/game/weapon/Weapon";
+import {Weapon} from "@/scripts/game/Weapon";
 import {Player} from "@/scripts/game/Player";
 import {Emitter} from "@/scripts/game/Emitter";
 import {Emitters} from "@/scripts/data/Emitters";
