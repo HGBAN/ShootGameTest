@@ -26,6 +26,7 @@ export interface Nav {
   link?: string;
   icon?: string;
   children?: Nav[];
+  expand?: boolean;
 }
 
 export default defineComponent({

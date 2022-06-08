@@ -14,10 +14,11 @@
       <TreeItem :ref="'item'+index" v-if="item.children"
                 @hide-bar="$emit('hide-bar')"
                 @outer-expand="$emit('outer-expand')"
-                :style="{height:expand[index]?item.children.length*40+'px':'0'}"
+                :style="{height:expand[index]?childrenHeight[index]*40+'px':'0'}"
                 :class="{'sidebar-item-show':expand[index],'sidebar-item-hide-show':!outerExpand}" :nav="item.children"
                 :level="level+1" :outer-expand="outerExpand"
-                @active="setChildrenActive(index)"></TreeItem>
+                @active="setChildrenActive(index)"
+                @update-height="updateChildrenLength(index)"></TreeItem>
     </div>
   </div>
 </template>
@@ -37,12 +38,18 @@ export default defineComponent({
   data() {
     return {
       expand: [] as boolean[],
-      childrenActive: [] as boolean[]
+      childrenActive: [] as boolean[],
+      childrenHeight: [] as number[]
     };
   },
 
   created() {
     this.updateChildrenActive();
+
+    if (!this.nav)
+      return;
+    for (let i = 0; i < this.nav.length; i++)
+      this.childrenHeight[i] = 0;
   },
 
   computed: {
@@ -59,6 +66,7 @@ export default defineComponent({
 
   methods: {
     onItemClick(index: number) {
+      // console.log(index);
       if (!this.nav)
         return;
       const link = this.nav[index].link;
@@ -80,6 +88,33 @@ export default defineComponent({
         }
         this.expand[index] = true;
       }
+      // eslint-disable-next-line vue/no-mutating-props
+      this.nav[index].expand = this.expand[index];
+
+      this.updateChildrenLength(index);
+      this.$emit('update-height');
+    },
+
+    updateChildrenLength(index: number) {
+      if (!this.nav)
+        return;
+
+      // console.log(1);
+      const getLength = (nav: Nav) => {
+        if (!nav.children)
+          return 0;
+        let length = 0;
+        if (nav.expand)
+          length = nav.children.length;
+        for (const item of nav.children) {
+          length += getLength(item);
+        }
+        return length;
+      };
+      this.childrenHeight[index] = getLength(this.nav[index]);
+      // console.log(this.childrenHeight[index]);
+
+      // return getLength(this.nav[index]);
     },
 
     setChildrenActive(index: number) {
@@ -112,12 +147,13 @@ export default defineComponent({
         if (!this.nav[i].children)
           continue;
         this.expand[i] = false;
+        // console.log('item' + i);
         (this.$refs['item' + i] as any)[0].hideAll();
       }
     }
   },
 
-  emits: ['outer-expand', 'active', 'hide-bar'],
+  emits: ['outer-expand', 'active', 'hide-bar', 'update-height'],
 
   props: {
     nav: {
