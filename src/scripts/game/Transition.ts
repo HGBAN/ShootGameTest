@@ -57,10 +57,18 @@ export class Transition extends GameObject {
         this.transition.drawRect(0, 0, 720, 1280);
         this.transition.endFill();
 
+        // console.log(this.openText.width);
+        // this.openText.
+        // this.openText.
         this.openText.position.set(360 - this.openText.width / 2, 640 - this.openText.height / 2);
         this.openText.alpha = 0;
 
+        // this.display.position.set(0, 0);
         this.display.addChild(this.transition, this.openText);
+    }
+
+    updateTextPos(){
+        this.openText.position.set(360 - this.openText.width / 2, 640 - this.openText.height / 2);
     }
 
     update(): void {

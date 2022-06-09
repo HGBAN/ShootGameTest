@@ -6,12 +6,12 @@ const sideBarNav: Nav[] = [
     {
         label: '介绍',
         icon: 'home',
-        link: '/description'
+        link: '/description',
     },
     {
         label: '游戏',
         link: '/game',
-        icon: 'game'
+        icon: 'game',
         // children: [
         //     {
         //         label: '选项1',
@@ -25,7 +25,7 @@ const sideBarNav: Nav[] = [
     {
         label: '商店',
         icon: 'store',
-        link: '/weapon'
+        link: '/weapon',
         // children: [
         //     {
         //         label: '选项1',
@@ -52,6 +52,40 @@ const sideBarNav: Nav[] = [
         label: '排行榜',
         icon: 'weapon',
         link: '/rankingList'
+    },
+    {
+        label: '选项1',
+        children: [
+            {
+                label: '选项1-1',
+                children:[
+                    {
+                        label: '选项1-1-1',
+                    },
+                    {
+                        label: '选项1-1-2',
+                    }
+                ]
+            },
+            {
+                label: '选项1-2'
+            },
+            {
+                label: '选项1-3'
+            }
+        ]
+    }
+    ,
+    {
+        label: '选项2',
+        children: [
+            {
+                label: '选项2-1'
+            },
+            {
+                label: '选项2-2'
+            }
+        ]
     }
 ]
 

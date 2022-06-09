@@ -17,6 +17,7 @@ export class Scene3 extends GameScene {
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
         this.transition.openText.text = this.levelName;
+        this.transition.updateTextPos();
 
         let boss: Enemy | undefined = undefined;
         this.events.addEvent(new EntityEvent(() => this.time >= 2, () => {

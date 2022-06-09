@@ -14,6 +14,7 @@ import axios from "axios";
 import {ErrCode, ResponseData, WeaponInfo} from "@/model";
 import {weaponInfos} from "@/scripts/data/Weapons";
 import {Scene3} from "@/scripts/scenes/Scene3";
+import {BossScene} from "@/scripts/scenes/BossScene";
 
 export class GameMain {
     readonly app = new PIXI.Application({width: 720, height: 1280});
@@ -125,7 +126,7 @@ export class GameMain {
 
     //更新游戏记录
     async updateGameRecord() {
-        if(!this.gameId){
+        if (!this.gameId) {
             await this.createGameRecord();
         }
         axios.put('/game/updateGameRecord', {
@@ -177,6 +178,13 @@ export class GameMain {
             time = 0;
             this.resetTime = false;
         }
+
+        if (Input.getKey('1').isPressed)
+            this.setScene(new BossScene(this, '1'));
+        else if (Input.getKey('2').isPressed)
+            this.setScene(new BossScene(this, '2'));
+        else if (Input.getKey('3').isPressed)
+            this.setScene(new BossScene(this, '3'));
 
         Time.update(time);
 

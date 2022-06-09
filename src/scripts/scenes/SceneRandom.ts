@@ -28,6 +28,7 @@ export class SceneRandom extends GameScene {
         Player.rubTimes = 0;
 
         this.transition.openText.text = this.levelName;
+        this.transition.updateTextPos();
 
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);

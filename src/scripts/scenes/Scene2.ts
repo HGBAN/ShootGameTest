@@ -31,6 +31,7 @@ export class Scene2 extends GameScene {
     constructor(gameMain: GameMain, player?: Player) {
         super(gameMain, player);
         this.transition.openText.text = this.levelName;
+        this.transition.updateTextPos();
 
         this.back = new Background(this, 'back_1');
         this.addObject(this.back);
